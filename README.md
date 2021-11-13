@@ -1,6 +1,6 @@
-## Topic: Analysis of stocks discussed in Reddit r/wallstreetbets
+## Analysis of stocks discussed in Reddit r/wallstreetbets
 
-### Background:
+Background:
 In January, 2021, there is a subreddit called r/wallstreetbets where participants discuss stock and option trading. The participants are mainly young retailer traders who have little background in investment knowledge and risk management. They are not satisfied with the over short on some stocks by major Wall Street companies. In January and June 2021, there were 2 waves of major short squeeze led by the participants in this subreddit, which were GameStop short squeeze and AMC short squeeze.
 (reference: https://en.wikipedia.org/wiki/R/wallstreetbets)
 
