@@ -1,6 +1,6 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "Analysis of stocks discussed in Reddit r/wallstreetbets"
+author: "Xingyu Lu, Yue Xiong ,Yue Zhang"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
