@@ -11,5 +11,3 @@ We'll be trying to answer following questions:
 
 *If you have any difficulties or have feedback of any kind, please file an issue.*
 *This repo was initially generated from a bookdown template available here: https://github.com/jtr13/EDAVtemplate.*	
-
-
