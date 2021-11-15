@@ -12,10 +12,13 @@ library(naniar)
 source("plot_missing.R")
 ```
 
+```{r}
+filenames <- list.files("data/reddit/daywise", pattern="*.csv", full.names=TRUE)
+df <- do.call(rbind,lapply(filenames, read.csv))
+```
 
 ```{r}
-df <- read.csv('data/combined.csv')
-df <- subset(df, select = -c(X, Unnamed..0))
+df <- subset(df, select = -c(X))
 df <- df %>% 
   replace_with_na(replace = list(author = "", selftext=c(" removed ", " deleted ")))
 
