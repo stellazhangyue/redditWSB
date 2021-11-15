@@ -52,6 +52,7 @@ plot_missing_patterns <- function(df, percent) {
     df_missing_agg %>%
       ggplot(aes(x=var,y=missing_percentage)) +
       geom_bar(stat='identity', fill = bar_fill) +
+      geom_text(aes(label = round(missing_percentage,2)), vjust = -0.2) + 
       scale_y_continuous(limits = c(0, 100)) +
       xlab('variable name') +
       ylab('% rows missing') +
@@ -81,6 +82,7 @@ plot_missing_patterns <- function(df, percent) {
       mutate(missing_percent = count/total * 100) %>%
       ggplot(aes(x=rn, y=missing_percent, alpha = is_cc)) +
       geom_bar(stat='identity', fill = bar_fill) +
+      geom_text(aes(label = round(missing_percent,2)), vjust = 0.5, hjust = 0) + 
       scale_y_continuous(limits = c(0, 100)) +
       scale_alpha_manual(values = alpha2) +
       ylab('% rows') +

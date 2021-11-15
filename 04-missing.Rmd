@@ -12,17 +12,67 @@ library(naniar)
 source("plot_missing.R")
 ```
 
+## Reddit post dataset
+We first create the missing values plots, both count and percent, for the reddit post dataset.
 ```{r}
 filenames <- list.files("data/reddit/daywise", pattern="*.csv", full.names=TRUE)
 df <- do.call(rbind,lapply(filenames, read.csv))
+df <- subset(df, select = -c(X))
+df <- df[!duplicated(df),]
 ```
 
 ```{r}
-df <- subset(df, select = -c(X))
-df <- df %>% 
+mp_df <- df %>% 
   replace_with_na(replace = list(author = "", selftext=c(" removed ", " deleted ")))
 
-plot_missing_patterns(df, FALSE)
-plot_missing_patterns(df, TRUE)
+plot_missing_patterns(mp_df, FALSE)
+plot_missing_patterns(mp_df, TRUE)
+```
+
+We can observe from the missing value plots that there are 4 different missing patterns, which are complete cases (47.19%), missing `selftext`  (45.08%), missing both `selftext` and `author` (4.77%), and missing `author` only (2.95%). Therefore, out of the 7 variables in the dataset, only 2 variables might be missing, which are `selftext` and `author` respectively. Among the 2 variables, 49.85% of the `selftext` is missing while only 7.72% of the `author` is missing.
+
+Looking into the `selftext` column in the original dataset, we noticed that there are 3 major levels that account for ~90% of the data, which are "removed", "" and "deleted". Consulted the reddit documents, we found that "removed" means the post is either removed by the moderators of the subreddit group or the administrator; "deleted" means the post is deleted by the content author; "" appears when a post doesn't have body text or a post's body contains pictures only. In this regard, we are only considering "removed" and "deleted" as NA, ""s are considered as valid inputs. About 45% of the posts are "removed", which means the level of censorship is relatively high. 
+
+```{r}
+body_agg <- df %>%
+  mutate(selftext = trimws(selftext)) %>%
+  group_by(selftext) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  mutate(percent = round(count/sum(count)*100, 2)) %>%
+  top_n(20)
+
+body_agg
+```
+
+Looking at the `author` column, 7.72% of the posts are missing `author`.  We noticed that 61.76% of the posts that don't have an `author` are also missing `selftext`. 
+```{r}
+author_agg <- mp_df %>%
+  mutate(selftext = trimws(selftext),
+         author = trimws(author)) %>%
+  filter(is.na(author)) %>%
+  group_by(selftext) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  mutate(percent = round(count/sum(count)*100, 2)) %>%
+  top_n(20)
+
+author_agg
+```
+
+These missing values wouldn't impact our analysis, because we are looking at the data at the aggregate level. Our analysis only cares about the change of the count of the posts in particular period of time. Even though those posts are deleted or removed in a later time, we should still include them in our analysis.
+
+## Google Trend dataset
+We created the missing values plots, both count and percent, for two Google trend datasets and found there's no missing value in both datasets
+```{r}
+gt_web <- read_csv("data/gtrends/combined_web.csv")
+plot_missing_patterns(gt_web, FALSE)
+plot_missing_patterns(gt_web, TRUE)
+```
+
+```{r}
+gt_news <- read_csv("data/gtrends/combined_news.csv")
+plot_missing_patterns(gt_news, FALSE)
+plot_missing_patterns(gt_news, TRUE)
 ```
 
