@@ -14,14 +14,14 @@ source("plot_missing.R")
 
 ## Reddit post dataset
 We first create the missing values plots, both count and percent, for the reddit post dataset.
-```{r}
+```{r echo=FALSE}
 filenames <- list.files("data/reddit/daywise", pattern="*.csv", full.names=TRUE)
 df <- do.call(rbind,lapply(filenames, read.csv))
 df <- subset(df, select = -c(X))
 df <- df[!duplicated(df),]
 ```
 
-```{r}
+```{r echo=FALSE}
 mp_df <- df %>% 
   replace_with_na(replace = list(author = "", selftext=c(" removed ", " deleted ")))
 
@@ -33,7 +33,7 @@ We can observe from the missing value plots that there are 4 different missing p
 
 Looking into the `selftext` column in the original dataset, we noticed that there are 3 major levels that account for ~90% of the data, which are "removed", "" and "deleted". Consulted the reddit documents, we found that "removed" means the post is either removed by the moderators of the subreddit group or the administrator; "deleted" means the post is deleted by the content author; "" appears when a post doesn't have body text or a post's body contains pictures only. In this regard, we are only considering "removed" and "deleted" as NA, ""s are considered as valid inputs. About 45% of the posts are "removed", which means the level of censorship is relatively high. 
 
-```{r}
+```{r echo=FALSE}
 body_agg <- df %>%
   mutate(selftext = trimws(selftext)) %>%
   group_by(selftext) %>%
@@ -46,7 +46,7 @@ body_agg
 ```
 
 Looking at the `author` column, 7.72% of the posts are missing `author`.  We noticed that 61.76% of the posts that don't have an `author` are also missing `selftext`. 
-```{r}
+```{r echo=FALSE}
 author_agg <- mp_df %>%
   mutate(selftext = trimws(selftext),
          author = trimws(author)) %>%
@@ -64,13 +64,13 @@ These missing values wouldn't impact our analysis, because we are looking at the
 
 ## Google Trend dataset
 We created the missing values plots, both count and percent, for two Google trend datasets and found there's no missing value in both datasets
-```{r}
+```{r echo=FALSE}
 gt_web <- read_csv("data/gtrends/combined_web.csv")
 plot_missing_patterns(gt_web, FALSE)
 plot_missing_patterns(gt_web, TRUE)
 ```
 
-```{r}
+```{r echo=FALSE}
 gt_news <- read_csv("data/gtrends/combined_news.csv")
 plot_missing_patterns(gt_news, FALSE)
 plot_missing_patterns(gt_news, TRUE)

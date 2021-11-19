@@ -24,7 +24,7 @@
 <meta name="author" content="Xingyu Lu, Yue Xiong ,Yue Zhang" />
 
 
-<meta name="date" content="2021-11-15" />
+<meta name="date" content="2021-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -55,70 +55,6 @@
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
 
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -172,28 +108,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="reddit-post-dataset" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Reddit post dataset</h2>
 <p>We first create the missing values plots, both count and percent, for the reddit post dataset.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="missing-values.html#cb1-1" aria-hidden="true" tabindex="-1"></a>filenames <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;data/reddit/daywise&quot;</span>, <span class="at">pattern=</span><span class="st">&quot;*.csv&quot;</span>, <span class="at">full.names=</span><span class="cn">TRUE</span>)</span>
-<span id="cb1-2"><a href="missing-values.html#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind,<span class="fu">lapply</span>(filenames, read.csv))</span>
-<span id="cb1-3"><a href="missing-values.html#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">subset</span>(df, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(X))</span>
-<span id="cb1-4"><a href="missing-values.html#cb1-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[<span class="sc">!</span><span class="fu">duplicated</span>(df),]</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="missing-values.html#cb2-1" aria-hidden="true" tabindex="-1"></a>mp_df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
-<span id="cb2-2"><a href="missing-values.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replace_with_na</span>(<span class="at">replace =</span> <span class="fu">list</span>(<span class="at">author =</span> <span class="st">&quot;&quot;</span>, <span class="at">selftext=</span><span class="fu">c</span>(<span class="st">&quot; removed &quot;</span>, <span class="st">&quot; deleted &quot;</span>)))</span>
-<span id="cb2-3"><a href="missing-values.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="missing-values.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing_patterns</span>(mp_df, <span class="cn">FALSE</span>)</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="missing-values.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing_patterns</span>(mp_df, <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
 <p>We can observe from the missing value plots that there are 4 different missing patterns, which are complete cases (47.19%), missing <code>selftext</code> (45.08%), missing both <code>selftext</code> and <code>author</code> (4.77%), and missing <code>author</code> only (2.95%). Therefore, out of the 7 variables in the dataset, only 2 variables might be missing, which are <code>selftext</code> and <code>author</code> respectively. Among the 2 variables, 49.85% of the <code>selftext</code> is missing while only 7.72% of the <code>author</code> is missing.</p>
 <p>Looking into the <code>selftext</code> column in the original dataset, we noticed that there are 3 major levels that account for ~90% of the data, which are “removed”, "" and “deleted”. Consulted the reddit documents, we found that “removed” means the post is either removed by the moderators of the subreddit group or the administrator; “deleted” means the post is deleted by the content author; "" appears when a post doesn’t have body text or a post’s body contains pictures only. In this regard, we are only considering “removed” and “deleted” as NA, "“s are considered as valid inputs. About 45% of the posts are”removed", which means the level of censorship is relatively high.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="missing-values.html#cb4-1" aria-hidden="true" tabindex="-1"></a>body_agg <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="missing-values.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">selftext =</span> <span class="fu">trimws</span>(selftext)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="missing-values.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(selftext) <span class="sc">%&gt;%</span></span>
-<span id="cb4-4"><a href="missing-values.html#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb4-5"><a href="missing-values.html#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(count)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="missing-values.html#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="fu">round</span>(count<span class="sc">/</span><span class="fu">sum</span>(count)<span class="sc">*</span><span class="dv">100</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="missing-values.html#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">20</span>)</span>
-<span id="cb4-8"><a href="missing-values.html#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="missing-values.html#cb4-9" aria-hidden="true" tabindex="-1"></a>body_agg</span></code></pre></div>
 <pre><code>## # A tibble: 88,017 × 3
 ##    selftext                                                           count percent
 ##    &lt;chr&gt;                                                              &lt;int&gt;   &lt;dbl&gt;
@@ -209,17 +126,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 &quot;TO THE MOON&quot;                                                         37    0   
 ## # … with 88,007 more rows</code></pre>
 <p>Looking at the <code>author</code> column, 7.72% of the posts are missing <code>author</code>. We noticed that 61.76% of the posts that don’t have an <code>author</code> are also missing <code>selftext</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="missing-values.html#cb6-1" aria-hidden="true" tabindex="-1"></a>author_agg <span class="ot">&lt;-</span> mp_df <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="missing-values.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">selftext =</span> <span class="fu">trimws</span>(selftext),</span>
-<span id="cb6-3"><a href="missing-values.html#cb6-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">author =</span> <span class="fu">trimws</span>(author)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="missing-values.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(author)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="missing-values.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(selftext) <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="missing-values.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb6-7"><a href="missing-values.html#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(count)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-8"><a href="missing-values.html#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="fu">round</span>(count<span class="sc">/</span><span class="fu">sum</span>(count)<span class="sc">*</span><span class="dv">100</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="missing-values.html#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">20</span>)</span>
-<span id="cb6-10"><a href="missing-values.html#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="missing-values.html#cb6-11" aria-hidden="true" tabindex="-1"></a>author_agg</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 3
 ##   selftext                                                            count percent
 ##   &lt;chr&gt;                                                               &lt;int&gt;   &lt;dbl&gt;
@@ -234,17 +140,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="google-trend-dataset" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Google Trend dataset</h2>
-<p>We created the missing values plots, both count and percent, for two Google trend datasets and found there’s no missing value in both datasets</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="missing-values.html#cb8-1" aria-hidden="true" tabindex="-1"></a>gt_web <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/gtrends/combined_web.csv&quot;</span>)</span>
-<span id="cb8-2"><a href="missing-values.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing_patterns</span>(gt_web, <span class="cn">FALSE</span>)</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="missing-values.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing_patterns</span>(gt_web, <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="missing-values.html#cb10-1" aria-hidden="true" tabindex="-1"></a>gt_news <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/gtrends/combined_news.csv&quot;</span>)</span>
-<span id="cb10-2"><a href="missing-values.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing_patterns</span>(gt_news, <span class="cn">FALSE</span>)</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="missing-values.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_missing_patterns</span>(gt_news, <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<p>We created the missing values plots, both count and percent, for two Google trend datasets and found there’s no missing value in both datasets
+<img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
 
 </div>
 </div>
