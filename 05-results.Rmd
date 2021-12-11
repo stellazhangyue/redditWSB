@@ -1,1 +1,37 @@
 # Results
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(quantmod)
+library(PerformanceAnalytics)
+library(ggplot2)
+library(plyr)
+library(scales)
+library(ggcorrplot)
+library(reshape2)
+library(plotly)
+library(patchwork)
+```
+
+
+## What's the impact of r/wallstreetbet?
+
+### General Public's interests on Google
+```{r}
+combined_web <- readr::read_csv("data/clean/gtrends/combined_web.csv")
+combined_news <- readr::read_csv("data/clean/gtrends/combined_news.csv")
+
+web <- combined_web %>%
+  ggplot(aes(x=Week, y=score, color = keyword)) +
+  geom_line() +
+  ggtitle("Web Search Interest overtime")
+
+news <- combined_news %>%
+  ggplot(aes(x=Week, y=score, color = keyword)) +
+  geom_line() +
+  ggtitle("News Search Interest overtime")
+
+web / news
+```
+The above two plots display the interest on the relative topics during the time period 2020-11-15 to 2021-11-15. Numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term.
+
+

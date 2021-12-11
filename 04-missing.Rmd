@@ -15,7 +15,7 @@ source("plot_missing.R")
 ## Reddit post dataset
 We first create the missing values plots, both count and percent, for the reddit post dataset.
 ```{r echo=FALSE}
-filenames <- list.files("data/reddit/daywise", pattern="*.csv", full.names=TRUE)
+filenames <- list.files("data/raw/reddit/daywise", pattern="*.csv", full.names=TRUE)
 df <- do.call(rbind,lapply(filenames, read.csv))
 df <- subset(df, select = -c(X))
 df <- df[!duplicated(df),]

@@ -1,1 +1,36 @@
 # Data transformation
+
+```{r, message=FALSE, warning=FALSE}
+library(readr)
+library(tidyverse)
+```
+
+## Google Trends Data Transformation
+In the Google Trends source data, it assigns a number to each keyword for each period(week). The numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term. A score of <1 means there is some search interest but it's extremely low. We are replacing all <1's with 0.5, so that we can keep the data frame consistent with all scores as numeric data. 
+
+We also need to tidy the dataset because some of the column names are not names of variables, but values of a variable: the original column names represent the values of the `keyword` variable and the values in the columns represents the values of `score`, and each row represents 5 observations, not one. To tidy the dataset, we make the offending columns into a new pair of variables using `pivot_longer`. 
+```{r echo=FALSE}
+combined_web <- readr::read_csv("data/gtrends/combined_web.csv")
+
+combined_web_clean <- combined_web %>%
+  mutate(`r/WallStreetBets` = replace(`r/WallStreetBets`, `r/WallStreetBets` == "<1", 0.5)) %>%
+  mutate(`r/WallStreetBets` = as.numeric(`r/WallStreetBets`)) %>%
+  pivot_longer(cols = !Week,
+             names_to = "keyword",
+             values_to = "score"
+             )
+  
+combined_news <- readr::read_csv("data/gtrends/combined_news.csv")
+combined_news_clean <- combined_news %>%
+  mutate(`r/WallStreetBets` = replace(`r/WallStreetBets`, `r/WallStreetBets` == "<1", 0.5),
+         `GameStop` = replace(`GameStop`, `GameStop` == "<1", 0.5)) %>%
+  mutate(`r/WallStreetBets` = as.numeric(`r/WallStreetBets`),
+         `GameStop` = as.numeric(`GameStop`)) %>%
+  pivot_longer(cols = !Week,
+             names_to = "keyword",
+             values_to = "score"
+             )
+
+```
+
+After cleaning, it contains 

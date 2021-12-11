@@ -112,30 +112,30 @@
 <p>We can observe from the missing value plots that there are 4 different missing patterns, which are complete cases (47.19%), missing <code>selftext</code> (45.08%), missing both <code>selftext</code> and <code>author</code> (4.77%), and missing <code>author</code> only (2.95%). Therefore, out of the 7 variables in the dataset, only 2 variables might be missing, which are <code>selftext</code> and <code>author</code> respectively. Among the 2 variables, 49.85% of the <code>selftext</code> is missing while only 7.72% of the <code>author</code> is missing.</p>
 <p>Looking into the <code>selftext</code> column in the original dataset, we noticed that there are 3 major levels that account for ~90% of the data, which are “removed”, "" and “deleted”. Consulted the reddit documents, we found that “removed” means the post is either removed by the moderators of the subreddit group or the administrator; “deleted” means the post is deleted by the content author; "" appears when a post doesn’t have body text or a post’s body contains pictures only. In this regard, we are only considering “removed” and “deleted” as NA, "“s are considered as valid inputs. About 45% of the posts are”removed", which means the level of censorship is relatively high.</p>
 <pre><code>## # A tibble: 88,017 × 3
-##    selftext                                                           count percent
-##    &lt;chr&gt;                                                              &lt;int&gt;   &lt;dbl&gt;
-##  1 &quot;removed&quot;                                                         436413   45.1 
-##  2 &quot;&quot;                                                                394027   40.7 
-##  3 &quot;deleted&quot;                                                          46173    4.77
-##  4 &quot;Your daily trading discussion thread Please keep the shitpostin…     85    0.01
-##  5 &quot;Title&quot;                                                               72    0.01
-##  6 &quot;To the moon&quot;                                                         51    0.01
-##  7 &quot;Your daily trading discussion thread Please keep the shitpostin…     39    0   
-##  8 &quot;AMC&quot;                                                                 37    0   
-##  9 &quot;That is all&quot;                                                         37    0   
-## 10 &quot;TO THE MOON&quot;                                                         37    0   
+##    selftext                                                        count percent
+##    &lt;chr&gt;                                                           &lt;int&gt;   &lt;dbl&gt;
+##  1 &quot;removed&quot;                                                      436413   45.1 
+##  2 &quot;&quot;                                                             394027   40.7 
+##  3 &quot;deleted&quot;                                                       46173    4.77
+##  4 &quot;Your daily trading discussion thread Please keep the shitpos…     85    0.01
+##  5 &quot;Title&quot;                                                            72    0.01
+##  6 &quot;To the moon&quot;                                                      51    0.01
+##  7 &quot;Your daily trading discussion thread Please keep the shitpos…     39    0   
+##  8 &quot;AMC&quot;                                                              37    0   
+##  9 &quot;That is all&quot;                                                      37    0   
+## 10 &quot;TO THE MOON&quot;                                                      37    0   
 ## # … with 88,007 more rows</code></pre>
 <p>Looking at the <code>author</code> column, 7.72% of the posts are missing <code>author</code>. We noticed that 61.76% of the posts that don’t have an <code>author</code> are also missing <code>selftext</code>.</p>
 <pre><code>## # A tibble: 7 × 3
-##   selftext                                                            count percent
-##   &lt;chr&gt;                                                               &lt;int&gt;   &lt;dbl&gt;
-## 1  &lt;NA&gt;                                                               46172    61.8
-## 2 &quot;&quot;                                                                  28588    38.2
-## 3 &quot;CROX are the official footwear of going to the moon nothing else …     1     0  
-## 4 &quot;I think he s gone and I think he has soled all of this stocks and…     1     0  
-## 5 &quot;taken from r investing full credit to OP u MasterCookSwag wanted …     1     0  
-## 6 &quot;Welp down 354 today could be worse for sure Just here to say I ha…     1     0  
-## 7 &quot;you should absolutely care about it and learn from it Figure out …     1     0</code></pre>
+##   selftext                                                         count percent
+##   &lt;chr&gt;                                                            &lt;int&gt;   &lt;dbl&gt;
+## 1  &lt;NA&gt;                                                            46172    61.8
+## 2 &quot;&quot;                                                               28588    38.2
+## 3 &quot;CROX are the official footwear of going to the moon nothing el…     1     0  
+## 4 &quot;I think he s gone and I think he has soled all of this stocks …     1     0  
+## 5 &quot;taken from r investing full credit to OP u MasterCookSwag want…     1     0  
+## 6 &quot;Welp down 354 today could be worse for sure Just here to say I…     1     0  
+## 7 &quot;you should absolutely care about it and learn from it Figure o…     1     0</code></pre>
 <p>These missing values wouldn’t impact our analysis, because we are looking at the data at the aggregate level. Our analysis only cares about the change of the count of the posts in particular period of time. Even though those posts are deleted or removed in a later time, we should still include them in our analysis.</p>
 </div>
 <div id="google-trend-dataset" class="section level2" number="4.2">
