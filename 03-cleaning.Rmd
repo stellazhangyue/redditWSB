@@ -10,18 +10,19 @@ In the Google Trends source data, it assigns a number to each keyword for each p
 
 We also need to tidy the dataset because some of the column names are not names of variables, but values of a variable: the original column names represent the values of the `keyword` variable and the values in the columns represents the values of `score`, and each row represents 5 observations, not one. To tidy the dataset, we make the offending columns into a new pair of variables using `pivot_longer`. 
 ```{r echo=FALSE}
-combined_web <- readr::read_csv("data/gtrends/combined_web.csv")
+combined_web_raw <- readr::read_csv("data/raw/gtrends/combined_web.csv")
 
-combined_web_clean <- combined_web %>%
+combined_web_clean <- combined_web_raw %>%
   mutate(`r/WallStreetBets` = replace(`r/WallStreetBets`, `r/WallStreetBets` == "<1", 0.5)) %>%
   mutate(`r/WallStreetBets` = as.numeric(`r/WallStreetBets`)) %>%
   pivot_longer(cols = !Week,
              names_to = "keyword",
              values_to = "score"
              )
-  
-combined_news <- readr::read_csv("data/gtrends/combined_news.csv")
-combined_news_clean <- combined_news %>%
+write.csv(combined_web_clean, file = ("data/clean/gtrends/combined_web.csv"),row.names=FALSE)
+
+combined_news_raw <- readr::read_csv("data/raw/gtrends/combined_news.csv")
+combined_news_clean <- combined_news_raw %>%
   mutate(`r/WallStreetBets` = replace(`r/WallStreetBets`, `r/WallStreetBets` == "<1", 0.5),
          `GameStop` = replace(`GameStop`, `GameStop` == "<1", 0.5)) %>%
   mutate(`r/WallStreetBets` = as.numeric(`r/WallStreetBets`),
@@ -30,7 +31,17 @@ combined_news_clean <- combined_news %>%
              names_to = "keyword",
              values_to = "score"
              )
-
+write.csv(combined_news_clean, file = ("data/clean/gtrends/combined_news.csv"),row.names=FALSE)
 ```
 
-After cleaning, it contains 
+After cleaning, it contains 3 rows and 260 records.
+```{r}
+knitr::kable(data.frame(
+                cols = c('week','keyword','score'),
+                data_type = c('date', 'string', 'numeric'),
+                description = c("Which week?","Search keyword","Search interest score")
+              ), 
+             col.names = c('Column', 'Type', 'Description'),
+             row.names = F,font_size = 10)
+```
+
