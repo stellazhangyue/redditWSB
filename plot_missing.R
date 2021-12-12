@@ -1,7 +1,7 @@
 build_missing_patterns_df <- function(df) {
   missing_patterns <- data.frame(is.na(df)) %>%
     group_by_all() %>%
-    count(name = "count", sort = TRUE) %>%
+    dplyr::count(name = "count", sort = TRUE) %>%
     ungroup()
   return(missing_patterns)
 }
@@ -52,7 +52,6 @@ plot_missing_patterns <- function(df, percent) {
     df_missing_agg %>%
       ggplot(aes(x=var,y=missing_percentage)) +
       geom_bar(stat='identity', fill = bar_fill) +
-      geom_text(aes(label = round(missing_percentage,2)), vjust = -0.2) + 
       scale_y_continuous(limits = c(0, 100)) +
       xlab('variable name') +
       ylab('% rows missing') +
@@ -82,7 +81,6 @@ plot_missing_patterns <- function(df, percent) {
       mutate(missing_percent = count/total * 100) %>%
       ggplot(aes(x=rn, y=missing_percent, alpha = is_cc)) +
       geom_bar(stat='identity', fill = bar_fill) +
-      geom_text(aes(label = round(missing_percent,2)), vjust = 0.5, hjust = 0) + 
       scale_y_continuous(limits = c(0, 100)) +
       scale_alpha_manual(values = alpha2) +
       ylab('% rows') +
@@ -102,7 +100,7 @@ plot_missing_patterns <- function(df, percent) {
       values = c("FALSE" = "grey", "TRUE"= "#B69FE7"), 
       aesthetics = c("fill")
     ) +
-    annotate("text", 
+    ggplot2::annotate("text", 
              x=length(missing_patterns[1,])/2, 
              y=num_missing_patterns+1-as.numeric(df_main[as.numeric(as.list(which(df_main$is_cc==TRUE))[1]),'rn']), 
              label = "complete cases") +
