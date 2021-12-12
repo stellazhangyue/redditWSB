@@ -13,6 +13,7 @@ library(patchwork)
 library(maps)
 library(mapdata)
 library(lubridate)
+library(treemap)
 ```
 
 ## General Public's interests on Google
@@ -335,7 +336,8 @@ Now, we can plot bar chart to show the count of posts that have mentioned about 
 
 ```{r}
 df <- read.csv('data/clean/reddit/ranked_possible_tickers_count.csv')
-df %>% filter(possible_ticker %in% c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')) %>%
+top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')
+df %>% filter(possible_ticker %in% top_10_tickers) %>%
     ggplot(aes(x = fct_reorder(possible_ticker, desc(count)), y = count)) +
     geom_bar(stat = "identity") +
     ggtitle("Number of Posts Mentioned the Stock Ticker") +
@@ -344,10 +346,8 @@ df %>% filter(possible_ticker %in% c('GME','AMC','BB','NOK','SND','NAKD','PLTR',
 ```
 
 ```{r}
-df %>% filter(possible_ticker %in% c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR','PLE')) -> df
+df %>% filter(possible_ticker %in% top_10_tickers) -> df
 df
-# df$count[1]/sum(df$count)
-# df$count[2]/sum(df$count)
 ```
 
 From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominant stocks that were discussed in WallStreeBets sub-reddit, which appears in around `r round(df$count[1]/sum(df$count)*100, 4)`% and `r round(df$count[2]/sum(df$count)*100, 4)`% of the total posts respectively. However, `NOK`, `SND` and the other stocks have also received some public attention, which are worthwhile to include them in the future analysis to get a bigger and clearer picture regarding the WSB stocks.
@@ -356,10 +356,8 @@ From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominan
 Now, we want to study how the top 10 stocks' prices move over the past one year.
 
 ```{r}
-tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')
-
 tickerPrices <- NULL
-for (ticker in tickers)
+for (ticker in top_10_tickers)
   tickerPrices <- cbind(tickerPrices, getSymbols(ticker, src = "yahoo", from = "2020-12-01", auto.assign=FALSE)[,4])
 ```
 
