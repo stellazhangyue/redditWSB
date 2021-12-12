@@ -46,7 +46,7 @@ process_text <- function(reddit_GME_sa) {
   lexStopWords <- stop_words
   gme_tidy_data <- gme_tidy_data %>% 
     anti_join(lexStopWords  , by = c("textWord" = "word")) %>% 
-    filter(!textWord  %in% c("april", "byteresa", "cfra", "jana","npd", "shopjana","wfm","ihor","amazoncom","anayahooyptryahoo","bloomberg","carolinabased","cincinnatibased","cincinnati", "monday", "month","dusaniwsky"))
+    filter(!textWord  %in% c("stocks"))
   
   #Attach date
   tmp <- str_split(gme_tidy_data$postid, "_")

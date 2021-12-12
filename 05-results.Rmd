@@ -12,6 +12,7 @@ library(plotly)
 library(patchwork)
 library(maps)
 library(mapdata)
+library(lubridate)
 ```
 
 
@@ -49,14 +50,19 @@ The above two plots display the interest on the relative topics during the time 
 ```{r echo=FALSE, message=FALSE}
 gme_nrc_first_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_first_wave.csv")
 gme_nrc_second_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_second_wave.csv")
+
+neg_sentiments = c('anger', 'disgust', 'fear', 'negative', 'sadness')
 ```
 ```{r}
 first_wave <- gme_nrc_first_wave %>%
   select(sentiment, wordCount) %>%
   group_by(sentiment) %>%
   dplyr::summarise(wordCount = sum(wordCount)) %>%
+  mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
   ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
-    geom_bar(stat = "identity") +
+    geom_bar(stat = "identity", aes(fill = label)) +
+    scale_fill_manual(values = c("neg" = "#88A8F2",
+                                "pos" = "#EF856E")) +
     ggtitle("GME Sentiment Jan and Feb") +
     xlab("sentiment")
 
@@ -64,14 +70,53 @@ second_wave <- gme_nrc_second_wave %>%
   select(sentiment, wordCount) %>%
   group_by(sentiment) %>%
   dplyr::summarise(wordCount = sum(wordCount)) %>%
+  mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
   ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
-    geom_bar(stat = "identity") +
+    geom_bar(stat = "identity", aes(fill = label)) +
+    scale_fill_manual(values = c("neg" = "#88A8F2",
+                                "pos" = "#EF856E")) +
     ggtitle("GME Sentiment May, Jun and Jul") +
     xlab("sentiment")
 
 first_wave / second_wave
 ```
 
+```{r}
+gme_nrc_total <- rbind(gme_nrc_first_wave, gme_nrc_second_wave)
+
+gme_nrc_sum <- gme_nrc_total %>%
+  mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
+  group_by(textDate, label) %>%
+  summarise(wordCount = sum(wordCount)) %>%
+  ungroup() %>%
+  pivot_wider(id_cols = textDate, names_from = label, values_from = wordCount) %>%
+  mutate(positive_percentage = pos/(pos+neg)) %>%
+  mutate(positive_percentage = (positive_percentage - min(positive_percentage))/(max(positive_percentage)-min(positive_percentage))*100) %>%
+  select(textDate, positive_percentage)
+
+textDate <- seq(as.Date("2021/3/1"), as.Date("2021/5/30"), "days")
+empty_df <- data.frame(textDate)
+empty_df$positive_percentage <- NA
+
+gme_nrc_sum <- rbind(gme_nrc_sum, empty_df)
+
+gme_stock <- getSymbols("GME", src="yahoo", from = "2021-01-01", to = "2021-07-31", auto.assign = FALSE)
+
+gme_stock_df <- data.frame(Date=index(gme_stock),coredata(gme_stock)) %>% 
+  mutate(price = (GME.Close - min(GME.Close))/(max(GME.Close)-min(GME.Close))*100) %>%
+  select(Date, price)
+
+total <- merge(gme_stock_df, gme_nrc_sum, by.y="textDate", by.x="Date") %>%
+  pivot_longer(!Date, names_to = "attr", values_to = "val")
+
+ggplot(total, aes(x=Date, y=val, color=attr)) +
+  geom_line() +
+  geom_point() +
+  ggtitle("GME positive percentage and stock price") +
+  ylab("value") +
+  labs(color = "") 
+```
+Above plot analyzes if the sentiments on r/WallStreetBets had any impact on GME's stock price.
 
 
 ### Stock Data and Information

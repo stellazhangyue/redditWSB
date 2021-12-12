@@ -70,8 +70,8 @@ gme_nrc_Feb_agg <- gme_nrc_Feb %>%
 
 gme_nrc_first_wave <- rbind(gme_nrc_Jan_agg, gme_nrc_Feb_agg)
 
-write.csv(gme_nrc_Jan_agg, file = ("data/clean/reddit/gme_sa_nrc_first_wave.csv"),row.names=FALSE)
-```
+write.csv(gme_nrc_first_wave, file = ("data/clean/reddit/gme_sa_nrc_first_wave.csv"), row.names=FALSE)
+``` 
 
 
 ```{r}
@@ -80,7 +80,21 @@ gme_nrc_567_agg <- gme_nrc_567 %>%
   group_by(textDate, sentiment) %>%
   dplyr::summarise(wordCount = sum(wordCount)) 
 
-write.csv(gme_nrc_Feb_agg, file = ("data/clean/reddit/gme_sa_nrc_second_wave.csv"), row.names=FALSE)
+write.csv(gme_nrc_567_agg, file = ("data/clean/reddit/gme_sa_nrc_second_wave.csv"), row.names=FALSE)
+```
+```{r}
+tmp_1 <-gme_nrc_Jan %>% 
+  select(textWord, sentiment, wordCount) %>%
+  group_by(textWord, sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount))%>%
+  arrange(desc(wordCount))
+
+tmp_567 <-gme_nrc_567 %>% 
+  select(textWord, sentiment, wordCount) %>%
+  group_by(textWord, sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount))%>%
+  arrange(desc(wordCount))
+
 ```
 
 

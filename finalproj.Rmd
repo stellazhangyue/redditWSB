@@ -4,205 +4,14 @@ author: "Xingyu Lu, Yue Xiong ,Yue Zhang"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-  echo = FALSE,
-  message = FALSE,
-  warning = FALSE
-)
-```
 
 # Introduction
 
-
-Background:
-In January, 2021, there is a subreddit called r/wallstreetbets where participants discuss stock and option trading. The participants are mainly young retailer traders who have little background in investment knowledge and risk management. They are not satisfied with the over short on some stocks by major Wall Street companies. In January and June 2021, there were 2 waves of major short squeeze led by the participants in this subreddit, which were GameStop short squeeze and AMC short squeeze.
-(reference: https://en.wikipedia.org/wiki/R/wallstreetbets)
-
-We'll be trying to answer following questions:
-1. How big is the impact of reddit wallstreetbet? I.e. no. of news, downloads of Robinhood and other trading apps,
-2. For each targeted stock, what’s the relationship between reddit posts and stock price/volume etc.
-3. Why does Wallstreetbet choose these target stocks? What’re their similarities? How do their choices change as time evolves? Gamestop, AMC, Blueberry, Nokia, SPCE, PLTR, TSLA.
-
-
-
-
-
+Placeholder
 
 
 #### Stock Data Plot
-The most Representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in WallStreetBet sub-reddit analysed in Chapter 3 - cleaning. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
-
-```{r}
-getSymbols("GME",src='yahoo')
-df_GME <- data.frame(Date=index(GME),coredata(GME))
-
-# Generate Bollinger Bands
-bbands <- BBands(GME[,c("GME.High","GME.Low","GME.Close")])
-
-df_GME <- subset(cbind(df_GME, data.frame(bbands[,1:3])), Date >= "2020-12-01")
-
-for (i in 1:length(df_GME[,1])) {
-  if (df_GME$GME.Close[i] >= df_GME$GME.Open[i]) {
-      df_GME$direction[i] = 'Increasing'
-  } else {
-      df_GME$direction[i] = 'Decreasing'
-  }
-}
-i <- list(line = list(color = 'green'))
-d <- list(line = list(color = 'red'))
-
-# candlestick chart
-fig <- df_GME %>% plot_ly(x = ~Date, type="candlestick",
-          open = ~GME.Open, close = ~GME.Close,
-          high = ~GME.High, low = ~GME.Low, name = "GME",
-          increasing = i, decreasing = d)
-fig <- fig %>% add_lines(x = ~Date, y = ~up , name = "Bollinger Bands",
-            line = list(color = '#ccc', width = 0.5),
-            legendgroup = "Bollinger Bands",
-            hoverinfo = "none", inherit = F) 
-fig <- fig %>% add_lines(x = ~Date, y = ~dn, name = "Bollinger Bands",
-            line = list(color = '#ccc', width = 0.5),
-            legendgroup = "Bollinger Bands", inherit = F,
-            showlegend = FALSE, hoverinfo = "none") 
-fig <- fig %>% add_lines(x = ~Date, y = ~mavg, name = "Moving Avg",
-            line = list(color = '#E377C2', width = 0.5),
-            hoverinfo = "none", inherit = F) 
-fig <- fig %>% layout(yaxis = list(title = "Price"))
-
-# volume chart
-fig2 <- df_GME
-fig2 <- fig2 %>% plot_ly(x=~Date, y=~GME.Volume, type='bar', name = "GME Volume",
-          color = ~direction, colors = c('green','red')) 
-fig2 <- fig2 %>% layout(yaxis = list(title = "Volume"))
-
-# date slider 
-rs <- list(visible = TRUE, x = 0.5, y = -0.055,
-           xanchor = 'center', yref = 'paper',
-           font = list(size = 9),
-           buttons = list(
-             list(count=1,
-                  label='RESET',
-                  step='all'),
-             list(count=1,
-                  label='1 YR',
-                  step='year',
-                  stepmode='backward'),
-             list(count=6,
-                  label='6 MO',
-                  step='month',
-                  stepmode='backward'),
-             list(count=3,
-                  label='3 MO',
-                  step='month',
-                  stepmode='backward'),
-             list(count=1,
-                  label='1 MO',
-                  step='month',
-                  stepmode='backward')
-           ))
-
-# combined plot
-fig <- subplot(fig, fig2, heights = c(0.7,0.2), nrows=2,
-             shareX = TRUE, titleY = TRUE)
-fig <- fig %>% layout(title = paste("GME: 2020-12-01 -",Sys.Date()),
-         xaxis = list(rangeselector = rs),
-         legend = list(orientation = 'h', x = 0.5, y = 1,
-                       xanchor = 'center', yref = 'paper',
-                       font = list(size = 10),
-                       bgcolor = 'transparent'))
-
-fig
-```
-
-```{r}
-getSymbols("AMC",src='yahoo')
-df_AMC <- data.frame(Date=index(AMC),coredata(AMC))
-
-# Generate Bollinger Bands
-bbands <- BBands(AMC[,c("AMC.High","AMC.Low","AMC.Close")])
-
-df_AMC <- subset(cbind(df_AMC, data.frame(bbands[,1:3])), Date >= "2020-12-01")
-
-for (i in 1:length(df_AMC[,1])) {
-  if (df_AMC$AMC.Close[i] >= df_AMC$AMC.Open[i]) {
-      df_AMC$direction[i] = 'Increasing'
-  } else {
-      df_AMC$direction[i] = 'Decreasing'
-  }
-}
-i <- list(line = list(color = 'green'))
-d <- list(line = list(color = 'red'))
-
-# candlestick chart
-fig3 <- df_AMC %>% plot_ly(x = ~Date, type="candlestick",
-          open = ~AMC.Open, close = ~AMC.Close,
-          high = ~AMC.High, low = ~AMC.Low, name = "AMC",
-          increasing = i, decreasing = d)
-fig3 <- fig3 %>% add_lines(x = ~Date, y = ~up , name = "Bollinger Bands",
-            line = list(color = '#ccc', width = 0.5),
-            legendgroup = "Bollinger Bands",
-            hoverinfo = "none", inherit = F) 
-fig3 <- fig3 %>% add_lines(x = ~Date, y = ~dn, name = "Bollinger Bands",
-            line = list(color = '#ccc', width = 0.5),
-            legendgroup = "Bollinger Bands", inherit = F,
-            showlegend = FALSE, hoverinfo = "none") 
-fig3 <- fig3 %>% add_lines(x = ~Date, y = ~mavg, name = "Moving Avg",
-            line = list(color = '#E377C2', width = 0.5),
-            hoverinfo = "none", inherit = F) 
-fig3 <- fig3 %>% layout(yaxis = list(title = "Price"))
-
-# volume chart
-fig4 <- df_AMC
-fig4 <- fig4 %>% plot_ly(x=~Date, y=~AMC.Volume, type='bar', name = "AMC Volume",
-          color = ~direction, colors = c('green','red')) 
-fig4 <- fig4 %>% layout(yaxis = list(title = "Volume"))
-
-# date slider 
-rs <- list(visible = TRUE, x = 0.5, y = -0.055,
-           xanchor = 'center', yref = 'paper',
-           font = list(size = 9),
-           buttons = list(
-             list(count=1,
-                  label='RESET',
-                  step='all'),
-             list(count=1,
-                  label='1 YR',
-                  step='year',
-                  stepmode='backward'),
-             list(count=6,
-                  label='6 MO',
-                  step='month',
-                  stepmode='backward'),
-             list(count=3,
-                  label='3 MO',
-                  step='month',
-                  stepmode='backward'),
-             list(count=1,
-                  label='1 MO',
-                  step='month',
-                  stepmode='backward')
-           ))
-
-# combined plot
-fig3 <- subplot(fig3, fig4, heights = c(0.7,0.2), nrows=2,
-             shareX = TRUE, titleY = TRUE)
-fig3 <- fig3 %>% layout(title = paste("AMC: 2020-12-01 -",Sys.Date()),
-         xaxis = list(rangeselector = rs),
-         legend = list(orientation = 'h', x = 0.5, y = 1,
-                       xanchor = 'center', yref = 'paper',
-                       font = list(size = 10),
-                       bgcolor = 'transparent'))
-
-fig3
-```
-
-From the above 2 graphs, we can clearly see that there are 2 waves of the WSB stocks, which are indicated by the sudden spike of the stock price as well as the sudden increase of the volume. These 2 waves are around January - Feburary and May - June period respectively. These 2 graphs actually double confirm with our previous claims. 
-
-Also, the gray and red line in the price graph is the Bollinger Bands, which is the price level at 1 standard deviation level above and below the sample moving average of the price, which is able to capture the volatility of the stock. Generally, Bollinger bands is used to check whether prices are relatively high or low as comparing to the historical price. Here, we can see that for the beginning of the 2 waves, the price of both `GME` and `AMC` break the Bollinger upper bands, which suggests that the price of these 2 stocks are extremely high as comparing to the historical data. However, the Bollinger bands also adjusted themselves quickly to accommodate the sudden price change, so we can see that the price of these 2 stocks fall back within the Bollinger bands after a short period of time.
-
 #### Stock Risk Assessment
-While the previous 2 graphs mainly focus on the price and volume aspect 
 
 <!--chapter:end:index.Rmd-->
 
@@ -220,259 +29,26 @@ From the above data sources
 
 <!--chapter:end:02-data.Rmd-->
 
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-  echo = FALSE,
-  message = FALSE,
-  warning = FALSE
-)
-```
+
 # Data transformation
 
-```{r, message=FALSE, warning=FALSE}
-library(readr)
-library(tidyverse)
-library(tm)
-library(tidytext)
-```
+Placeholder
+
 
 ## Sentiment Analysis on Reddit Posts regarding GME
-
-```{r echo=FALSE}
-reddit_filenames <- list.files("data/raw/reddit/daywise", pattern="*.csv", full.names=TRUE)
-reddit_df <- do.call(rbind,lapply(reddit_filenames, read.csv))
-reddit_df <- subset(reddit_df, select = -c(X))
-reddit_df <- reddit_df[!duplicated(reddit_df),]
-```
-
-```{r}
-#Function to cleanup data
-cleanData <- function(x){
-  x <- gsub(":", "", x) # Replace junk with ("")
-  x <- iconv(x, "latin1", "ASCII", sub=" ")
-  x <- gsub("\\s+", " ", x) # Remove double spaces
-  return(x)
-}
-```
-
-
-```{r}
-# filter posts with score > 10 and contains GME in title or text
-reddit_GME_sa <- reddit_df %>%
-  filter(score >=10) %>%
-  select(postid, created_utc, title, selftext) %>%
-  mutate(title_contains_GME = grepl("GME", title, ignore.case = TRUE),
-         text_contains_GME = grepl("GME", selftext, ignore.case = TRUE)) %>%
-  filter(title_contains_GME | text_contains_GME) %>%
-  mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
-         text = cleanData(str_trim(paste(title, selftext))),
-         postid = paste(postid, date_utc, sep = "_")) %>%
-  select(postid, text)
-```
-
-```{r}
-reddit_GME_sa <- reddit_GME_sa %>% 
-  arrange(desc(length(text))) %>%
-  top_n(20)
-```
-
-```{r warning=FALSE}
-gme_corpus <- Corpus(VectorSource(reddit_GME_sa$text), readerControl = list(reader = readPlain, language = "en_US", load = TRUE))
-
-#Clean up the corpus
-gme_corpus <- tm_map(gme_corpus, removePunctuation)
-gme_corpus <- tm_map(gme_corpus, removeNumbers)
-gme_corpus <- tm_map(gme_corpus, stripWhitespace)
-gme_corpus <- tm_map(gme_corpus, content_transformer(tolower))
-
-#Generate Document Term Matrix
-gme_tdm <- TermDocumentMatrix(gme_corpus)
-gme_tdm <- list(tdm = gme_tdm, articleFile = reddit_GME_sa$postid)
-```
-```{r}
-gme_matrix <- data.matrix(gme_tdm[["tdm"]])
-
-#Convert matrix to dataframe
-gme_text_df <- as.data.frame(gme_matrix, stringsAsFactors = F)
-
-gme_postid <- gme_tdm[["articleFile"]]
-
-#Bind filenames to columns
-colnames(gme_text_df) <- gme_postid
-
-#Clean data get words from rownames
-gme_text_df$textWords <- cleanData(rownames(gme_text_df)) 
-rownames(gme_text_df) <- NULL
-
-#Transpose columns to rows
-gme_tidy_data <- pivot_longer(gme_text_df, !textWords, "postid", "wordCount")
-colnames(gme_tidy_data) <- c("textWord","postid","wordCount")
-
-#Ignore rows with NA values and wordCount less than 1. Means word does not exist in the article
-gme_tidy_data <- na.omit(gme_tidy_data)
-gme_tidy_data<- gme_tidy_data[gme_tidy_data$wordCount>0, ]
-rownames(gme_tidy_data) <- NULL
-
-#Get stop words from 'tidytext' package and remove from data frame
-lexStopWords <- stop_words
-gme_tidy_data <- gme_tidy_data %>% 
-                    anti_join(lexStopWords  , by = c("textWord" = "word")) %>% 
-                    filter(!textWord  %in% c("april", "byteresa", "cfra", "jana","npd", "shopjana","wfm","ihor","amazoncom","anayahooyptryahoo","bloomberg","carolinabased","cincinnatibased","cincinnati", "monday", "month","dusaniwsky"))
-
-#Attach date
-
-# gme_tidy_data$textDate <- properDate(str_extract(wfm.tidy.data$fileName, pattern))
-```
-
-
-
-
 ## Google Trends Data Transformation
-In the Google Trends source data, it assigns a number to each keyword for each period(week). The numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term. A score of <1 means there is some search interest but it's extremely low. We are replacing all <1's with 0.5, so that we can keep the data frame consistent with all scores as numeric data. 
-
-We also need to tidy the dataset because some of the column names are not names of variables, but values of a variable: the original column names represent the values of the `keyword` variable and the values in the columns represents the values of `score`, and each row represents 5 observations, not one. To tidy the dataset, we make the offending columns into a new pair of variables using `pivot_longer`. 
-```{r echo=FALSE}
-combined_web_raw <- readr::read_csv("data/raw/gtrends/combined_web.csv")
-
-combined_web_clean <- combined_web_raw %>%
-  mutate(`r/WallStreetBets` = replace(`r/WallStreetBets`, `r/WallStreetBets` == "<1", 0.5)) %>%
-  mutate(`r/WallStreetBets` = as.numeric(`r/WallStreetBets`)) %>%
-  pivot_longer(cols = !Week,
-             names_to = "keyword",
-             values_to = "score"
-             )
-write.csv(combined_web_clean, file = ("data/clean/gtrends/combined_web.csv"),row.names=FALSE)
-
-combined_news_raw <- readr::read_csv("data/raw/gtrends/combined_news.csv")
-combined_news_clean <- combined_news_raw %>%
-  mutate(`r/WallStreetBets` = replace(`r/WallStreetBets`, `r/WallStreetBets` == "<1", 0.5),
-         `GameStop` = replace(`GameStop`, `GameStop` == "<1", 0.5)) %>%
-  mutate(`r/WallStreetBets` = as.numeric(`r/WallStreetBets`),
-         `GameStop` = as.numeric(`GameStop`)) %>%
-  pivot_longer(cols = !Week,
-             names_to = "keyword",
-             values_to = "score"
-             )
-write.csv(combined_news_clean, file = ("data/clean/gtrends/combined_news.csv"),row.names=FALSE)
-```
-
-After cleaning, it contains 3 rows and 260 records.
-```{r}
-knitr::kable(data.frame(
-                cols = c('week','keyword','score'),
-                data_type = c('date', 'string', 'numeric'),
-                description = c("Which week?","Search keyword","Search interest score")
-              ), 
-             col.names = c('Column', 'Type', 'Description'),
-             row.names = F,font_size = 10)
-```
-
-
 ## Reddit Data Transformation
-There were 2 waves of sharp stock price change for WallStreetBets (WSBs) stocks in 2021, which were around January/Feburary and May/June period. These 2 waves are mainly caused by the discussion in the sub-Reddit group, WallStreetBets. Therefore, we have downloaded the Reddit posts that have been posted during these 2 periods and also extend some time before and after the wave. This is because we believe it takes some time for the initial posts to get public attention and then the posts starts to influence the stock price. Also, by including the posts that are slightly after the wave, we can do a comparison during and after the wave to check how big the effects of the posts in the sub-Reddit group on the stock price. Therefore, we have downloaded the data for the whole January, February, May, June and July, which have completely cover the 2 waves and also cover some extension. Also, we have parsed the posts on daily basis, which also helps to show the change over time.
-
-Before starting to do the analysis, we need to find the list of WSB stocks first. the Generally speaking, all the stocks that have been discussed in the WallStreetBets sub-Reddit group should be considered as WSB stock. However, given the time frame that we considered is relatively long, which is 5 months, also, the WSBs has caught huge public attention, which also attracted a lot of new redditers. Therefore, there are many people participate in the discussion and the stocks mentioned are quite diversified. In this project, we will only focus on the top 10 stocks that have been mentioned in the posts. 
-
-In the source data, which are the daily posts csv files, there are 2 columns that may contains the stock information, which are `title` and `selftext` respectively. Therefore, we need to first find the stock ticker from these 2 columns. Generally, the stock ticker should start with `$` and followed by 3 to 4 consecutive upper case letters. However, in the source data, there is no `$` exists, we cannot get the exact stock data but rather, we can extract out the list of possible stock tickers by extracting all the sub-strings which are consists of 3 to 4 consecutive upper case letters. 
-
-We have used regex in python to extract out the list of possible stock tickers from `title` and `selftext` respectively for each of the daily reddit csv and then we combine these 2 lists together. However, there might be the case that the possible stock tickers are mentioned by the redditers both in `title` and `selftext`. In this case, we define that the possible stock ticker should be considered only once. Therefore, after combining the 2 lists together, we also need to drop duplicates to make sure there is no double count of possible stock ticker from both `title` and `selftext`. With that, we can make sure that the count of every possible stock ticker in 1 row is at most 1. 
-
-Then, we start to count the possible stock ticker and summarize the count information into a dictionary. For every daily reddit csv, we will get a possible stock ticker count dictionary and combine them together to get the final count dictionary and stored it into the clean data folder. 
-
-Now, in r, we can read the file which contains the information of the final possible stock ticker count. Since we are only interested in the top 10 WSB stocks, we need to re-order the data frame according to the word count in descending order. 
-
-We noticed that there are some invalid tickers exists in the data frame, but that is expected since there is no perfect way to extract out the stock ticker due to the lack of `$` in the data source, so we manually go through the data frame and select out the top 10 tickers, which are: `GME`, `AMC`, `NOK`, `SND`, `NAK`, `NAKD`, `PLTR`, `CLOV`, `RETA`, `MAR`, respectively.
-
-```{r}
-df <- read.csv('possible_tickers_count.csv')
-df %>% arrange(desc(count))
-```
-
 
 <!--chapter:end:03-cleaning.Rmd-->
 
-```{r include=FALSE, cache=FALSE}
-knitr::opts_chunk$set(
-  echo = FALSE,
-  message = FALSE,
-  warning = FALSE
-)
-```
-# Missing values
-```{r include=FALSE}
-library(tidyverse)
-library(patchwork)
-library(visdat)
-library(ggplot2)
-library(naniar)
 
-source("plot_missing.R")
-```
+# Missing values
+
+Placeholder
+
 
 ## Reddit post dataset
-We first create the missing values plots, both count and percent, for the reddit post dataset.
-```{r echo=FALSE}
-filenames <- list.files("data/raw/reddit/daywise", pattern="*.csv", full.names=TRUE)
-df <- do.call(rbind,lapply(filenames, read.csv))
-df <- subset(df, select = -c(X))
-df <- df[!duplicated(df),]
-```
-
-```{r echo=FALSE}
-mp_df <- df %>% 
-  replace_with_na(replace = list(author = "", selftext=c(" removed ", " deleted ")))
-
-plot_missing_patterns(mp_df, FALSE)
-plot_missing_patterns(mp_df, TRUE)
-```
-
-We can observe from the missing value plots that there are 4 different missing patterns, which are complete cases (47.19%), missing `selftext`  (45.08%), missing both `selftext` and `author` (4.77%), and missing `author` only (2.95%). Therefore, out of the 7 variables in the dataset, only 2 variables might be missing, which are `selftext` and `author` respectively. Among the 2 variables, 49.85% of the `selftext` is missing while only 7.72% of the `author` is missing.
-
-Looking into the `selftext` column in the original dataset, we noticed that there are 3 major levels that account for ~90% of the data, which are "removed", "" and "deleted". Consulted the reddit documents, we found that "removed" means the post is either removed by the moderators of the subreddit group or the administrator; "deleted" means the post is deleted by the content author; "" appears when a post doesn't have body text or a post's body contains pictures only. In this regard, we are only considering "removed" and "deleted" as NA, ""s are considered as valid inputs. About 45% of the posts are "removed", which means the level of censorship is relatively high. 
-
-```{r echo=FALSE}
-body_agg <- df %>%
-  mutate(selftext = trimws(selftext)) %>%
-  group_by(selftext) %>%
-  summarise(count = n()) %>%
-  arrange(desc(count)) %>%
-  mutate(percent = round(count/sum(count)*100, 2)) %>%
-  top_n(20)
-
-body_agg
-```
-
-Looking at the `author` column, 7.72% of the posts are missing `author`.  We noticed that 61.76% of the posts that don't have an `author` are also missing `selftext`. 
-```{r echo=FALSE}
-author_agg <- mp_df %>%
-  mutate(selftext = trimws(selftext),
-         author = trimws(author)) %>%
-  filter(is.na(author)) %>%
-  group_by(selftext) %>%
-  summarise(count = n()) %>%
-  arrange(desc(count)) %>%
-  mutate(percent = round(count/sum(count)*100, 2)) %>%
-  top_n(20)
-
-author_agg
-```
-
-These missing values wouldn't impact our analysis, because we are looking at the data at the aggregate level. Our analysis only cares about the change of the count of the posts in particular period of time. Even though those posts are deleted or removed in a later time, we should still include them in our analysis.
-
 ## Google Trend dataset
-We created the missing values plots, both count and percent, for two Google trend datasets and found there's no missing value in both datasets
-```{r echo=FALSE}
-gt_web <- read_csv("data/raw/gtrends/combined_web.csv")
-plot_missing_patterns(gt_web, FALSE)
-plot_missing_patterns(gt_web, TRUE)
-```
-
-```{r echo=FALSE}
-gt_news <- read_csv("data/raw/gtrends/combined_news.csv")
-plot_missing_patterns(gt_news, FALSE)
-plot_missing_patterns(gt_news, TRUE)
-```
-
 
 <!--chapter:end:04-missing.Rmd-->
 
@@ -497,6 +73,7 @@ library(plotly)
 library(patchwork)
 library(maps)
 library(mapdata)
+library(lubridate)
 ```
 
 
@@ -521,14 +98,87 @@ news <- combined_news %>%
 
 web / news
 ```
+
 The above two plots display the interest on the relative topics during the time period 2020-11-15 to 2021-11-15. Numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term.
 
 #### Interest by subregion
 
+### r/WallStreetBets Reddit Post Data
+
+#### Reddit post data overview
+
+#### Sentiment analysis on Reddit posts regarding GME
+```{r echo=FALSE, message=FALSE}
+gme_nrc_first_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_first_wave.csv")
+gme_nrc_second_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_second_wave.csv")
+
+neg_sentiments = c('anger', 'disgust', 'fear', 'negative', 'sadness')
+```
+```{r}
+first_wave <- gme_nrc_first_wave %>%
+  select(sentiment, wordCount) %>%
+  group_by(sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) %>%
+  mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
+  ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
+    geom_bar(stat = "identity", aes(fill = label)) +
+    scale_fill_manual(values = c("neg" = "#88A8F2",
+                                "pos" = "#EF856E")) +
+    ggtitle("GME Sentiment Jan and Feb") +
+    xlab("sentiment")
+
+second_wave <- gme_nrc_second_wave %>%
+  select(sentiment, wordCount) %>%
+  group_by(sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) %>%
+  mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
+  ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
+    geom_bar(stat = "identity", aes(fill = label)) +
+    scale_fill_manual(values = c("neg" = "#88A8F2",
+                                "pos" = "#EF856E")) +
+    ggtitle("GME Sentiment May, Jun and Jul") +
+    xlab("sentiment")
+
+first_wave / second_wave
+```
+
+```{r}
+gme_nrc_total <- rbind(gme_nrc_first_wave, gme_nrc_second_wave)
+
+gme_nrc_sum <- gme_nrc_total %>%
+  mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
+  group_by(textDate, label) %>%
+  summarise(wordCount = sum(wordCount)) %>%
+  ungroup() %>%
+  pivot_wider(id_cols = textDate, names_from = label, values_from = wordCount) %>%
+  mutate(positive_percentage = pos/(pos+neg)) %>%
+  mutate(positive_percentage = (positive_percentage - min(positive_percentage))/(max(positive_percentage)-min(positive_percentage))*100) %>%
+  select(textDate, positive_percentage)
+
+gme_nrc_sum$textDate[month(gme_nrc_sum$textDate)==3] <- NA
+gme_nrc_sum$textDate[month(gme_nrc_sum$textDate)==4] <- NA
+           
+gme_stock <- getSymbols("GME", src="yahoo", from = "2021-01-01", to = "2021-07-31", auto.assign = FALSE)
+
+gme_stock_df <- data.frame(Date=index(gme_stock),coredata(gme_stock)) %>% 
+  mutate(Close = (GME.Close - min(GME.Close))/(max(GME.Close)-min(GME.Close))*100) %>%
+  select(Date, Close)
+
+total <- merge(gme_stock_df, gme_nrc_sum, by.y="textDate", by.x="Date") %>%
+  pivot_longer(!Date, names_to = "attr", values_to = "val")
+
+ggplot(total, aes(x=Date, y=val, color=attr)) +
+  geom_path() +
+  ggtitle("GME Positive percentage and stock price")
+# gme_df %>%
+#   ggplot(aes(Date, GME.Close)) +
+#   geom_line() +
+#   ggtitle("GME Stock price")
+```
 
 
 
-
+### Stock Data and Information
 #### Stock Data Plot
 The most Representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in WallStreetBet sub-reddit analysed in Chapter 3 - cleaning. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
 
@@ -701,7 +351,22 @@ From the above 2 graphs, we can clearly see that there are 2 waves of the WSB st
 Also, the gray and red line in the price graph is the Bollinger Bands, which is the price level at 1 standard deviation level above and below the sample moving average of the price, which is able to capture the volatility of the stock. Generally, Bollinger bands is used to check whether prices are relatively high or low as comparing to the historical price. Here, we can see that for the beginning of the 2 waves, the price of both `GME` and `AMC` break the Bollinger upper bands, which suggests that the price of these 2 stocks are extremely high as comparing to the historical data. However, the Bollinger bands also adjusted themselves quickly to accommodate the sudden price change, so we can see that the price of these 2 stocks fall back within the Bollinger bands after a short period of time.
 
 #### Stock Risk Assessment
-While the previous 2 graphs mainly focus on the price and volume aspect 
+While the previous 2 graphs mainly focus on the price and volume aspects, there is one more aspect that are very important to the stock, which is risk. Risk can be measured by the standard deviation. Here, we would like to explore how the risk of the 2 stocks change before and after the 2 waves, which are `GME` and `AMC` respectively. Thus, we need to calculate the moving standard deviation of the 2 stocks over time.
+
+For each month, it is about 4 weeks and the stock market only opens in weekdays, thus, there are about 4*5 = 20 days with stock data every month. Therefore, we set the moving window to 20, which is roughly about 1 month time.
+```{r}
+getSymbols("GME",src='yahoo')
+df_GME <- data.frame(Date=index(GME),coredata(GME))
+
+df_GME <- subset(df_GME, Date >= "2020-01-01")
+df_GME['moving_std'] <- rollapply(df_GME['GME.Close'], width = 20, FUN = sd, na.pad = TRUE)
+ggplot(df_GME, aes(x=Date, y=moving_std)) +
+  geom_line() +
+  xlab("Date") +
+  ylab('Moving Standard Deviation') + 
+  ggtitle('Change of risk of GME over time')
+```
+
 
 <!--chapter:end:05-results.Rmd-->
 
