@@ -280,10 +280,10 @@ df$count[1]/sum(df$count)
 df$count[2]/sum(df$count)
 ```
 
-From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominant stocks that were discussed in WallStreeBets sub-reddit, which appears in around 45% and 25% of the total posts respectively. However, `NOK`, `SND` and the other stocks have also received some public attention, which are worthwhile to include them in the future analysis to get a bigger and clearer picture regarding the WSB stocks.
+From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominant stocks that were discussed in WallStreeBets sub-reddit, which appears in around 45% and 25% of the total posts respectively. However, ``BB`, `NOK`, `SND` and the other stocks have also received some public attention, which are worthwhile to include them in the future analysis to get a bigger and clearer picture regarding the WSB stocks.
 
 #### Time Series of the Top 10 Stocks
-Now, we want to study how the top 10 stocks' prices move over the past one year.
+Now, we want to study how the top 10 stocks' prices move over the past one year. Again, since the closing price is the most representative price among all the 5 prices, we just use closing price to show the price change over time.
 
 ```{r}
 tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')
