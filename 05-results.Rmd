@@ -295,13 +295,13 @@ colnames(df_price) <- c('date','GME.Close','AMC.Close','BB.Close','NOK.Close','S
 tmp <- as.data.frame(t(as.matrix(df_price)))
 #rownames(df_price) <- df_price$date
 #df_price$date <- NULL
-ggplot(tickerPrices, aes(x=tickerPrices.index)) + 
-  geom_line(aes(y = GME), color = "darkred") + 
-  geom_line(aes(y = AMC), color="steelblue", linetype="twodash") 
+# ggplot(tickerPrices, aes(x=tickerPrices.index)) + 
+#   geom_line(aes(y = GME), color = "darkred") + 
+#   geom_line(aes(y = AMC), color="steelblue", linetype="twodash") 
 ```
 
 ```{r}
-df_price <- read.csv()
+# df_price <- read.csv()
 ```
 
 ```{r}
