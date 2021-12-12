@@ -12,6 +12,8 @@ library(plotly)
 library(patchwork)
 library(maps)
 library(mapdata)
+library(lubridate)
+library(treemap)
 ```
 
 
@@ -259,13 +261,14 @@ From the 2 graphs above, we have following observations:
 #### Most Popular Stocks
 Besides studying about the 2 most representative stocks in WSBs, which are `GME` and `AMC` respectively, we could also study some other WSB stocks, which are not as popular as `GME` and `AMC` but they are still very representative and have received a lot of public attention.
 
-Therefore, we extend our study to the top 10 mentioned stocks in the posts of WallStreetBets sub-reddit group. These 10 stocks has been identified in the Chapter 3 - Cleaning, which are: `GME`, `AMC`, `BB`, `NOK`, `SND`, `NAKD`, `PLTR`, `CLOV`, `RETA`, `MAR`, `PLE`, respectively.
+Therefore, we extend our study to the top 10 mentioned stocks in the posts of WallStreetBets sub-reddit group. These 10 stocks has been identified in the Chapter 3 - Cleaning, which are: `GME`, `AMC`, `BB`, `NOK`, `SND`, `NAKD`, `PLTR`, `CLOV`, `RETA`, `MAR`, respectively.
 
 Now, we can plot bar chart to show the count of posts that have mentioned about the stock for each stock.
 
 ```{r}
 df <- read.csv('data/clean/reddit/ranked_possible_tickers_count.csv')
-df %>% filter(possible_ticker %in% c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')) %>%
+top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')
+df %>% filter(possible_ticker %in% top_10_tickers) %>%
     ggplot(aes(x = fct_reorder(possible_ticker, desc(count)), y = count)) +
     geom_bar(stat = "identity") +
     ggtitle("Number of Posts Mentioned the Stock Ticker") +
@@ -274,22 +277,18 @@ df %>% filter(possible_ticker %in% c('GME','AMC','BB','NOK','SND','NAKD','PLTR',
 ```
 
 ```{r}
-df %>% filter(possible_ticker %in% c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR','PLE')) -> df
+df %>% filter(possible_ticker %in% top_10_tickers) -> df
 df
-df$count[1]/sum(df$count)
-df$count[2]/sum(df$count)
 ```
 
-From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominant stocks that were discussed in WallStreeBets sub-reddit, which appears in around 45% and 25% of the total posts respectively. However, ``BB`, `NOK`, `SND` and the other stocks have also received some public attention, which are worthwhile to include them in the future analysis to get a bigger and clearer picture regarding the WSB stocks.
+From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominant stocks that were discussed in WallStreeBets sub-reddit, which appears in around `r round(df$count[1]/sum(df$count)*100, 4)`% and `r round(df$count[2]/sum(df$count)*100, 4)`% of the total posts respectively. However, ``BB`, `NOK`, `SND` and the other stocks have also received some public attention, which are worthwhile to include them in the future analysis to get a bigger and clearer picture regarding the WSB stocks.
 
 #### Time Series of the Top 10 Stocks
 Now, we want to study how the top 10 stocks' prices move over the past one year. Again, since the closing price is the most representative price among all the 5 prices, we just use closing price to show the price change over time.
 
 ```{r}
-tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')
-
 tickerPrices <- NULL
-for (ticker in tickers)
+for (ticker in top_10_tickers)
   tickerPrices <- cbind(tickerPrices, getSymbols(ticker, src = "yahoo", from = "2020-12-01", auto.assign=FALSE)[,4])
 
 ggplot(tickerPrices, aes(x=tickerPrices.index)) + 
