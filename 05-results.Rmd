@@ -291,5 +291,9 @@ tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')
 tickerPrices <- NULL
 for (ticker in tickers)
   tickerPrices <- cbind(tickerPrices, getSymbols(ticker, src = "yahoo", from = "2020-12-01", auto.assign=FALSE)[,4])
+
+ggplot(tickerPrices, aes(x=tickerPrices.index)) + 
+  geom_line(aes(y = GME), color = "darkred") + 
+  geom_line(aes(y = AMC), color="steelblue", linetype="twodash") 
 ```
 

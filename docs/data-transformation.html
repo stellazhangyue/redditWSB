@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Data transformation | Final_Project</title>
-  <meta name="description" content="Chapter 3 Data transformation | Final_Project" />
+  <title>Chapter 3 Data transformation | Analysis of stocks discussed in Reddit r/wallstreetbets</title>
+  <meta name="description" content="Chapter 3 Data transformation | Analysis of stocks discussed in Reddit r/wallstreetbets" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 Data transformation | Final_Project" />
+  <meta property="og:title" content="Chapter 3 Data transformation | Analysis of stocks discussed in Reddit r/wallstreetbets" />
   <meta property="og:type" content="book" />
   
   
@@ -16,15 +16,15 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Data transformation | Final_Project" />
+  <meta name="twitter:title" content="Chapter 3 Data transformation | Analysis of stocks discussed in Reddit r/wallstreetbets" />
   
   
   
 
-<meta name="author" content="Xiong Yue" />
+<meta name="author" content="Xingyu Lu, Yue Xiong ,Yue Zhang" />
 
 
-<meta name="date" content="2021-12-11" />
+<meta name="date" content="2021-12-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -62,70 +62,6 @@
 <script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
 
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -159,17 +95,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#whats-the-impact-of-rwallstreetbet"><i class="fa fa-check"></i><b>5.1</b> What’s the impact of r/wallstreetbet?</a>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#general-publics-interests-on-google"><i class="fa fa-check"></i><b>5.1</b> General Public’s interests on Google</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#general-publics-interests-on-google"><i class="fa fa-check"></i><b>5.1.1</b> General Public’s interests on Google</a></li>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#interest-over-time"><i class="fa fa-check"></i><b>5.1.1</b> Interest over time</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#interest-by-subregion"><i class="fa fa-check"></i><b>5.1.2</b> Interest by subregion</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#rwallstreetbets-reddit-post-data"><i class="fa fa-check"></i><b>5.2</b> r/WallStreetBets Reddit Post Data</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#reddit-post-data-overview"><i class="fa fa-check"></i><b>5.2.1</b> Reddit post data overview</a></li>
+<li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#sentiment-analysis-on-reddit-posts-regarding-gme-1"><i class="fa fa-check"></i><b>5.2.2</b> Sentiment analysis on Reddit posts regarding GME</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#stock-data-and-information"><i class="fa fa-check"></i><b>5.3</b> Stock Data and Information</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="results.html"><a href="results.html#stock-data-plot"><i class="fa fa-check"></i><b>5.3.1</b> Stock Data Plot</a></li>
+<li class="chapter" data-level="5.3.2" data-path="results.html"><a href="results.html#stock-risk-assessment"><i class="fa fa-check"></i><b>5.3.2</b> Stock Risk Assessment</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#r-markdown"><i class="fa fa-check"></i><b>7.1</b> R Markdown</a></li>
-<li class="chapter" data-level="7.2" data-path="conclusion.html"><a href="conclusion.html#including-plots"><i class="fa fa-check"></i><b>7.2</b> Including Plots</a></li>
-</ul></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -181,7 +124,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Final_Project</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Analysis of stocks discussed in Reddit r/wallstreetbets</a>
           </h1>
         </div>
 
@@ -230,346 +173,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">3.3</span> Reddit Data Transformation</h2>
 <p>There were 2 waves of sharp stock price change for WallStreetBets (WSBs) stocks in 2021, which were around January/Feburary and May/June period. These 2 waves are mainly caused by the discussion in the sub-Reddit group, WallStreetBets. Therefore, we have downloaded the Reddit posts that have been posted during these 2 periods and also extend some time before and after the wave. This is because we believe it takes some time for the initial posts to get public attention and then the posts starts to influence the stock price. Also, by including the posts that are slightly after the wave, we can do a comparison during and after the wave to check how big the effects of the posts in the sub-Reddit group on the stock price. Therefore, we have downloaded the data for the whole January, February, May, June and July, which have completely cover the 2 waves and also cover some extension. Also, we have parsed the posts on daily basis, which also helps to show the change over time.</p>
 <p>Before starting to do the analysis, we need to find the list of WSB stocks first. the Generally speaking, all the stocks that have been discussed in the WallStreetBets sub-Reddit group should be considered as WSB stock. However, given the time frame that we considered is relatively long, which is 5 months, also, the WSBs has caught huge public attention, which also attracted a lot of new redditers. Therefore, there are many people participate in the discussion and the stocks mentioned are quite diversified. In this project, we will only focus on the top 10 stocks that have been mentioned in the posts.</p>
-<p>In the source data, which are the daily posts csv files, there are 2 columns that may contains the stock information, which are <code>title</code> and <code>selftext</code> respectively. Therefore, we need to first find the stock ticker from these 2 columns. Generally, the stock ticker should start with <code>$</code> and followed by 3 to 4 consecutive upper case letters. However, in the source data, there is no <code>$</code> exists, we cannot get the exact stock data but rather, we can extract out the list of possible stock tickers by extracting all the sub-strings which are consists of 3 to 4 consecutive upper case letters.</p>
+<p>In the source data, which are the daily posts csv files, there are 2 columns that may contains the stock information, which are <code>title</code> and <code>selftext</code> respectively. Therefore, we need to first find the stock ticker from these 2 columns. Generally, the stock ticker should start with <code>$</code> and followed by 2 to 4 consecutive upper case letters. However, in the source data, there is no <code>$</code> exists, we cannot get the exact stock data but rather, we can extract out the list of possible stock tickers by extracting all the sub-strings which are consists of 2 to 4 consecutive upper case letters.</p>
 <p>We have used regex in python to extract out the list of possible stock tickers from <code>title</code> and <code>selftext</code> respectively for each of the daily reddit csv and then we combine these 2 lists together. However, there might be the case that the possible stock tickers are mentioned by the redditers both in <code>title</code> and <code>selftext</code>. In this case, we define that the possible stock ticker should be considered only once. Therefore, after combining the 2 lists together, we also need to drop duplicates to make sure there is no double count of possible stock ticker from both <code>title</code> and <code>selftext</code>. With that, we can make sure that the count of every possible stock ticker in 1 row is at most 1.</p>
 <p>Then, we start to count the possible stock ticker and summarize the count information into a dictionary. For every daily reddit csv, we will get a possible stock ticker count dictionary and combine them together to get the final count dictionary and stored it into the clean data folder.</p>
 <p>Now, in r, we can read the file which contains the information of the final possible stock ticker count. Since we are only interested in the top 10 WSB stocks, we need to re-order the data frame according to the word count in descending order.</p>
-<p>We noticed that there are some invalid tickers exists in the data frame, but that is expected since there is no perfect way to extract out the stock ticker due to the lack of <code>$</code> in the data source, so we manually go through the data frame and select out the top 10 tickers, which are: <code>GME</code>, <code>AMC</code>, <code>NOK</code>, <code>SND</code>, <code>NAK</code>, <code>NAKD</code>, <code>PLTR</code>, <code>CLOV</code>, <code>RETA</code>, <code>MAR</code>, respectively.</p>
-<pre><code>##        X possible_ticker  count
-## 1     37             GME 156006
-## 2     42             AMC  85363
-## 3    107             THE  58421
-## 4     62             HOL  37494
-## 5     68            HOLD  36881
-## 6    667             NOK  27053
-## 7     45             WSB  22416
-## 8     78             BUY  21913
-## 9    129             MOO  20864
-## 10   136            MOON  18742
-## 11   128             AND  17170
-## 12   287             YOU  15654
-## 13   103             STO  13745
-## 14   126             FUC  13193
-## 15   135            FUCK  13131
-## 16   210             THI  12894
-## 17   258             NOT  12731
-## 18   458             LIN  12605
-## 19   307            THIS  11520
-## 20   308             LET  10336
-## 21    87             YOL  10289
-## 22    97            YOLO  10269
-## 23   440             SEL  10019
-## 24  2313             DOG   9963
-## 25   124             FOR   9937
-## 26   106             ING   9930
-## 27   442            SELL   9811
-## 28  3187            DOGE   9572
-## 29   570             SND   9426
-## 30   572            SNDL   9378
-## 31    23             KIN   9374
-## 32   238             ALL   8930
-## 33   461            LINE   8365
-## 34    69             ARE   7754
-## 35   158            STOC   7679
-## 36   108             SHO   7549
-## 37   561             CAN   7403
-## 38    63             DIN   7373
-## 39   410             DON   7323
-## 40   919             ROB   6896
-## 41   399             NAK   6815
-## 42     4             MON   6691
-## 43   922            ROBI   6532
-## 44   309            LETS   6243
-## 45   921             OOD   6228
-## 46   920             INH   6211
-## 47   923            NHOO   6175
-## 48   660            NAKD   6139
-## 49   246             SEC   6095
-## 50   291             GET   5897
-## 51   587             CLO   5586
-## 52   115            SHOR   5285
-## 53    90             NOW   5211
-## 54   312             PLT   5076
-## 55   313            PLTR   5040
-## 56   772            THEY   5038
-## 57   142             EVE   5021
-## 58   591             STR   4990
-## 59   109             WIL   4938
-## 60   112            STOP   4929
-## 61   459             TRA   4926
-## 62    25             RET   4851
-## 63   116            WILL   4846
-## 64   480            YOUR   4824
-## 65   120             LIK   4773
-## 66   137             APE   4759
-## 67   131            LIKE   4745
-## 68  2156            CLOV   4712
-## 69   407             ARD   4710
-## 70   212             THA   4691
-## 71   610             EST   4466
-## 72   413            RETA   4441
-## 73   127             DIP   4328
-## 74   904             WIS   4327
-## 75  1862            COIN   4315
-## 76    46             CEO   4304
-## 77   669             MAR   4278
-## 78    70             REA   4274
-## 79  1162            WISH   4258
-## 80   342             RES   4204
-## 81    24             HOD   4183
-## 82    85             CNB   4138
-## 83    86            CNBC   4113
-## 84   263             BOY   4098
-## 85   415            DONT   4093
-## 86   290             HAN   4066
-## 87   162             WIT   4058
-## 88   584             MOR   4056
-## 89   374             WHA   3981
-## 90   169            WITH   3974
-## 91   698             COM   3959
-## 92   240             KET   3910
-## 93   380            WHAT   3878
-## 94   297            HAND   3849
-## 95   344             JUS   3847
-## 96    29            HODL   3841
-## 97   351            JUST   3818
-## 98   146            EVER   3815
-## 99   498             PLE   3787
-## 100  161             SHA   3785
-## 101   61             STI   3783
-## 102   41             DFV   3689
-## 103  655             DIA   3639
-## 104  347             STA   3625
-## 105  462            TRAD   3549
-## 106  375             GOI   3510
-## 107  381            GOIN   3504
-## 108  182             HER   3482
-## 109   76             SQU   3414
-## 110  267            BOYS   3393
-## 111  832             NEW   3361
-## 112  302             GOO   3336
-## 113  598            MORE   3316
-## 114  606            THER   3316
-## 115  168            SHAR   3273
-## 116  296             BUT   3264
-## 117   82            SQUE   3256
-## 118  491             OOO   3253
-## 119  183            APES   3226
-## 120   75             GAM   3221
-## 121  656            DIAM   3209
-## 122  464             SHI   3207
-## 123  233            THAT   3204
-## 124   77             EEZ   3200
-## 125  121             HAV   3179
-## 126  408             SLV   3157
-## 127  213             NEX   3125
-## 128 2039             ECO   3107
-## 129  743             KEE   3093
-## 130  132            HAVE   3085
-## 131  358             ION   3076
-## 132  234            NEXT   3074
-## 133  567            THEM   3058
-## 134  745            KEEP   3043
-## 135   60             DAY   3039
-## 136  604            STRO   3035
-## 137  592             ONG   2981
-## 138  152             TSL   2974
-## 139  153            TSLA   2965
-## 140  257             ITS   2922
-## 141  164             NEE   2838
-## 142    7             FRO   2828
-## 143  252             OUR   2819
-## 144   67            STIL   2799
-## 145   50             IPO   2781
-## 146  816             MAK   2781
-## 147  925             VER   2778
-## 148   59             HEL   2775
-## 149  346             OUT   2758
-## 150  171            NEED   2756
-## 151  634             BAC   2735
-## 152  184            TIME   2712
-## 153  173            GAME   2697
-## 154  325             ONE   2678
-## 155  740            BACK   2678
-## 156 1243             DOW   2667
-## 157  180             TIM   2662
-## 158  594             ETH   2657
-## 159  209             MAN   2596
-## 160   15            FROM   2582
-## 161 2081            DOWN   2577
-## 162  197             INT   2575
-## 163  140             SPC   2554
-## 164  278             EXP   2548
-## 165  141            SPCE   2544
-## 166  670            MARK   2537
-## 167 1458             TAK   2528
-## 168  830            BUYI   2510
-## 169  474             ONL   2479
-## 170 1342             ENT   2478
-## 171  336            TION   2431
-## 172  632             WKH   2430
-## 173  633            WKHS   2427
-## 174  477            ONLY   2406
-## 175  762             PLA   2399
-## 176 1299             BIG   2391
-## 177  329             POS   2389
-## 178  948            MAKE   2389
-## 179  534             WHE   2386
-## 180  596             BRO   2338
-## 181 1362             TLR   2323
-## 182  446             WAL   2315
-## 183  292             TIN   2312
-## 184 2117            TLRY   2312
-## 185  782            STON   2310
-## 186  260             BAB   2302
-## 187  560             GUY   2297
-## 188  905             WOR   2290
-## 189  718             CHA   2279
-## 190  449            WALL   2225
-## 191   57             TOD   2222
-## 192  327             ABO   2218
-## 193  450            STRE   2217
-## 194  310             FIN   2206
-## 195  538             TLD   2206
-## 196   51             COV   2205
-## 197 1688             PRO   2196
-## 198   64            TODA   2195
-## 199  539            TLDR   2191
-## 200  492            MOOO   2178
-## 201  149             TEN   2177
-## 202  694            HERE   2147
-## 203  365            HELP   2102
-## 204  485             WIN   2098
-## 205   13            MONE   2084
-## 206  565            GUYS   2078
-## 207 1683             WTF   2071
-## 208  593             TOG   2061
-## 209  563             HED   2048
-## 210 1545             DIS   2047
-## 211  799             OVE   2043
-## 212 1459            TAKE   2034
-## 213  605            TOGE   2032
-## 214 1167             APP   2026
-## 215 1762            SHIT   2020
-## 216  489             ANY   1985
-## 217  156             CKS   1981
-## 218 2911            NOKI   1979
-## 219  569            HEDG   1968
-## 220 1176             KER   1964
-## 221    2             LEA   1950
-## 222 3294             CLN   1941
-## 223  207             HAS   1938
-## 224 3311            CLNE   1926
-## 225  244             ATE   1924
-## 226  150             DIE   1922
-## 227 1060             VIN   1907
-## 228 1582             BBB   1890
-## 229 1062             LOW   1883
-## 230  759             SPA   1876
-## 231  419             WAN   1870
-## 232  406             NIO   1859
-## 233  144             WHO   1858
-## 234 2916            THES   1850
-## 235  145             LOS   1847
-## 236  391             FUN   1836
-## 237  470             SEN   1834
-## 238 1872             CON   1821
-## 239 1072             TER   1819
-## 240 1180            GOOO   1814
-## 241 1441             SIL   1813
-## 242 1435             XRP   1812
-## 243  788             AGA   1810
-## 244  367             CAL   1809
-## 245  723             LAT   1802
-## 246  789            AGAI   1800
-## 247 1143             END   1798
-## 248  333            ABOU   1797
-## 249 1586            BBBY   1796
-## 250   72            READ   1770
-## 251 1159             BAN   1757
-## 252  732             ERS   1755
-## 253  111             PEN   1750
-## 254  122             RIG   1740
-## 255 1005             INV   1735
-## 256   52            COVI   1728
-## 257 1574             OFF   1726
-## 258  767             NIN   1721
-## 259  451             CTR   1713
-## 260 1269             TOO   1709
-## 261  176             ETF   1685
-## 262 1277             AAL   1685
-## 263  761             SOM   1678
-## 264  668             RED   1665
-## 265  627             TOM   1660
-## 266  265            BABY   1659
-## 267  454             HOW   1659
-## 268  574             WEE   1650
-## 269  497             PEO   1642
-## 270 1442            SILV   1642
-## 271 1858             COI   1637
-## 272  502            PEOP   1635
-## 273  110             HAP   1630
-## 274  452            CTRM   1628
-## 275  704             LOV   1619
-## 276 1595             OPE   1609
-## 277 1339             ASE   1607
-## 278  556             PRI   1605
-## 279 1646            FUND   1605
-## 280  770            SOME   1601
-## 281 1350            PLEA   1598
-## 282 1009            INVE   1596
-## 283 1178            REAL   1596
-## 284  801            OVER   1594
-## 285  159             REM   1592
-## 286  214             WAY   1592
-## 287 2643             UWM   1583
-## 288   43             CCI   1579
-## 289  589             GHT   1576
-## 290  705            LOVE   1575
-## 291  427            WANT   1574
-## 292 1546             TRI   1570
-## 293  259             HIN   1559
-## 294  143             RYO   1555
-## 295  760            SPAC   1553
-## 296  147            YONE   1552
-## 297  261             GOT   1551
-## 298   44            CCIV   1547
-## 299  283             NYS   1542
-## 300 2644            UWMC   1541
-## 301  963             IST   1539
-## 302 1422             INS   1537
-## 303  239             ROC   1532
-## 304  848             FRE   1528
-## 305  368            CALL   1526
-## 306  232            THIN   1525
-## 307  588             BOU   1523
-## 308  852             LIO   1522
-## 309 1542             AUT   1513
-## 310  834             MUS   1512
-## 311  284            NYSE   1508
-## 312  835             SEE   1508
-## 313  503             NAS   1504
-## 314  192             PRE   1502
-## 315  324             WHY   1491
-## 316  270            THAN   1490
-## 317 2856             HOO   1488
-## 318  306             WAR   1487
-## 319 1298             CHE   1474
-## 320  286             RKT   1470
-## 321  493            OOOO   1470
-## 322  444             HCM   1465
-## 323  769             ORT   1464
-## 324  445            HCMC   1458
-## 325  826             RID   1456
-## 326 1503             REV   1455
-## 327 1101            REST   1451
-## 328  215             FIR   1447
-## 329 3092            EXPR   1440
-## 330  628             ORR   1409
-## 331 1033             MOV   1409
-## 332 3634            THEI   1406
-## 333  683             IDE   1392
-##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 30244 rows ]</code></pre>
+<p>We noticed that there are some invalid tickers exists in the data frame, but that is expected since there is no perfect way to extract out the stock ticker due to the lack of <code>$</code> in the data source, so we manually go through the data frame and select out the top 10 tickers, which are: <code>GME</code>, <code>AMC</code>, <code>BB</code>,<code>NOK</code>, <code>SND</code>, <code>NAKD</code>, <code>PLTR</code>, <code>CLOV</code>, <code>RETA</code>, <code>MAR</code>, <code>PLE</code>, respectively.</p>
 
 </div>
 </div>
