@@ -14,6 +14,7 @@ library(maps)
 library(mapdata)
 library(lubridate)
 library(treemap)
+library(wordcloud2)
 ```
 
 
@@ -44,10 +45,8 @@ The above two plots display the interest on the relative topics during the time 
 #### Interest by subregion
 
 
-
-
-### Stock Data and Information
-#### Stock Data Plot
+## Stock Data and Information
+### Stock Data Plot
 The most Representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in WallStreetBet sub-reddit analysed in Chapter 3 - cleaning. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
 
 ```{r}
@@ -218,7 +217,7 @@ From the above 2 graphs, we can clearly see that there are 2 waves of the WSB st
 
 Also, the gray and red line in the price graph is the Bollinger Bands, which is the price level at 1 standard deviation level above and below the sample moving average of the price, which is able to capture the volatility of the stock. Generally, Bollinger bands is used to check whether prices are relatively high or low as comparing to the historical price. Here, we can see that for the beginning of the 2 waves, the price of both `GME` and `AMC` break the Bollinger upper bands, which suggests that the price of these 2 stocks are extremely high as comparing to the historical data. However, the Bollinger bands also adjusted themselves quickly to accommodate the sudden price change, so we can see that the price of these 2 stocks fall back within the Bollinger bands after a short period of time.
 
-#### Stock Risk Assessment
+### Stock Risk Assessment
 While the previous 2 graphs mainly focus on the price and volume aspects, there is one more aspect that are very important to the stock, which is risk. Risk can be measured by the standard deviation. Here, we would like to explore how the risk of the 2 stocks change before and after the 2 waves, which are `GME` and `AMC` respectively. Thus, we need to calculate the moving standard deviation of the 2 stocks over time.
 
 Here, we take the closing price to be the one calculating the moving standard deviation since closing price is the most representative price among all the 5 prices. For each month, it is about 4 weeks and the stock market only opens in weekdays, thus, there are about 4*5 = 20 days with stock data every month. Therefore, we set the moving window to be 20, which is roughly about 1 month time. 
@@ -258,7 +257,7 @@ From the 2 graphs above, we have following observations:
 
 3. The risk of `GME` is highest in the first wave during Jan/Feb period while the risk of `AMC` is highest in the second wave during May/Jun period. This can be supported by the general knowledge that `GME` is the leading stock in the 1st wave while `AMC` is the leading stock in the 2nd wave.
 
-#### Most Popular Stocks
+### Most Popular Stocks
 Besides studying about the 2 most representative stocks in WSBs, which are `GME` and `AMC` respectively, we could also study some other WSB stocks, which are not as popular as `GME` and `AMC` but they are still very representative and have received a lot of public attention.
 
 Therefore, we extend our study to the top 10 mentioned stocks in the posts of WallStreetBets sub-reddit group. These 10 stocks has been identified in the Chapter 3 - Cleaning, which are: `GME`, `AMC`, `BB`, `NOK`, `SND`, `NAKD`, `PLTR`, `CLOV`, `RETA`, `MAR`, respectively.
@@ -277,13 +276,15 @@ df %>% filter(possible_ticker %in% top_10_tickers) %>%
 ```
 
 ```{r}
-df %>% filter(possible_ticker %in% top_10_tickers) -> df
-df
+df %>% 
+  filter(possible_ticker %in% top_10_tickers) %>%
+  mutate(ticker=paste(possible_ticker, count, sep ="\n"))%>%
+  treemap(index = c("ticker"), vSize = "count", vColor = "count", type = "value", title = "Ticker mentions count")
 ```
 
 From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominant stocks that were discussed in WallStreeBets sub-reddit, which appears in around `r round(df$count[1]/sum(df$count)*100, 4)`% and `r round(df$count[2]/sum(df$count)*100, 4)`% of the total posts respectively. However, ``BB`, `NOK`, `SND` and the other stocks have also received some public attention, which are worthwhile to include them in the future analysis to get a bigger and clearer picture regarding the WSB stocks.
 
-#### Time Series of the Top 10 Stocks
+### Time Series of the Top 10 Stocks
 Now, we want to study how the top 10 stocks' prices move over the past one year. Again, since the closing price is the most representative price among all the 5 prices, we just use closing price to show the price change over time.
 
 ```{r}
@@ -322,5 +323,83 @@ for(i in top_10_tickers) {
 }
 write.csv(df_output,'data/tmp/top_10_stocks_prices.csv')
 ```
+
+
+
+
+## r/WallStreetBets Reddit Post Data
+
+### Reddit post data overview
+
+#### What are the most popular words?
+```{r}
+reddit_wc <- readr::read_csv("data/clean/reddit/reddit_wc_total.csv")
+wordcloud2(data=reddit_wc, size=0.7, maxRotation = 0, minRotation = 0)
+```
+
+
+### Sentiment analysis on Reddit posts regarding GME
+```{r echo=FALSE, message=FALSE}
+gme_nrc_first_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_first_wave.csv")
+gme_nrc_second_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_second_wave.csv")
+neg_sentiments = c('anger', 'disgust', 'fear', 'negative', 'sadness')
+```
+```{r}
+first_wave <- gme_nrc_first_wave %>%
+  select(sentiment, wordCount) %>%
+  group_by(sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) %>%
+  mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
+  ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
+    geom_bar(stat = "identity", aes(fill = label)) +
+    scale_fill_manual(values = c("neg" = "#88A8F2",
+                                "pos" = "#EF856E")) +
+    ggtitle("GME Sentiment Jan and Feb") +
+    xlab("sentiment")
+second_wave <- gme_nrc_second_wave %>%
+  select(sentiment, wordCount) %>%
+  group_by(sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) %>%
+  mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
+  ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
+    geom_bar(stat = "identity", aes(fill = label)) +
+    scale_fill_manual(values = c("neg" = "#88A8F2",
+                                "pos" = "#EF856E")) +
+    ggtitle("GME Sentiment May, Jun and Jul") +
+    xlab("sentiment")
+first_wave / second_wave
+```
+
+```{r}
+gme_nrc_total <- rbind(gme_nrc_first_wave, gme_nrc_second_wave)
+gme_nrc_sum <- gme_nrc_total %>%
+  mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
+  group_by(textDate, label) %>%
+  summarise(wordCount = sum(wordCount)) %>%
+  ungroup() %>%
+  pivot_wider(id_cols = textDate, names_from = label, values_from = wordCount) %>%
+  mutate(positive_percentage = pos/(pos+neg)) %>%
+  mutate(positive_percentage = (positive_percentage - min(positive_percentage))/(max(positive_percentage)-min(positive_percentage))*100) %>%
+  select(textDate, positive_percentage)
+textDate <- seq(as.Date("2021/3/1"), as.Date("2021/5/30"), "days")
+empty_df <- data.frame(textDate)
+empty_df$positive_percentage <- NA
+gme_nrc_sum <- rbind(gme_nrc_sum, empty_df)
+gme_stock <- getSymbols("GME", src="yahoo", from = "2021-01-01", to = "2021-07-31", auto.assign = FALSE)
+gme_stock_df <- data.frame(Date=index(gme_stock),coredata(gme_stock)) %>% 
+  mutate(price = (GME.Close - min(GME.Close))/(max(GME.Close)-min(GME.Close))*100) %>%
+  select(Date, price)
+total <- merge(gme_stock_df, gme_nrc_sum, by.y="textDate", by.x="Date") %>%
+  pivot_longer(!Date, names_to = "attr", values_to = "val")
+ggplot(total, aes(x=Date, y=val, color=attr)) +
+  geom_line() +
+  ggtitle("GME positive percentage and stock price") +
+  ylab("value") +
+  labs(color = "") 
+```
+
+Above plot analyzes if the sentiments on r/WallStreetBets had any impact on GME's stock price.
+
+
 
 
