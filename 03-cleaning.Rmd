@@ -82,19 +82,50 @@ gme_nrc_567_agg <- gme_nrc_567 %>%
 
 write.csv(gme_nrc_567_agg, file = ("data/clean/reddit/gme_sa_nrc_second_wave.csv"), row.names=FALSE)
 ```
-```{r}
-tmp_1 <-gme_nrc_Jan %>% 
-  select(textWord, sentiment, wordCount) %>%
-  group_by(textWord, sentiment) %>%
-  dplyr::summarise(wordCount = sum(wordCount))%>%
-  arrange(desc(wordCount))
 
-tmp_567 <-gme_nrc_567 %>% 
-  select(textWord, sentiment, wordCount) %>%
-  group_by(textWord, sentiment) %>%
-  dplyr::summarise(wordCount = sum(wordCount))%>%
-  arrange(desc(wordCount))
+## Word clouds
+```{r warning=FALSE}
+get_reddit_wc_df <- function(start_dt, end_dt) {
+  reddit_wc <- reddit_df %>%
+    filter(score >= 10) %>%
+    mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
+           text = cleanData(str_trim(paste(title, selftext)))) %>%
+    filter(date_utc <= as.Date(end_dt) & date_utc >= as.Date(start_dt)) %>%
+    select(date_utc, text)
+  
+  reddit_corpus <- Corpus(VectorSource(reddit_wc$text), readerControl = list(reader = readPlain, language = "en_US", load = TRUE))
+    
+  #Clean up the corpus
+  reddit_corpus <- tm_map(reddit_corpus, removePunctuation)
+  reddit_corpus <- tm_map(reddit_corpus, removeNumbers)
+  reddit_corpus <- tm_map(reddit_corpus, stripWhitespace)
+  reddit_corpus <- tm_map(reddit_corpus, removeWords, stopwords("english"))
+  reddit_corpus <- tm_map(reddit_corpus, removeWords, c("http", "www", "amp", "https", "the", "com"))
+  
+  #Generate Document Term Matrix
+  reddit_tdm <- TermDocumentMatrix(reddit_corpus)
+  reddit_matrix <- as.matrix(reddit_tdm) 
+  reddit_words <- sort(rowSums(reddit_matrix),decreasing=TRUE) 
+  reddit_wc_df <- data.frame(word = names(reddit_words),freq=reddit_words)
+  
+  #Get stop words from 'tidytext' package and remove from data frame
+  lexStopWords <- stop_words
+  reddit_wc_df <- reddit_wc_df %>% 
+    anti_join(lexStopWords, by = c("word" = "word")) %>% 
+    filter(!word  %in% c("http", "www", "amp", "https", "the", "com", "removed", "deleted", "don", "png"))
+  
+  return(reddit_wc_df)
+}
 
+reddit_wc_df_1 <- get_reddit_wc_df('2021-01-01', '2021-01-31')
+reddit_wc_df_2 <- get_reddit_wc_df('2021-02-01', '2021-02-28')
+reddit_wc_df_567 <- get_reddit_wc_df('2021-05-01', '2021-07-31')
+reddit_wc_df_total <- rbind(reddit_wc_df_1, reddit_wc_df_2, reddit_wc_df_567) %>%
+  group_by(word) %>%
+  summarise(freq = sum(freq)) %>%
+  arrange(desc(freq))
+
+write.csv(reddit_wc_df_total, file = ("data/clean/reddit/reddit_wc_total.csv"), row.names=FALSE)
 ```
 
 
