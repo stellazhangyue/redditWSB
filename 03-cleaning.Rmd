@@ -91,8 +91,8 @@ gme_tidy_data <- gme_tidy_data %>%
                     filter(!textWord  %in% c("april", "byteresa", "cfra", "jana","npd", "shopjana","wfm","ihor","amazoncom","anayahooyptryahoo","bloomberg","carolinabased","cincinnatibased","cincinnati", "monday", "month","dusaniwsky"))
 
 #Attach date
-
-# gme_tidy_data$textDate <- properDate(str_extract(wfm.tidy.data$fileName, pattern))
+# pattern <- "^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$"
+# gme_tidy_data$textDate <- properDate(str_extract(gme_tidy_data$postid, pattern))
 ```
 
 

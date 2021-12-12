@@ -53,6 +53,13 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -143,6 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#sentiment-analysis-on-reddit-posts-regarding-gme"><i class="fa fa-check"></i><b>3.1</b> Sentiment Analysis on Reddit Posts regarding GME</a></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#google-trends-data-transformation"><i class="fa fa-check"></i><b>3.2</b> Google Trends Data Transformation</a></li>
+<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#reddit-data-transformation"><i class="fa fa-check"></i><b>3.3</b> Reddit Data Transformation</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
@@ -186,7 +194,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="reddit-post-dataset" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Reddit post dataset</h2>
 <p>We first create the missing values plots, both count and percent, for the reddit post dataset.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-17-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
 <p>We can observe from the missing value plots that there are 4 different missing patterns, which are complete cases (47.19%), missing <code>selftext</code> (45.08%), missing both <code>selftext</code> and <code>author</code> (4.77%), and missing <code>author</code> only (2.95%). Therefore, out of the 7 variables in the dataset, only 2 variables might be missing, which are <code>selftext</code> and <code>author</code> respectively. Among the 2 variables, 49.85% of the <code>selftext</code> is missing while only 7.72% of the <code>author</code> is missing.</p>
 <p>Looking into the <code>selftext</code> column in the original dataset, we noticed that there are 3 major levels that account for ~90% of the data, which are “removed”, "" and “deleted”. Consulted the reddit documents, we found that “removed” means the post is either removed by the moderators of the subreddit group or the administrator; “deleted” means the post is deleted by the content author; "" appears when a post doesn’t have body text or a post’s body contains pictures only. In this regard, we are only considering “removed” and “deleted” as NA, "“s are considered as valid inputs. About 45% of the posts are”removed", which means the level of censorship is relatively high.</p>
 <pre><code>## # A tibble: 95,599 × 3
@@ -219,8 +227,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="google-trend-dataset" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Google Trend dataset</h2>
 <p>We created the missing values plots, both count and percent, for two Google trend datasets and found there’s no missing value in both datasets
-<img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-19-2.png" width="672" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-21-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-21-2.png" width="672" /></p>
 
 </div>
 </div>

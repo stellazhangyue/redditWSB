@@ -1,7 +1,7 @@
 build_missing_patterns_df <- function(df) {
   missing_patterns <- data.frame(is.na(df)) %>%
     group_by_all() %>%
-    count(name = "count", sort = TRUE) %>%
+    dplyr::count(name = "count", sort = TRUE) %>%
     ungroup()
   return(missing_patterns)
 }

@@ -53,6 +53,13 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -143,6 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#sentiment-analysis-on-reddit-posts-regarding-gme"><i class="fa fa-check"></i><b>3.1</b> Sentiment Analysis on Reddit Posts regarding GME</a></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#google-trends-data-transformation"><i class="fa fa-check"></i><b>3.2</b> Google Trends Data Transformation</a></li>
+<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#reddit-data-transformation"><i class="fa fa-check"></i><b>3.3</b> Reddit Data Transformation</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
@@ -188,16 +196,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">7.1</span> R Markdown</h2>
 <p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
 <p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="conclusion.html#cb3-1" aria-hidden="true" tabindex="-1"></a>tickers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;GME&quot;</span>,<span class="st">&quot;MRNA&quot;</span>,<span class="st">&quot;JNJ&quot;</span>,<span class="st">&quot;SVA&quot;</span>,<span class="st">&quot;^GSPC&quot;</span>,<span class="st">&quot;AAPL&quot;</span>,<span class="st">&quot;AMZN&quot;</span>,<span class="st">&quot;FB&quot;</span>,<span class="st">&quot;GS&quot;</span>,<span class="st">&quot;JPM&quot;</span>)</span>
-<span id="cb3-2"><a href="conclusion.html#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="conclusion.html#cb3-3" aria-hidden="true" tabindex="-1"></a>tickerPrices <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb3-4"><a href="conclusion.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ticker <span class="cf">in</span> tickers)</span>
-<span id="cb3-5"><a href="conclusion.html#cb3-5" aria-hidden="true" tabindex="-1"></a>  tickerPrices <span class="ot">&lt;-</span> <span class="fu">cbind</span>(tickerPrices,<span class="fu">getSymbols.yahoo</span>(ticker,<span class="at">from =</span> <span class="st">&quot;2015-01-01&quot;</span>,<span class="at">auto.assign=</span><span class="cn">FALSE</span>)[,<span class="dv">4</span>])</span>
-<span id="cb3-6"><a href="conclusion.html#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="conclusion.html#cb3-7" aria-hidden="true" tabindex="-1"></a>tickerPrices <span class="ot">&lt;-</span> tickerPrices[<span class="fu">apply</span>(tickerPrices,<span class="dv">1</span>,<span class="cf">function</span>(x) <span class="fu">all</span>(<span class="sc">!</span><span class="fu">is.na</span>(x))),]</span>
-<span id="cb3-8"><a href="conclusion.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tickerPrices) <span class="ot">&lt;-</span> tickers</span>
-<span id="cb3-9"><a href="conclusion.html#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="conclusion.html#cb3-10" aria-hidden="true" tabindex="-1"></a>tickerPrices</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="conclusion.html#cb6-1" aria-hidden="true" tabindex="-1"></a>tickers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;GME&quot;</span>,<span class="st">&quot;MRNA&quot;</span>,<span class="st">&quot;JNJ&quot;</span>,<span class="st">&quot;SVA&quot;</span>,<span class="st">&quot;^GSPC&quot;</span>,<span class="st">&quot;AAPL&quot;</span>,<span class="st">&quot;AMZN&quot;</span>,<span class="st">&quot;FB&quot;</span>,<span class="st">&quot;GS&quot;</span>,<span class="st">&quot;JPM&quot;</span>)</span>
+<span id="cb6-2"><a href="conclusion.html#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="conclusion.html#cb6-3" aria-hidden="true" tabindex="-1"></a>tickerPrices <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb6-4"><a href="conclusion.html#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ticker <span class="cf">in</span> tickers)</span>
+<span id="cb6-5"><a href="conclusion.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  tickerPrices <span class="ot">&lt;-</span> <span class="fu">cbind</span>(tickerPrices,<span class="fu">getSymbols.yahoo</span>(ticker,<span class="at">from =</span> <span class="st">&quot;2015-01-01&quot;</span>,<span class="at">auto.assign=</span><span class="cn">FALSE</span>)[,<span class="dv">4</span>])</span>
+<span id="cb6-6"><a href="conclusion.html#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="conclusion.html#cb6-7" aria-hidden="true" tabindex="-1"></a>tickerPrices <span class="ot">&lt;-</span> tickerPrices[<span class="fu">apply</span>(tickerPrices,<span class="dv">1</span>,<span class="cf">function</span>(x) <span class="fu">all</span>(<span class="sc">!</span><span class="fu">is.na</span>(x))),]</span>
+<span id="cb6-8"><a href="conclusion.html#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tickerPrices) <span class="ot">&lt;-</span> tickers</span>
+<span id="cb6-9"><a href="conclusion.html#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="conclusion.html#cb6-10" aria-hidden="true" tabindex="-1"></a>tickerPrices</span></code></pre></div>
 <pre><code>##                GME    MRNA      JNJ    SVA   ^GSPC     AAPL    AMZN      FB     GS
 ## 2018-12-07  13.680  18.600 145.4300 7.1700 2633.08 168.4900 1629.13 137.420 179.67
 ## 2018-12-10  13.230  18.800 145.2600 7.3400 2637.72 169.6000 1641.03 141.850 178.83
