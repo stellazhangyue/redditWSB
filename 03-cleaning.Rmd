@@ -5,6 +5,9 @@ library(readr)
 library(tidyverse)
 library(tm)
 library(tidytext)
+library(textdata)
+
+source("sentiment_analysis.R")
 ```
 
 ## Sentiment Analysis on Reddit Posts regarding GME
@@ -16,21 +19,11 @@ reddit_df <- subset(reddit_df, select = -c(X))
 reddit_df <- reddit_df[!duplicated(reddit_df),]
 ```
 
-```{r}
-#Function to cleanup data
-cleanData <- function(x){
-  x <- gsub(":", "", x) # Replace junk with ("")
-  x <- iconv(x, "latin1", "ASCII", sub=" ")
-  x <- gsub("\\s+", " ", x) # Remove double spaces
-  return(x)
-}
-```
 
-
-```{r}
+```{r warning=FALSE}
 # filter posts with score > 10 and contains GME in title or text
-reddit_GME_sa <- reddit_df %>%
-  filter(score >=10) %>%
+reddit_GME_sa_Feb <- reddit_df %>%
+  filter(score >= 10) %>%
   select(postid, created_utc, title, selftext) %>%
   mutate(title_contains_GME = grepl("GME", title, ignore.case = TRUE),
          text_contains_GME = grepl("GME", selftext, ignore.case = TRUE)) %>%
@@ -38,63 +31,21 @@ reddit_GME_sa <- reddit_df %>%
   mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
          text = cleanData(str_trim(paste(title, selftext))),
          postid = paste(postid, date_utc, sep = "_")) %>%
+  filter(date_utc <= as.Date('2021-02-28') & date_utc >= as.Date('2021-02-01')) %>%
   select(postid, text)
+
+gme_nrc_Feb <- get_nrc_sentiments(reddit_GME_sa)
 ```
 
-```{r}
-reddit_GME_sa <- reddit_GME_sa %>% 
-  arrange(desc(length(text))) %>%
-  top_n(20)
-```
 
 ```{r warning=FALSE}
-gme_corpus <- Corpus(VectorSource(reddit_GME_sa$text), readerControl = list(reader = readPlain, language = "en_US", load = TRUE))
+gme_nrc_Feb_agg <- gme_nrc_Feb %>%
+  select(textDate, sentiment, wordCount) %>%
+  group_by(textDate, sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) 
 
-#Clean up the corpus
-gme_corpus <- tm_map(gme_corpus, removePunctuation)
-gme_corpus <- tm_map(gme_corpus, removeNumbers)
-gme_corpus <- tm_map(gme_corpus, stripWhitespace)
-gme_corpus <- tm_map(gme_corpus, content_transformer(tolower))
-
-#Generate Document Term Matrix
-gme_tdm <- TermDocumentMatrix(gme_corpus)
-gme_tdm <- list(tdm = gme_tdm, articleFile = reddit_GME_sa$postid)
+write.csv(gme_nrc_Feb_agg, file = ("data/clean/reddit/gme_sa_nrc_feb.csv"),row.names=FALSE)
 ```
-```{r}
-gme_matrix <- data.matrix(gme_tdm[["tdm"]])
-
-#Convert matrix to dataframe
-gme_text_df <- as.data.frame(gme_matrix, stringsAsFactors = F)
-
-gme_postid <- gme_tdm[["articleFile"]]
-
-#Bind filenames to columns
-colnames(gme_text_df) <- gme_postid
-
-#Clean data get words from rownames
-gme_text_df$textWords <- cleanData(rownames(gme_text_df)) 
-rownames(gme_text_df) <- NULL
-
-#Transpose columns to rows
-gme_tidy_data <- pivot_longer(gme_text_df, !textWords, "postid", "wordCount")
-colnames(gme_tidy_data) <- c("textWord","postid","wordCount")
-
-#Ignore rows with NA values and wordCount less than 1. Means word does not exist in the article
-gme_tidy_data <- na.omit(gme_tidy_data)
-gme_tidy_data<- gme_tidy_data[gme_tidy_data$wordCount>0, ]
-rownames(gme_tidy_data) <- NULL
-
-#Get stop words from 'tidytext' package and remove from data frame
-lexStopWords <- stop_words
-gme_tidy_data <- gme_tidy_data %>% 
-                    anti_join(lexStopWords  , by = c("textWord" = "word")) %>% 
-                    filter(!textWord  %in% c("april", "byteresa", "cfra", "jana","npd", "shopjana","wfm","ihor","amazoncom","anayahooyptryahoo","bloomberg","carolinabased","cincinnatibased","cincinnati", "monday", "month","dusaniwsky"))
-
-#Attach date
-# pattern <- "^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$"
-# gme_tidy_data$textDate <- properDate(str_extract(gme_tidy_data$postid, pattern))
-```
-
 
 
 
