@@ -23,5 +23,25 @@ for(i in top_10_tickers) {
   tmp <- get_price_df(i)
   df_output <- rbind(df_output, tmp)
 }
-write.csv(df_output,'data/tmp/top_10_stocks_prices.csv')
+write.csv(df_output,'data/tmp/top_10_stocks_prices.csv',row.names=FALSE)
+```
+
+```{r}
+get_price_df <- function(ticker) {
+  df <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
+  daily_return <- na.omit(periodReturn(df, period="daily", type = "arithmetic"))
+  dat <- data.frame(date=index(daily_return), daily_return$daily.returns)
+  dat$daily.returns <- dat$daily.returns * 100
+  dat <- dat %>%
+    rename(Daily_return = daily.returns, Date = date)
+  dat$Symbol = ticker
+  dat <- select(dat, Symbol, Date, Daily_return)
+  return(dat)
+}
+df_output = data.frame()
+for(i in top_10_tickers) {
+  tmp <- get_price_df(i)
+  df_output <- rbind(df_output, tmp)
+}
+write.csv(df_output,'data/clean/stock/top_10_stocks_daily_return.csv',row.names=FALSE)
 ```
