@@ -301,10 +301,10 @@ df <- economics %>%
   gather(key = "variable", value = "value", -date)
 head(df)
 
-df_price <- read.csv('data/tmp/top_10_stocks_prices.csv')
+df_price <- read.csv('data/clean/stock/top_10_stocks_daily_return.csv')
 df_price %>%
-  select(Date, Symbol, Close) %>%
-  pivot_wider(names_from = Symbol, values_from = Close, values_fill = 0) %>%
+  select(Date, Symbol, Daily_return) %>%
+  pivot_wider(names_from = Symbol, values_from = Daily_return, values_fill = 0) %>%
   gather(key = "variable", value = "value", -Date) %>%
   ggplot(aes(x = Date, y = value)) + 
     geom_line(aes(color = variable, linetype = variable)) + 
@@ -312,34 +312,5 @@ df_price %>%
   #ggplot(aes(x=Date)) + 
     #geom_line(aes(y = GME), color = "darkred") 
     #geom_line(aes(y = AMC), color="steelblue", linetype="twodash")
-```
-
-
-```{r}
-df <- getSymbols("GME", src="yahoo", from = "2020-01-01", auto.assign = FALSE)
-daily_return <- na.omit(periodReturn(df, period="daily", type = "arithmetic"))
-dat <- data.frame(date=index(daily_return), daily_return$daily.returns)
-dat
-```
-
-```{r}
-
-get_price_df <- function(ticker) {
-  df <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
-  daily_return <- na.omit(periodReturn(df, period="daily", type = "arithmetic"))
-  dat <- data.frame(date=index(daily_return), daily_return$daily.returns)
-  dat$daily.returns <- dat$daily.returns * 100
-  dat <- dat %>%
-    rename(Daily_return = daily.returns, Date = date)
-  dat$Symbol = ticker
-  dat <- select(dat, Symbol, Date, Daily_return)
-  return(dat)
-}
-df_output = data.frame()
-for(i in top_10_tickers) {
-  tmp <- get_price_df(i)
-  df_output <- rbind(df_output, tmp)
-}
-write.csv(df_output,'data/tmp/top_10_stocks_prices.csv',row.names=FALSE)
 ```
 
