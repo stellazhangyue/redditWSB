@@ -301,6 +301,10 @@ ggplot(tickerPrices, aes(x=tickerPrices.index)) +
 ```
 
 ```{r}
+df_price <- read.csv()
+```
+
+```{r}
 get_price_df <- function(ticker) {
   GME_S <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
   gme_sp_df <- data.frame(Date=index(GME_S),coredata(GME_S))
