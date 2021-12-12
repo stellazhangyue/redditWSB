@@ -1,9 +1,0 @@
-introduction
-data-sources
-data-transformation
-missing-values
-reddit-post-dataset
-google-trend-dataset
-results
-interactive-component
-conclusion

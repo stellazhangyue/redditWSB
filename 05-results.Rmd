@@ -212,3 +212,6 @@ fig3
 From the above 2 graphs, we can clearly see that there are 2 waves of the WSB stocks, which are indicated by the sudden spike of the stock price as well as the sudden increase of the volume. These 2 waves are around January - Feburary and May - June period respectively. These 2 graphs actually double confirm with our previous claims. 
 
 Also, the gray and red line in the price graph is the Bollinger Bands, which is the price level at 1 standard deviation level above and below the sample moving average of the price, which is able to capture the volatility of the stock. Generally, Bollinger bands is used to check whether prices are relatively high or low as comparing to the historical price. Here, we can see that for the beginning of the 2 waves, the price of both `GME` and `AMC` break the Bollinger upper bands, which suggests that the price of these 2 stocks are extremely high as comparing to the historical data. However, the billinger bands also adjusted themselve quickly to accommate the sudden price change, so we can see that the price of these 2 stocks fall back within the Bollinger bands after a short period of time.
+
+#### Stock Risk Assessment
+While the previous 
