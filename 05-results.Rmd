@@ -293,16 +293,26 @@ for (ticker in top_10_tickers)
   tickerPrices <- cbind(tickerPrices, getSymbols(ticker, src = "yahoo", from = "2020-12-01", auto.assign=FALSE)[,4])
 df_price <- data.table::as.data.table(tickerPrices)
 colnames(df_price) <- c('date','GME.Close','AMC.Close','BB.Close','NOK.Close','SND.Close','NAKD.Close', 'PLTR.Close','CLOV.Close','RETA.Close','MAR.Close')
-tmp <- as.data.frame(t(as.matrix(df_price)))
-#rownames(df_price) <- df_price$date
-#df_price$date <- NULL
-# ggplot(tickerPrices, aes(x=tickerPrices.index)) + 
-#   geom_line(aes(y = GME), color = "darkred") + 
-#   geom_line(aes(y = AMC), color="steelblue", linetype="twodash") 
 ```
 
 ```{r}
-# df_price <- read.csv()
+library("tidyverse")
+df <- economics %>%
+  select(date, psavert, uempmed) %>%
+  gather(key = "variable", value = "value", -date)
+head(df)
+
+df_price <- read.csv('data/clean/stock/top_10_stocks_daily_return.csv')
+df_price %>%
+  select(Date, Symbol, Daily_return) %>%
+  pivot_wider(names_from = Symbol, values_from = Daily_return, values_fill = 0) %>%
+  gather(key = "variable", value = "value", -Date) %>%
+  ggplot(aes(x = Date, y = value)) + 
+    geom_line(aes(color = variable, linetype = variable)) + 
+    scale_color_manual(values = c("Red", "Orange", "Yellow", "Green", "black", "black", "black", "black", "black", "black", "black"))
+  #ggplot(aes(x=Date)) + 
+    #geom_line(aes(y = GME), color = "darkred") 
+    #geom_line(aes(y = AMC), color="steelblue", linetype="twodash")
 ```
 
 ```{r}
@@ -399,7 +409,5 @@ ggplot(total, aes(x=Date, y=val, color=attr)) +
 ```
 
 Above plot analyzes if the sentiments on r/WallStreetBets had any impact on GME's stock price.
-
-
 
 

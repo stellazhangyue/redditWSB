@@ -12,10 +12,11 @@ get_price_df <- function(ticker) {
   GME_S <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
   gme_sp_df <- data.frame(Date=index(GME_S),coredata(GME_S))
   gme_sp_df <- gme_sp_df %>%
-    select(Date, ends_with("Close")) %>%
-    rename(Close = ends_with("Close"))
+    select(Date, ends_with("Close"), ends_with("Volume")) %>%
+    rename(Close = ends_with("Close")) %>%
+    rename(Volume = ends_with("Volume"))
   gme_sp_df$Symbol = ticker
-  gme_sp_df <- select(gme_sp_df, Symbol, Date, Close)
+  gme_sp_df <- select(gme_sp_df, Symbol, Date, Close, Volume)
   return(gme_sp_df)
 }
 df_output = data.frame()
@@ -23,5 +24,45 @@ for(i in top_10_tickers) {
   tmp <- get_price_df(i)
   df_output <- rbind(df_output, tmp)
 }
-write.csv(df_output,'data/tmp/top_10_stocks_prices.csv')
+write.csv(df_output,'data/tmp/top_10_stocks_prices.csv',row.names=FALSE)
+```
+
+```{r}
+top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR','^GSPC')
+get_price_df <- function(ticker) {
+  GME_S <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
+  gme_sp_df <- data.frame(Date=index(GME_S),coredata(GME_S))
+  gme_sp_df <- gme_sp_df %>%
+    select(Date, ends_with("Volume")) %>%
+    rename(Volume = ends_with("Volume"))
+  gme_sp_df$Symbol = ticker
+  gme_sp_df <- select(gme_sp_df, Symbol, Date, Volume)
+  return(gme_sp_df)
+}
+df_output = data.frame()
+for(i in top_10_tickers) {
+  tmp <- get_price_df(i)
+  df_output <- rbind(df_output, tmp)
+}
+write.csv(df_output,'data/tmp/top_10_stocks_volume.csv',row.names=FALSE)
+```
+
+```{r}
+get_price_df <- function(ticker) {
+  df <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
+  daily_return <- na.omit(periodReturn(df, period="daily", type = "arithmetic"))
+  dat <- data.frame(date=index(daily_return), daily_return$daily.returns)
+  dat$daily.returns <- dat$daily.returns * 100
+  dat <- dat %>%
+    rename(Daily_return = daily.returns, Date = date)
+  dat$Symbol = ticker
+  dat <- select(dat, Symbol, Date, Daily_return)
+  return(dat)
+}
+df_output = data.frame()
+for(i in top_10_tickers) {
+  tmp <- get_price_df(i)
+  df_output <- rbind(df_output, tmp)
+}
+write.csv(df_output,'data/clean/stock/top_10_stocks_daily_return.csv',row.names=FALSE)
 ```
