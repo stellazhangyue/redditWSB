@@ -290,9 +290,33 @@ Now, we want to study how the top 10 stocks' prices move over the past one year.
 tickerPrices <- NULL
 for (ticker in top_10_tickers)
   tickerPrices <- cbind(tickerPrices, getSymbols(ticker, src = "yahoo", from = "2020-12-01", auto.assign=FALSE)[,4])
-
+df_price <- data.table::as.data.table(tickerPrices)
+colnames(df_price) <- c('date','GME.Close','AMC.Close','BB.Close','NOK.Close','SND.Close','NAKD.Close', 'PLTR.Close','CLOV.Close','RETA.Close','MAR.Close')
+tmp <- as.data.frame(t(as.matrix(df_price)))
+#rownames(df_price) <- df_price$date
+#df_price$date <- NULL
 ggplot(tickerPrices, aes(x=tickerPrices.index)) + 
   geom_line(aes(y = GME), color = "darkred") + 
   geom_line(aes(y = AMC), color="steelblue", linetype="twodash") 
 ```
+
+```{r}
+get_price_df <- function(ticker) {
+  GME_S <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
+  gme_sp_df <- data.frame(Date=index(GME_S),coredata(GME_S))
+  gme_sp_df <- gme_sp_df %>%
+    select(Date, ends_with("Close")) %>%
+    rename(Close = ends_with("Close"))
+  gme_sp_df$Symbol = ticker
+  gme_sp_df <- select(gme_sp_df, Symbol, Date, Close)
+  return(gme_sp_df)
+}
+df_output = data.frame()
+for(i in top_10_tickers) {
+  tmp <- get_price_df(i)
+  df_output <- rbind(df_output, tmp)
+}
+write.csv(df_output,'data/tmp/top_10_stocks_prices.csv')
+```
+
 

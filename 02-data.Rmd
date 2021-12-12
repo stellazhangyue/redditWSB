@@ -2,3 +2,25 @@
 
 The primary data sources for this project are [*Yahoo Finance*](https://finance.yahoo.com/), [*Reddit API*](https://www.reddit.com/dev/api/) and [*Google Trends*](https://trends.google.com/trends/?geo=US). Yahoo Finance provides financial news, data and commentary including stock quotes, press releases, financial reports, and original content. Reddit API is the official portal Reddit created to facilitate developers in their app-building endeavors, where developers can retrieve the constantly updating feeds of Reddit posts. Google Trends is a website by Google that analyzes the popularity of top search queries in Google Search across various regions and languages. 
 From the above data sources 
+
+
+
+
+```{r}
+get_price_df <- function(ticker) {
+  GME_S <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
+  gme_sp_df <- data.frame(Date=index(GME_S),coredata(GME_S))
+  gme_sp_df <- gme_sp_df %>%
+    select(Date, ends_with("Close")) %>%
+    rename(Close = ends_with("Close"))
+  gme_sp_df$Symbol = ticker
+  gme_sp_df <- select(gme_sp_df, Symbol, Date, Close)
+  return(gme_sp_df)
+}
+df_output = data.frame()
+for(i in top_10_tickers) {
+  tmp <- get_price_df(i)
+  df_output <- rbind(df_output, tmp)
+}
+write.csv(df_output,'data/tmp/top_10_stocks_prices.csv')
+```
