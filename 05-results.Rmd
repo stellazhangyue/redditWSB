@@ -340,6 +340,10 @@ write.csv(df_output,'data/tmp/top_10_stocks_prices.csv')
 ## r/WallStreetBets Reddit Post Data
 
 ### Reddit post data overview
+```{r}
+
+```
+
 
 #### What are the most popular words?
 ```{r}
