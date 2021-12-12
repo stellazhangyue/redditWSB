@@ -103,7 +103,7 @@ Then, we start to count the possible stock ticker and summarize the count inform
 
 Now, in r, we can read the file which contains the information of the final possible stock ticker count. Since we are only interested in the top 10 WSB stocks, we need to re-order the data frame according to the word count in descending order. 
 
-We noticed that there are some invalid tickers exists in the data frame, but that is expected since there is no perfect way to extract out the stock ticker due to the lack of `$` in the data source, so we manually go through the data frame and select out the top 10 tickers, which are: `GME`, `AMC`, `NOK`, `SND`, `NAKD`, `PLTR`, `CLOV`, `RETA`, `MAR`, `PLE`, respectively.
+We noticed that there are some invalid tickers exists in the data frame, but that is expected since there is no perfect way to extract out the stock ticker due to the lack of `$` in the data source, so we manually go through the data frame and select out the top 10 tickers, which are: `GME`, `AMC`, `BB`,`NOK`, `SND`, `NAKD`, `PLTR`, `CLOV`, `RETA`, `MAR`, `PLE`, respectively.
 
 ```{r}
 df <- read.csv('data/clean/reddit/possible_tickers_count.csv')
