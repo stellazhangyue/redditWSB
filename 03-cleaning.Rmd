@@ -3,7 +3,100 @@
 ```{r, message=FALSE, warning=FALSE}
 library(readr)
 library(tidyverse)
+library(tm)
+library(tidytext)
 ```
+
+## Sentiment Analysis on Reddit Posts regarding GME
+
+```{r echo=FALSE}
+reddit_filenames <- list.files("data/raw/reddit/daywise", pattern="*.csv", full.names=TRUE)
+reddit_df <- do.call(rbind,lapply(reddit_filenames, read.csv))
+reddit_df <- subset(reddit_df, select = -c(X))
+reddit_df <- reddit_df[!duplicated(reddit_df),]
+```
+
+```{r}
+#Function to cleanup data
+cleanData <- function(x){
+  x <- gsub(":", "", x) # Replace junk with ("")
+  x <- iconv(x, "latin1", "ASCII", sub=" ")
+  x <- gsub("\\s+", " ", x) # Remove double spaces
+  return(x)
+}
+```
+
+
+```{r}
+# filter posts with score > 10 and contains GME in title or text
+reddit_GME_sa <- reddit_df %>%
+  filter(score >=10) %>%
+  select(postid, created_utc, title, selftext) %>%
+  mutate(title_contains_GME = grepl("GME", title, ignore.case = TRUE),
+         text_contains_GME = grepl("GME", selftext, ignore.case = TRUE)) %>%
+  filter(title_contains_GME | text_contains_GME) %>%
+  mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
+         text = cleanData(str_trim(paste(title, selftext))),
+         postid = paste(postid, date_utc, sep = "_")) %>%
+  select(postid, text)
+```
+
+```{r}
+reddit_GME_sa <- reddit_GME_sa %>% 
+  arrange(desc(length(text))) %>%
+  top_n(20)
+```
+
+```{r warning=FALSE}
+gme_corpus <- Corpus(VectorSource(reddit_GME_sa$text), readerControl = list(reader = readPlain, language = "en_US", load = TRUE))
+
+#Clean up the corpus
+gme_corpus <- tm_map(gme_corpus, removePunctuation)
+gme_corpus <- tm_map(gme_corpus, removeNumbers)
+gme_corpus <- tm_map(gme_corpus, stripWhitespace)
+gme_corpus <- tm_map(gme_corpus, content_transformer(tolower))
+
+#Generate Document Term Matrix
+gme_tdm <- TermDocumentMatrix(gme_corpus)
+gme_tdm <- list(tdm = gme_tdm, articleFile = reddit_GME_sa$postid)
+```
+```{r}
+gme_matrix <- data.matrix(gme_tdm[["tdm"]])
+
+#Convert matrix to dataframe
+gme_text_df <- as.data.frame(gme_matrix, stringsAsFactors = F)
+
+gme_postid <- gme_tdm[["articleFile"]]
+
+#Bind filenames to columns
+colnames(gme_text_df) <- gme_postid
+
+#Clean data get words from rownames
+gme_text_df$textWords <- cleanData(rownames(gme_text_df)) 
+rownames(gme_text_df) <- NULL
+
+#Transpose columns to rows
+gme_tidy_data <- pivot_longer(gme_text_df, !textWords, "postid", "wordCount")
+colnames(gme_tidy_data) <- c("textWord","postid","wordCount")
+
+#Ignore rows with NA values and wordCount less than 1. Means word does not exist in the article
+gme_tidy_data <- na.omit(gme_tidy_data)
+gme_tidy_data<- gme_tidy_data[gme_tidy_data$wordCount>0, ]
+rownames(gme_tidy_data) <- NULL
+
+#Get stop words from 'tidytext' package and remove from data frame
+lexStopWords <- stop_words
+gme_tidy_data <- gme_tidy_data %>% 
+                    anti_join(lexStopWords  , by = c("textWord" = "word")) %>% 
+                    filter(!textWord  %in% c("april", "byteresa", "cfra", "jana","npd", "shopjana","wfm","ihor","amazoncom","anayahooyptryahoo","bloomberg","carolinabased","cincinnatibased","cincinnati", "monday", "month","dusaniwsky"))
+
+#Attach date
+
+# gme_tidy_data$textDate <- properDate(str_extract(wfm.tidy.data$fileName, pattern))
+```
+
+
+
 
 ## Google Trends Data Transformation
 In the Google Trends source data, it assigns a number to each keyword for each period(week). The numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term. A score of <1 means there is some search interest but it's extremely low. We are replacing all <1's with 0.5, so that we can keep the data frame consistent with all scores as numeric data. 
