@@ -14,6 +14,8 @@ library(maps)
 library(mapdata)
 library(lubridate)
 library(treemap)
+library(wordcloud)
+library(wordcloud2)
 ```
 
 
@@ -46,6 +48,14 @@ The above two plots display the interest on the relative topics during the time 
 ## r/WallStreetBets Reddit Post Data
 
 ### Reddit post data overview
+
+#### What are the most popular words?
+```{r}
+reddit_wc <- readr::read_csv("data/clean/reddit/reddit_wc_total.csv")
+wordcloud2(data=reddit_wc, size=1.6, maxRotation = 0, minRotation = 0)
+# wordcloud2(data=reddit_wc, size = 0.7, shape = 'pentagon')
+```
+
 
 ### Sentiment analysis on Reddit posts regarding GME
 ```{r echo=FALSE, message=FALSE}
@@ -358,8 +368,8 @@ tickerPrices <- NULL
 for (ticker in top_10_tickers)
   tickerPrices <- cbind(tickerPrices, getSymbols(ticker, src = "yahoo", from = "2020-12-01", auto.assign=FALSE)[,4])
 
-ggplot(tickerPrices, aes(x=tickerPrices.index)) + 
-  geom_line(aes(y = GME), color = "darkred") + 
-  geom_line(aes(y = AMC), color="steelblue", linetype="twodash") 
+# ggplot(tickerPrices, aes(x=tickerPrices.index)) + 
+#   geom_line(aes(y = GME), color = "darkred") + 
+#   geom_line(aes(y = AMC), color="steelblue", linetype="twodash") 
 ```
 
