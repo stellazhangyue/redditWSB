@@ -310,6 +310,10 @@ ts_plot
 ## r/WallStreetBets Reddit Post Data
 
 ### Reddit post data overview
+```{r}
+
+```
+
 
 #### What are the most popular words?
 ```{r}
