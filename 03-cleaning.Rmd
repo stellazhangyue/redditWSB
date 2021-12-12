@@ -20,9 +20,9 @@ reddit_df <- reddit_df[!duplicated(reddit_df),]
 ```
 
 
-```{r warning=FALSE}
+```{r}
 # filter posts with score > 10 and contains GME in title or text
-reddit_GME_sa_Feb <- reddit_df %>%
+reddit_GME_sa <- reddit_df %>%
   filter(score >= 10) %>%
   select(postid, created_utc, title, selftext) %>%
   mutate(title_contains_GME = grepl("GME", title, ignore.case = TRUE),
@@ -30,23 +30,58 @@ reddit_GME_sa_Feb <- reddit_df %>%
   filter(title_contains_GME | text_contains_GME) %>%
   mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
          text = cleanData(str_trim(paste(title, selftext))),
-         postid = paste(postid, date_utc, sep = "_")) %>%
+         postid = paste(postid, date_utc, sep = "_"))
+```
+
+```{r warning=FALSE}
+reddit_GME_sa_Jan <- reddit_GME_sa %>%
+  filter(date_utc <= as.Date('2021-01-31') & date_utc >= as.Date('2021-01-01')) %>%
+  select(postid, text)
+
+gme_nrc_Jan <- get_nrc_sentiments(reddit_GME_sa_Jan)
+```
+
+```{r warning=FALSE}
+reddit_GME_sa_Feb <- reddit_GME_sa %>%
   filter(date_utc <= as.Date('2021-02-28') & date_utc >= as.Date('2021-02-01')) %>%
   select(postid, text)
 
-gme_nrc_Feb <- get_nrc_sentiments(reddit_GME_sa)
+gme_nrc_Feb <- get_nrc_sentiments(reddit_GME_sa_Feb)
 ```
 
-
 ```{r warning=FALSE}
+reddit_GME_sa_567 <- reddit_GME_sa %>%
+  filter(date_utc <= as.Date('2021-07-31') & date_utc >= as.Date('2021-05-01')) %>%
+  select(postid, text)
+
+gme_nrc_567 <- get_nrc_sentiments(reddit_GME_sa_567)
+```
+
+```{r}
+gme_nrc_Jan_agg <- gme_nrc_Jan %>%
+  select(textDate, sentiment, wordCount) %>%
+  group_by(textDate, sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) 
+
 gme_nrc_Feb_agg <- gme_nrc_Feb %>%
   select(textDate, sentiment, wordCount) %>%
   group_by(textDate, sentiment) %>%
   dplyr::summarise(wordCount = sum(wordCount)) 
 
-write.csv(gme_nrc_Feb_agg, file = ("data/clean/reddit/gme_sa_nrc_feb.csv"),row.names=FALSE)
+gme_nrc_first_wave <- rbind(gme_nrc_Jan_agg, gme_nrc_Feb_agg)
+
+write.csv(gme_nrc_Jan_agg, file = ("data/clean/reddit/gme_sa_nrc_first_wave.csv"),row.names=FALSE)
 ```
 
+
+```{r}
+gme_nrc_567_agg <- gme_nrc_567 %>%
+  select(textDate, sentiment, wordCount) %>%
+  group_by(textDate, sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) 
+
+write.csv(gme_nrc_Feb_agg, file = ("data/clean/reddit/gme_sa_nrc_second_wave.csv"), row.names=FALSE)
+```
 
 
 ## Google Trends Data Transformation

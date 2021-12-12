@@ -41,6 +41,36 @@ The above two plots display the interest on the relative topics during the time 
 
 #### Interest by subregion
 
+### r/WallStreetBets Reddit Post Data
+
+#### Reddit post data overview
+
+#### Sentiment analysis on Reddit posts regarding GME
+```{r echo=FALSE, message=FALSE}
+gme_nrc_first_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_first_wave.csv")
+gme_nrc_second_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_second_wave.csv")
+```
+```{r}
+first_wave <- gme_nrc_first_wave %>%
+  select(sentiment, wordCount) %>%
+  group_by(sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) %>%
+  ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
+    geom_bar(stat = "identity") +
+    ggtitle("GME Sentiment Jan and Feb") +
+    xlab("sentiment")
+
+second_wave <- gme_nrc_second_wave %>%
+  select(sentiment, wordCount) %>%
+  group_by(sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) %>%
+  ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
+    geom_bar(stat = "identity") +
+    ggtitle("GME Sentiment May, Jun and Jul") +
+    xlab("sentiment")
+
+first_wave / second_wave
+```
 
 
 
