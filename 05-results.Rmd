@@ -15,12 +15,9 @@ library(mapdata)
 library(lubridate)
 ```
 
+## General Public's interests on Google
 
-## What's the impact of r/wallstreetbet?
-
-### General Public's interests on Google
-
-#### Interest over time
+### Interest over time
 ```{r}
 combined_web <- readr::read_csv("data/clean/gtrends/combined_web.csv")
 combined_news <- readr::read_csv("data/clean/gtrends/combined_news.csv")
@@ -40,13 +37,13 @@ web / news
 
 The above two plots display the interest on the relative topics during the time period 2020-11-15 to 2021-11-15. Numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term.
 
-#### Interest by subregion
+### Interest by subregion
 
-### r/WallStreetBets Reddit Post Data
+## r/WallStreetBets Reddit Post Data
 
-#### Reddit post data overview
+### Reddit post data overview
 
-#### Sentiment analysis on Reddit posts regarding GME
+### Sentiment analysis on Reddit posts regarding GME
 ```{r echo=FALSE, message=FALSE}
 gme_nrc_first_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_first_wave.csv")
 gme_nrc_second_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_second_wave.csv")
@@ -111,16 +108,16 @@ total <- merge(gme_stock_df, gme_nrc_sum, by.y="textDate", by.x="Date") %>%
 
 ggplot(total, aes(x=Date, y=val, color=attr)) +
   geom_line() +
-  geom_point() +
   ggtitle("GME positive percentage and stock price") +
   ylab("value") +
   labs(color = "") 
 ```
+
 Above plot analyzes if the sentiments on r/WallStreetBets had any impact on GME's stock price.
 
 
-### Stock Data and Information
-#### Stock Data Plot
+## Stock Data and Information
+### Stock Data Plot
 The most Representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in WallStreetBet sub-reddit analysed in Chapter 3 - cleaning. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
 
 ```{r}
@@ -291,7 +288,7 @@ From the above 2 graphs, we can clearly see that there are 2 waves of the WSB st
 
 Also, the gray and red line in the price graph is the Bollinger Bands, which is the price level at 1 standard deviation level above and below the sample moving average of the price, which is able to capture the volatility of the stock. Generally, Bollinger bands is used to check whether prices are relatively high or low as comparing to the historical price. Here, we can see that for the beginning of the 2 waves, the price of both `GME` and `AMC` break the Bollinger upper bands, which suggests that the price of these 2 stocks are extremely high as comparing to the historical data. However, the Bollinger bands also adjusted themselves quickly to accommodate the sudden price change, so we can see that the price of these 2 stocks fall back within the Bollinger bands after a short period of time.
 
-#### Stock Risk Assessment
+### Stock Risk Assessment
 While the previous 2 graphs mainly focus on the price and volume aspects, there is one more aspect that are very important to the stock, which is risk. Risk can be measured by the standard deviation. Here, we would like to explore how the risk of the 2 stocks change before and after the 2 waves, which are `GME` and `AMC` respectively. Thus, we need to calculate the moving standard deviation of the 2 stocks over time.
 
 For each month, it is about 4 weeks and the stock market only opens in weekdays, thus, there are about 4*5 = 20 days with stock data every month. Therefore, we set the moving window to 20, which is roughly about 1 month time.
