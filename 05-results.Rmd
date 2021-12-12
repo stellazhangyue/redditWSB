@@ -295,7 +295,6 @@ Here, we take the closing price to be the one calculating the moving standard de
 
 Also, we take the data since the start of last year because we want to see whether there is any difference in terms of the risk of `GME` and `AMC` by comparing the moving standard deviation before and after the 2 waves.
 ```{r}
-getSymbols("GME",src='yahoo')
 df_GME <- data.frame(Date=index(GME),coredata(GME))
 
 df_GME <- subset(df_GME, Date >= "2020-01-01")
@@ -308,7 +307,6 @@ ggplot(df_GME, aes(x=Date, y=moving_std)) +
 ```
 
 ```{r}
-getSymbols("AMC",src='yahoo')
 df_AMC <- data.frame(Date=index(AMC),coredata(AMC))
 
 df_AMC <- subset(df_AMC, Date >= "2020-01-01")
@@ -348,11 +346,11 @@ df %>% filter(possible_ticker %in% c('GME','AMC','BB','NOK','SND','NAKD','PLTR',
 ```{r}
 df %>% filter(possible_ticker %in% c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR','PLE')) -> df
 df
-df$count[1]/sum(df$count)
-df$count[2]/sum(df$count)
+# df$count[1]/sum(df$count)
+# df$count[2]/sum(df$count)
 ```
 
-From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominant stocks that were discussed in WallStreeBets sub-reddit, which appears in around 45% and 25% of the total posts respectively. However, `NOK`, `SND` and the other stocks have also received some public attention, which are worthwhile to include them in the future analysis to get a bigger and clearer picture regarding the WSB stocks.
+From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominant stocks that were discussed in WallStreeBets sub-reddit, which appears in around `r round(df$count[1]/sum(df$count)*100, 4)`% and `r round(df$count[2]/sum(df$count)*100, 4)`% of the total posts respectively. However, `NOK`, `SND` and the other stocks have also received some public attention, which are worthwhile to include them in the future analysis to get a bigger and clearer picture regarding the WSB stocks.
 
 #### Time Series of the Top 10 Stocks
 Now, we want to study how the top 10 stocks' prices move over the past one year.

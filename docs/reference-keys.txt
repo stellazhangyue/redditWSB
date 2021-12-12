@@ -17,5 +17,7 @@ sentiment-analysis-on-reddit-posts-regarding-gme-1
 stock-data-and-information
 stock-data-plot
 stock-risk-assessment
+most-popular-stocks
+time-series-of-the-top-10-stocks
 interactive-component
 conclusion
