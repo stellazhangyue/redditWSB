@@ -5,8 +5,9 @@ Click [here](https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?
 
 ## Descriptions
 
-The interactive part of our analysis was built with D3 version 6, which the code has been uploaded to [VizHub](https://vizhub.com/). You can also find code [here](https://github.com/stellazhangyue/redditWSB/tree/main/scripts) in our github repo. 
-The interactive plot shows the selected 10 stock price related to a highlighted date. Our data source for the plot is [yahoo finance](https://finance.yahoo.com/). You can also find the data [here](https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv) under the `data` folder of our repo.
+The interactive part of our analysis was built with D3 version 6, which the code has been uploaded to [VizHub](https://vizhub.com/). 
+You can also find code [here](https://github.com/stellazhangyue/redditWSB/tree/main/scripts) in our github repo.  
+The interactive plot shows the selected 10 stock price related to a highlighted date. The y axis shows the volume of a day divided by the volume of the highlighted day. Since the y value is relative, we choose to use the log scale so that the plot is stable. Our data source for the plot is [yahoo finance](https://finance.yahoo.com/). You can also find the data [here](https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv) under the `data` folder of our repo. It has four columns: Symbol, Date, Close(Price in the plot) and Volume.  
 
 
 ## Instructions for using the map
@@ -24,7 +25,6 @@ Notes:
 - Once a legend or a variable is clicked, the entire plot will be initialized to align with the first date, Dec 31, 2020.  
 
 References:
-
 
 1. Observable: Line Chart, Index Chart (https://observablehq.com/@d3/index-chart)  
 2. D3 Gallery: Line chart (https://www.d3-graph-gallery.com/line.html)
