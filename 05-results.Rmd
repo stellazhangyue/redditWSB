@@ -337,6 +337,31 @@ From the above graph, we can have the following observation:
 
 5. The stocks are included in different waves, while`PLTR` is the stock that is only active in 1st wave, there are other stocks that are active only in the 2nd wave, which are `CLOV`, `SND`, `RETA` respectively. For `GME`, `AMC`, `BB`, `NOK`, `NAKD`, they are active in both of the waves. However, for `MAR`, its stock price does not change much through out the 2 waves.
 
+### Correlations between top 10 stocks
+```{r}
+top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')
+tickerPrices <- NULL
+for (ticker in top_10_tickers)
+  tickerPrices <- cbind(tickerPrices, getSymbols(ticker, src = "yahoo", from = "2020-01-01", auto.assign=FALSE)[,4])
+
+drop_na <- apply(tickerPrices,1,function(x) all(!is.na(x)))
+tickerPrices <- tickerPrices[drop_na]
+colnames(tickerPrices) <- top_10_tickers
+
+corr <- cor(tickerPrices)
+melted_cormat <- melt(corr)
+
+ggcorrplot(corr, 
+           type = 'upper',
+           lab = TRUE,
+           lab_size = 3,
+           method = 'circle',
+           colors = c(light_red, "white", green),
+           title="Correlogram of Stocks",
+           legend.title = "Correlation")
+```
+
+
 ## r/WallStreetBets Reddit Post Data
 
 ### r/WallStreetBets metrics
