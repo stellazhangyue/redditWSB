@@ -15,6 +15,7 @@ library(mapdata)
 library(lubridate)
 library(treemap)
 library(wordcloud2)
+library(highcharter)
 ```
 
 
@@ -285,7 +286,7 @@ df %>%
 From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominant stocks that were discussed in WallStreeBets sub-reddit, which appears in around `r round(df$count[1]/sum(df$count)*100, 4)`% and `r round(df$count[2]/sum(df$count)*100, 4)`% of the total posts respectively. However, ``BB`, `NOK`, `SND` and the other stocks have also received some public attention, which are worthwhile to include them in the future analysis to get a bigger and clearer picture regarding the WSB stocks.
 
 ### Time Series of the Top 10 Stocks
-Now, we want to study how the top 10 stocks' prices move over the past one year. Again, since the closing price is the most representative price among all the 5 prices, we just use closing price to show the price change over time.
+Now, we want to study how the top 10 stocks' prices move over the past one year. Again, since the closing price is the most representative price among all the 5 prices, we just use closing price to calculate the daily return change over time. The equation used to calculate the daily stock return is that: `(current closing price - previous closing price) / previous closing price * 100%`.
 
 ```{r}
 df_price <- read.csv('data/clean/stock/top_10_stocks_daily_return.csv')
@@ -297,15 +298,38 @@ df_price %>%
   pivot_wider(names_from = Symbol, values_from = Daily_return, values_fill = 0) %>%
   gather(key = "variable", value = "value", -Date) -> df_price
 
-ts_plot <- 
-  ggplot(data=df_price, aes(x=Date, y=value, group = variable, colour = variable)) +
-    geom_line() +
-    labs(y= "Daily Return", x = "Date") + 
-    ggtitle("Daily Return of Top 10 mentioned Stocks")
- 
-ts_plot
+df_price$Date <- as.Date(df_price$Date)
+
+ts1 <- df_price %>%
+  hchart("line",hcaes(x = Date, y = value, 
+                      group = variable)) %>%
+  hc_chart(zoomType = "x") %>%
+  hc_colors(c("steelBlue", "sienna", "seaGreen", "teal", "violet", 
+                       "orange", "darkSlateGray", "darkOrchid", "darkRed", "coral", "crimson")) %>%
+  hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+  hc_xAxis(title = list(text = "Date"),
+           labels = list(format = '{value:%b %d}')) %>%
+  hc_yAxis(title = list(text = "Daily Return (%)"),
+           tickInterval = 20,
+           max = 400) %>%
+  hc_title(text = "<b>Daily Return of Top 10 mentioned Stocks</b>") %>%
+  hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+  hc_plotOptions(area = list(lineWidth = 0.5)) 
+
+ts1
 ```
 
+From the above graph, we can have the following observation:
+
+1. `AMC` has the highest daily return in the end of January 2021, which was around 300% increase as comparing to the previous day price. 
+
+2. `GME` and `AMC`'s price change start to fluctuate a lot since the mid of the January, which marks the beginning of the WSB 1st wave. During this period, they started to get public attention.
+
+3. In 27th Jan, the 1st wave of WSB reaches the peak, where `GME`, `AMC`, `BB`, `NOK`, `NAKD` achieved their highest daily return change on the same day.
+
+4. Generally, the change in daily return in the 1st WSB wave is higher than the change in daily return in the 2nd WSB wave. This occurs since the price of the stocks has increases a lot in the first wave already, so in terms of the return (%), it is very hard to have as big change as that in 1st wave.
+
+5. The stocks are included in different waves, while`PLTR` is the stock that is only active in 1st wave, there are other stocks that are active only in the 2nd wave, which are `CLOV`, `SND`, `RETA` respectively. For `GME`, `AMC`, `BB`, `NOK`, `NAKD`, they are active in both of the waves. However, for `MAR`, its stock price does not change much through out the 2 waves.
 
 ## r/WallStreetBets Reddit Post Data
 
