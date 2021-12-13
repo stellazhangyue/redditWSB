@@ -27,42 +27,11 @@ purple <- "#D5A7F1"
 
 ## What's the impact of r/wallstreetbet?
 
-### General Public's interests on Google
-
-We believe that the whole event , i.e. r/wallstreetbets subreddit, short squeeze and the associated stocks are relatively new to the public, therefore, they are very likely to search some of the related keywords in Google to understand the whole event. Therefore, in this section, we would like to use the Google search related data to explore the general public attention towards this event. 
-
-#### Interest over time
-
-In Google, people can search in the website and if they already know the basic information about the event and they follow the event closely and only interested in the most recent news, therefore, we would like to zoom one level down into Google News to understand the topics that the close followers are interested in.
-
-We have identified some keywords from the word cloud, excluding the commonly searched word in our daily life, i.e. stock, market, buy and etc, which are: `GME`,`AMC` `AMC`,`GameStop`, `r/WallStreetBets`,`Reddit`,`Robinhood` respectively. Therefore, we will use the 
-
-Also, since we want to compare the public interest 
-```{r}
-combined_web <- readr::read_csv("data/clean/gtrends/combined_web.csv")
-combined_news <- readr::read_csv("data/clean/gtrends/combined_news.csv")
-
-web <- combined_web %>%
-  ggplot(aes(x=Week, y=score, color = keyword)) +
-  geom_line() +
-  ggtitle("Web Search Interest overtime")
-
-news <- combined_news %>%
-  ggplot(aes(x=Week, y=score, color = keyword)) +
-  geom_line() +
-  ggtitle("News Search Interest overtime")
-
-web / news
-```
-
-The above two plots display the interest on the relative topics during the time period 2020-11-15 to 2021-11-15. Numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term.
-
-#### Interest by subregion
-
-
 ## Stock Data and Information
 ### Stock Data Plot
 The most representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in WallStreetBet sub-reddit analysed in Chapter 3 - cleaning. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
+
+The graph is interactive, where we can choose select the period of time that we want to focus on by dragging on the bottom graph. This allows us to zoom in and see the graph clearly. Also, we can choose the specific period, i.e. the past 1 year or past 6 months data by pressing the corresponding buttons above and we can easily go back to the main graph by pressing the "RESET" botton.
 
 ```{r}
 getSymbols("GME",src='yahoo')
@@ -605,3 +574,44 @@ ggplot(total, aes(x=Date, y=val, color=attr)) +
 Above plot analyzes if the sentiments on r/WallStreetBets had any impact on GME's stock price.
 
 
+### General Public's interests on Google
+
+We believe that the whole event , i.e. r/wallstreetbets subreddit, short squeeze and the associated stocks are relatively new to the public, therefore, they are very likely to search some of the related keywords in Google to understand the whole event. Therefore, in this section, we would like to use the Google search related data to explore the general public attention towards this event. 
+
+#### Interest over time
+
+In Google, people can search in the website and if they already know the basic information about the event and they follow the event closely and only interested in the most recent news, therefore, we would like to zoom one level down into Google News to understand the topics that the close followers are interested in.
+
+We have identified some keywords from the word cloud based on the size of the words there. However, there are some commonly searched word in our daily life, i.e. stock, market, buy and etc, so we need to exclude them from the list. Therefore, we choose `GME`, `AMC`, `wallStreetBet`, `reddit`, `robinhood` to be the key words. However, in the source data, there are misalignment in the word format, i.e. Google data source use `GameStop` to represent `GME`, so we choose the closest word form, which are: `AMC`,`GameStop`, `r/WallStreetBets`,`Reddit`,`Robinhood` respectively. 
+
+Also, since we want to compare the public interest towards these key words before and after the events in order to show how big the effect of the event on the public interest, we choose to display the data during the time period 2020-11-15 to 2021-11-15.
+
+```{r}
+combined_web <- readr::read_csv("data/clean/gtrends/combined_web.csv")
+combined_news <- readr::read_csv("data/clean/gtrends/combined_news.csv")
+
+web <- combined_web %>%
+  ggplot(aes(x=Week, y=score, color = keyword)) +
+  geom_line() +
+  ggtitle("Web Search Interest overtime")
+
+news <- combined_news %>%
+  ggplot(aes(x=Week, y=score, color = keyword)) +
+  geom_line() +
+  ggtitle("News Search Interest overtime")
+
+web / news
+```
+In the above 2 graphs, the x-axis is the date. For the y-aixs score, it represents search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term.
+
+From the above 2 graphs, we have the following observations:
+
+1. This event has attract huge public attention around the end of Jan, 2021 and start of Feb, 2021 period of time.
+
+2. `GME` caught the highest attention during the 1st wave of the WSB, while `AMC` caught the highest attention during the 2nd wave of the WSB.
+
+3. Generally, the 1st wave of WSB caught more public attention than the 2nd wave of WSB.
+
+4. For the professionals and the closely followed people, more news reported the `GME` and `Robinhood` related topics, since they are the one using `Robinhood` to trade `GME`. While for the general public, they are more care about the different stocks, i.e. `GME` and `AMC`.
+
+5. `Reddit` always has relatively high search interest, which indicates that there are constant active users in `Reddit`, while for `r/WallStreetBets`, before and after the event, only very few people use it. Therefore, the active users in this sub-reddit is not very high, which coincident with our previous conclusion from the daily active user graph.
