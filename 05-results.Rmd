@@ -214,10 +214,17 @@ df_GME <- data.frame(Date=index(GME),coredata(GME))
 df_GME <- subset(df_GME, Date >= "2020-01-01")
 df_GME['moving_std'] <- rollapply(df_GME['GME.Close'], width = 20, FUN = sd, na.pad = TRUE)
 ggplot(df_GME, aes(x=Date, y=moving_std)) +
-  geom_line() +
+  geom_line(color = light_blue) +
   xlab("Date") +
   ylab('Moving Standard Deviation') + 
-  ggtitle('Change of risk of GME over time')
+  ggtitle('Change of risk of GME over time') +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold"),
+        plot.subtitle = element_text(face = "bold", color = "grey35"),
+        plot.caption = element_text(color = "grey68"),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position="bottom",
+        legend.title = element_text(face="bold"))
 ```
 
 ```{r}
@@ -227,10 +234,17 @@ df_AMC <- data.frame(Date=index(AMC),coredata(AMC))
 df_AMC <- subset(df_AMC, Date >= "2020-01-01")
 df_AMC['moving_std'] <- rollapply(df_AMC['AMC.Close'], width = 20, FUN = sd, na.pad = TRUE)
 ggplot(df_AMC, aes(x=Date, y=moving_std)) +
-  geom_line() +
+  geom_line(color = light_red) +
   xlab("Date") +
   ylab('Moving Standard Deviation') + 
-  ggtitle('Change of risk of AMC over time')
+  ggtitle('Change of risk of AMC over time') +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold"),
+        plot.subtitle = element_text(face = "bold", color = "grey35"),
+        plot.caption = element_text(color = "grey68"),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position="bottom",
+        legend.title = element_text(face="bold"))
 ```
 
 From the 2 graphs above, we have following observations:
@@ -254,10 +268,17 @@ top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MA
 ticker_df <- ticker_df %>% filter(possible_ticker %in% top_10_tickers)
 ticker_df %>%
     ggplot(aes(x = fct_reorder(possible_ticker, desc(count)), y = count)) +
-    geom_bar(stat = "identity") +
+    geom_bar(stat = "identity", fill = light_blue) +
     ggtitle("Number of Posts Mentioned the Stock Ticker") +
     xlab("Stock Ticker") + 
-    ylab("Count")
+    ylab("Count") +
+    theme_bw() +
+    theme(plot.title = element_text(face = "bold"),
+          plot.subtitle = element_text(face = "bold", color = "grey35"),
+          plot.caption = element_text(color = "grey68"),
+          axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position="bottom",
+          legend.title = element_text(face="bold"))
 ```
 
 ```{r}
@@ -387,19 +408,18 @@ reddit_sub %>%
   hc_xAxis(title = list(text = "Date"),
            labels = list(format = '{value:%b %d}')) %>%
   hc_yAxis(title = list(text = "Subscriber growth")) %>%
-  hc_title(text = "<b>r/WallStreetBets subscriber growth by Date</b>") %>%
+  hc_title(text = "<b>r/wallstreetbets subscriber growth by Date</b>") %>%
   hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
   hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
   hc_exporting(enabled = TRUE)
 ```
 
 ```{r}
-reddit_post_ov <- readr::read_csv("data/clean/reddit/wsb_subreddit_overview.csv") %>%
-  # select(date_utc, post_cnt, )
-  rename(Date = date_utc) %>%
-  pivot_longer(!Date, names_to = "attribute", values_to = "value")
-
+reddit_post_ov <- readr::read_csv("data/clean/reddit/wsb_subreddit_overview.csv")
 reddit_post_ov_ts <- reddit_post_ov %>%
+  select(!distinct_user_cnt) %>%
+  rename(Date = date_utc) %>%
+  pivot_longer(!Date, names_to = "attribute", values_to = "value") %>%
   hchart("line",hcaes(x = Date, y = value, group = attribute)) %>%
   hc_chart(zoomType = "x") %>%
   hc_colors(c(light_blue, light_red, green, purple)) %>%
@@ -430,7 +450,41 @@ hc_add_annotation(
     )
 )
 ```
+```{r}
+reddit_post_ov <- readr::read_csv("data/clean/reddit/wsb_subreddit_overview.csv")
+reddit_post_ov_ts <- reddit_post_ov %>%
+  select(date_utc, distinct_user_cnt) %>%
+  rename(Date = date_utc) %>%
+  hchart("line", hcaes(x = Date, y = distinct_user_cnt)) %>%
+  hc_chart(zoomType = "x") %>%
+  hc_colors(c(light_blue, light_red, green, purple)) %>%
+  hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+  hc_xAxis(title = list(text = "Date"),
+           labels = list(format = '{value:%b %d}')) %>%
+  hc_yAxis(title = list(text = "count")) %>%
+  hc_title(text = "<b>r/wallstreetbets daily active user count</b>") %>%
+  hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+  hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+  hc_exporting(enabled = TRUE)
 
+
+hc_add_annotation(
+    reddit_post_ov_ts,
+    labelOptions = list(
+      backgroundColor = 'rgba(0,0,0,0.4)',
+      verticalAlign = 'top',
+      y = 15
+    ),
+    labels = list(
+      list(point = list(xAxis = 0, yAxis = 0,
+          x = datetime_to_timestamp(as.Date("2021/01/28")),
+          y = 120000), text = "First wave"),
+      list(point = list(xAxis = 0, yAxis = 0,
+          x = datetime_to_timestamp(as.Date("2021/06/03")),
+          y = 12000), text = "Second wave")
+    )
+)
+```
 ### Reddit metrics vs. stock price and volume
 From the above 3 graphs, we have the following observations:
 
@@ -617,7 +671,12 @@ first_wave <- gme_nrc_first_wave %>%
     scale_fill_manual(values = c("neg" = green,
                                 "pos" = light_red)) +
     ggtitle("GME Sentiment Jan and Feb") +
-    xlab("sentiment")
+    xlab("sentiment") +
+    theme_bw() +
+    theme(plot.title = element_text(face = "bold"),
+          plot.subtitle = element_text(face = "bold", color = "grey35"),
+          plot.caption = element_text(color = "grey68"),
+          axis.text.x = element_text(angle = 45, hjust = 1))
 second_wave <- gme_nrc_second_wave %>%
   select(sentiment, wordCount) %>%
   group_by(sentiment) %>%
@@ -628,7 +687,12 @@ second_wave <- gme_nrc_second_wave %>%
     scale_fill_manual(values = c("neg" = green,
                                 "pos" = light_red)) +
     ggtitle("GME Sentiment May, Jun and Jul") +
-    xlab("sentiment")
+    xlab("sentiment") +
+    theme_bw() +
+    theme(plot.title = element_text(face = "bold"),
+          plot.subtitle = element_text(face = "bold", color = "grey35"),
+          plot.caption = element_text(color = "grey68"),
+          axis.text.x = element_text(angle = 45, hjust = 1))
 first_wave / second_wave
 ```
 
@@ -661,8 +725,11 @@ ggplot(total, aes(x=Date, y=val, color=attr)) +
   labs(color = "") +
   theme_bw() +
   theme(plot.title = element_text(face = "bold"),
+        plot.subtitle = element_text(face = "bold", color = "grey35"),
         plot.caption = element_text(color = "grey68"),
-        legend.position="bottom")
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position="bottom",
+        legend.title = element_text(face="bold"))
 ```
 
 Above plot analyzes if the sentiments on r/WallStreetBets had any impact on GME's stock price.
