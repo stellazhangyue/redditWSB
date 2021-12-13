@@ -60,6 +60,47 @@
 <script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
 <link href="libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<script src="libs/proj4js-2.3.15/proj4.js"></script>
+<link href="libs/highcharts-8.1.2/css/motion.css" rel="stylesheet" />
+<script src="libs/highcharts-8.1.2/highcharts.js"></script>
+<script src="libs/highcharts-8.1.2/highcharts-3d.js"></script>
+<script src="libs/highcharts-8.1.2/highcharts-more.js"></script>
+<script src="libs/highcharts-8.1.2/modules/stock.js"></script>
+<script src="libs/highcharts-8.1.2/modules/map.js"></script>
+<script src="libs/highcharts-8.1.2/modules/annotations.js"></script>
+<script src="libs/highcharts-8.1.2/modules/data.js"></script>
+<script src="libs/highcharts-8.1.2/modules/drilldown.js"></script>
+<script src="libs/highcharts-8.1.2/modules/item-series.js"></script>
+<script src="libs/highcharts-8.1.2/modules/offline-exporting.js"></script>
+<script src="libs/highcharts-8.1.2/modules/overlapping-datalabels.js"></script>
+<script src="libs/highcharts-8.1.2/modules/exporting.js"></script>
+<script src="libs/highcharts-8.1.2/modules/export-data.js"></script>
+<script src="libs/highcharts-8.1.2/modules/funnel.js"></script>
+<script src="libs/highcharts-8.1.2/modules/heatmap.js"></script>
+<script src="libs/highcharts-8.1.2/modules/treemap.js"></script>
+<script src="libs/highcharts-8.1.2/modules/sankey.js"></script>
+<script src="libs/highcharts-8.1.2/modules/dependency-wheel.js"></script>
+<script src="libs/highcharts-8.1.2/modules/organization.js"></script>
+<script src="libs/highcharts-8.1.2/modules/solid-gauge.js"></script>
+<script src="libs/highcharts-8.1.2/modules/streamgraph.js"></script>
+<script src="libs/highcharts-8.1.2/modules/sunburst.js"></script>
+<script src="libs/highcharts-8.1.2/modules/vector.js"></script>
+<script src="libs/highcharts-8.1.2/modules/wordcloud.js"></script>
+<script src="libs/highcharts-8.1.2/modules/xrange.js"></script>
+<script src="libs/highcharts-8.1.2/modules/tilemap.js"></script>
+<script src="libs/highcharts-8.1.2/modules/venn.js"></script>
+<script src="libs/highcharts-8.1.2/modules/gantt.js"></script>
+<script src="libs/highcharts-8.1.2/modules/timeline.js"></script>
+<script src="libs/highcharts-8.1.2/modules/parallel-coordinates.js"></script>
+<script src="libs/highcharts-8.1.2/modules/bullet.js"></script>
+<script src="libs/highcharts-8.1.2/modules/coloraxis.js"></script>
+<script src="libs/highcharts-8.1.2/modules/dumbbell.js"></script>
+<script src="libs/highcharts-8.1.2/modules/lollipop.js"></script>
+<script src="libs/highcharts-8.1.2/modules/series-label.js"></script>
+<script src="libs/highcharts-8.1.2/plugins/motion.js"></script>
+<script src="libs/highcharts-8.1.2/custom/reset.js"></script>
+<script src="libs/highcharts-8.1.2/modules/boost.js"></script>
+<script src="libs/highchart-binding-0.8.2/highchart.js"></script>
 <link href="libs/wordcloud2-0.0.1/wordcloud.css" rel="stylesheet" />
 <script src="libs/wordcloud2-0.0.1/wordcloud2-all.js"></script>
 <script src="libs/wordcloud2-0.0.1/hover.js"></script>
@@ -88,10 +129,14 @@
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#sentiment-analysis-on-reddit-posts-regarding-gme"><i class="fa fa-check"></i><b>3.1</b> Sentiment Analysis on Reddit Posts regarding GME</a></li>
-<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#word-clouds"><i class="fa fa-check"></i><b>3.2</b> Word clouds</a></li>
-<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#google-trends-data-transformation"><i class="fa fa-check"></i><b>3.3</b> Google Trends Data Transformation</a></li>
-<li class="chapter" data-level="3.4" data-path="data-transformation.html"><a href="data-transformation.html#reddit-data-transformation"><i class="fa fa-check"></i><b>3.4</b> Reddit Data Transformation</a></li>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#google-trends-data-transformation"><i class="fa fa-check"></i><b>3.1</b> Google Trends Data Transformation</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#reddit-data-transformation"><i class="fa fa-check"></i><b>3.2</b> Reddit Data Transformation</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="data-transformation.html"><a href="data-transformation.html#parse-stock-tickers-from-reddit-posts"><i class="fa fa-check"></i><b>3.2.1</b> Parse Stock tickers from Reddit posts</a></li>
+<li class="chapter" data-level="3.2.2" data-path="data-transformation.html"><a href="data-transformation.html#subreddit-overview"><i class="fa fa-check"></i><b>3.2.2</b> Subreddit overview</a></li>
+<li class="chapter" data-level="3.2.3" data-path="data-transformation.html"><a href="data-transformation.html#frequent-keywords-in-reddit-posts"><i class="fa fa-check"></i><b>3.2.3</b> Frequent keywords in Reddit posts</a></li>
+<li class="chapter" data-level="3.2.4" data-path="data-transformation.html"><a href="data-transformation.html#sentiment-analysis-on-reddit-posts-regarding-gme"><i class="fa fa-check"></i><b>3.2.4</b> Sentiment Analysis on Reddit Posts regarding GME</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
@@ -113,7 +158,7 @@
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#rwallstreetbets-reddit-post-data"><i class="fa fa-check"></i><b>5.3</b> r/WallStreetBets Reddit Post Data</a>
 <ul>
-<li class="chapter" data-level="5.3.1" data-path="results.html"><a href="results.html#reddit-post-data-overview"><i class="fa fa-check"></i><b>5.3.1</b> Reddit post data overview</a></li>
+<li class="chapter" data-level="5.3.1" data-path="results.html"><a href="results.html#rwallstreetbets-metrics"><i class="fa fa-check"></i><b>5.3.1</b> r/WallStreetBets metrics</a></li>
 <li class="chapter" data-level="5.3.2" data-path="results.html"><a href="results.html#sentiment-analysis-on-reddit-posts-regarding-gme-1"><i class="fa fa-check"></i><b>5.3.2</b> Sentiment analysis on Reddit posts regarding GME</a></li>
 </ul></li>
 </ul></li>
@@ -140,14 +185,8 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
-<div id="sentiment-analysis-on-reddit-posts-regarding-gme" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Sentiment Analysis on Reddit Posts regarding GME</h2>
-</div>
-<div id="word-clouds" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Word clouds</h2>
-</div>
-<div id="google-trends-data-transformation" class="section level2" number="3.3">
-<h2><span class="header-section-number">3.3</span> Google Trends Data Transformation</h2>
+<div id="google-trends-data-transformation" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Google Trends Data Transformation</h2>
 <p>In the Google Trends source data, it assigns a number to each keyword for each period(week). The numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term. A score of &lt;1 means there is some search interest but it’s extremely low. We are replacing all &lt;1’s with 0.5, so that we can keep the data frame consistent with all scores as numeric data.</p>
 <p>We also need to tidy the dataset because some of the column names are not names of variables, but values of a variable: the original column names represent the values of the <code>keyword</code> variable and the values in the columns represents the values of <code>score</code>, and each row represents 5 observations, not one. To tidy the dataset, we make the offending columns into a new pair of variables using <code>pivot_longer</code>.</p>
 <p>After cleaning, it contains 3 rows and 260 records.</p>
@@ -178,8 +217,10 @@
 </tbody>
 </table>
 </div>
-<div id="reddit-data-transformation" class="section level2" number="3.4">
-<h2><span class="header-section-number">3.4</span> Reddit Data Transformation</h2>
+<div id="reddit-data-transformation" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Reddit Data Transformation</h2>
+<div id="parse-stock-tickers-from-reddit-posts" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Parse Stock tickers from Reddit posts</h3>
 <p>There were 2 waves of sharp stock price change for WallStreetBets (WSBs) stocks in 2021, which were around January/Feburary and May/June period. These 2 waves are mainly caused by the discussion in the sub-Reddit group, WallStreetBets. Therefore, we have downloaded the Reddit posts that have been posted during these 2 periods and also extend some time before and after the wave. This is because we believe it takes some time for the initial posts to get public attention and then the posts starts to influence the stock price. Also, by including the posts that are slightly after the wave, we can do a comparison during and after the wave to check how big the effects of the posts in the sub-Reddit group on the stock price. Therefore, we have downloaded the data for the whole January, February, May, June and July, which have completely cover the 2 waves and also cover some extension. Also, we have parsed the posts on daily basis, which also helps to show the change over time.</p>
 <p>Before starting to do the analysis, we need to find the list of WSB stocks first. the Generally speaking, all the stocks that have been discussed in the WallStreetBets sub-Reddit group should be considered as WSB stock. However, given the time frame that we considered is relatively long, which is 5 months, also, the WSBs has caught huge public attention, which also attracted a lot of new redditers. Therefore, there are many people participate in the discussion and the stocks mentioned are quite diversified. In this project, we will only focus on the top 10 stocks that have been mentioned in the posts.</p>
 <p>In the source data, which are the daily posts csv files, there are 2 columns that may contains the stock information, which are <code>title</code> and <code>selftext</code> respectively. Therefore, we need to first find the stock ticker from these 2 columns. Generally, the stock ticker should start with <code>$</code> and followed by 2 to 4 consecutive upper case letters. However, in the source data, there is no <code>$</code> exists, we cannot get the exact stock data but rather, we can extract out the list of possible stock tickers by extracting all the sub-strings which are consists of 2 to 4 consecutive upper case letters.</p>
@@ -187,7 +228,17 @@
 <p>Then, we start to count the possible stock ticker and summarize the count information into a dictionary. For every daily reddit csv, we will get a possible stock ticker count dictionary and combine them together to get the final count dictionary and stored it into the clean data folder.</p>
 <p>Now, in r, we can read the file which contains the information of the final possible stock ticker count. Since we are only interested in the top 10 WSB stocks, we need to re-order the data frame according to the word count in descending order.</p>
 <p>We noticed that there are some invalid tickers exists in the data frame, but that is expected since there is no perfect way to extract out the stock ticker due to the lack of <code>$</code> in the data source, so we manually go through the data frame and select out the top 10 tickers, which are: <code>GME</code>, <code>AMC</code>, <code>BB</code>,<code>NOK</code>, <code>SND</code>, <code>NAKD</code>, <code>PLTR</code>, <code>CLOV</code>, <code>RETA</code>, <code>MAR</code>, respectively.</p>
+</div>
+<div id="subreddit-overview" class="section level3" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Subreddit overview</h3>
+</div>
+<div id="frequent-keywords-in-reddit-posts" class="section level3" number="3.2.3">
+<h3><span class="header-section-number">3.2.3</span> Frequent keywords in Reddit posts</h3>
+</div>
+<div id="sentiment-analysis-on-reddit-posts-regarding-gme" class="section level3" number="3.2.4">
+<h3><span class="header-section-number">3.2.4</span> Sentiment Analysis on Reddit Posts regarding GME</h3>
 
+</div>
 </div>
 </div>
             </section>
