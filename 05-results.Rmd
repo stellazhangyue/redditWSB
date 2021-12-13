@@ -677,10 +677,12 @@ gme_nrc_second_wave <- readr::read_csv("data/clean/reddit/gme_sa_nrc_second_wave
 neg_sentiments = c('anger', 'disgust', 'fear', 'negative', 'sadness')
 ```
 ```{r}
-first_wave <- gme_nrc_first_wave %>%
+gme_nrc_first_wave_agg <- gme_nrc_first_wave %>%
   select(sentiment, wordCount) %>%
   group_by(sentiment) %>%
-  dplyr::summarise(wordCount = sum(wordCount)) %>%
+  dplyr::summarise(wordCount = sum(wordCount))
+  
+first_wave <- gme_nrc_first_wave_agg %>%
   mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
   ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
     geom_bar(stat = "identity", aes(fill = label)) +
@@ -693,10 +695,13 @@ first_wave <- gme_nrc_first_wave %>%
           plot.subtitle = element_text(face = "bold", color = "grey35"),
           plot.caption = element_text(color = "grey68"),
           axis.text.x = element_text(angle = 45, hjust = 1))
-second_wave <- gme_nrc_second_wave %>%
+
+gme_nrc_second_wave_agg <- gme_nrc_second_wave %>%
   select(sentiment, wordCount) %>%
   group_by(sentiment) %>%
-  dplyr::summarise(wordCount = sum(wordCount)) %>%
+  dplyr::summarise(wordCount = sum(wordCount))
+
+second_wave <- gme_nrc_second_wave_agg %>%
   mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
   ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
     geom_bar(stat = "identity", aes(fill = label)) +
@@ -710,6 +715,29 @@ second_wave <- gme_nrc_second_wave %>%
           plot.caption = element_text(color = "grey68"),
           axis.text.x = element_text(angle = 45, hjust = 1))
 first_wave / second_wave
+```
+
+```{r}
+gme_nrc_first_wave_agg$period <- "1st wave"
+gme_nrc_second_wave_agg$period <- "2nd wave"
+total <- rbind(gme_nrc_first_wave_agg, gme_nrc_second_wave_agg)
+
+COLORS <- c(RColorBrewer::brewer.pal(8, "Set2"), "darkSlateGray", "darkOrchid")
+
+hchart(total, 'column', hcaes(x = 'period', y = 'wordCount', group = 'sentiment'),stacking="percent") %>%
+  hc_colors(COLORS)%>%
+  hc_chart(zoomType = "x") %>%
+  hc_legend(title = list(text = "sentiment",style=list(fontSize='14px')),
+            align = "right", verticalAlign = "middle",layout = "vertical",floating=FALSE) %>%
+  hc_xAxis(title = list(text = "Time period"),
+           labels= list(style=list(fontSize='10px'), step = 1)) %>%
+  hc_yAxis(title = list(text = "Percent of Total word count (%)")) %>%
+  hc_title(text = "<b>GME sentiments on r/wallstreetbets</b>") %>%
+  hc_subtitle(text = "Click on the legend to show selected spending categories") %>%
+  hc_tooltip(formatter= JS("function () { 
+      return this.point.sentiment  + ' <br />' + 
+        Math.round(this.point.wordCount/1000) + ' k words';}")) %>%
+  hc_exporting(enabled = TRUE)
 ```
 
 Since there are 2 WSB waves, we would like to study the posts in these 2 periods separately to compare whether there is any change in terms of the sentiments. Also, for the 10 different sentiment, we manually assign them into 2 categories, which are positive and negative sentiments respectively. The positive sentiments includes: `positive`, `trust`, `anticipation`, `joy` and `surprise` while the negative sentiments includes: `negative`, `anger`, `fear`, `sadness` and `disgust`.
