@@ -450,7 +450,8 @@ From the above 3 graphs, we have the following observations:
 
 ### Reddit metrics vs. stock price
 
-Now, we want to examine how the posts in r/WallStreetBets sub-reddit group affect the stock price. 
+Now, we want to examine how the posts counts in r/WallStreetBets sub-reddit group affect the stock price as well as the stock trading volume. Since `GME` and `AMC` are the 2 most representative stocks in the 2 WSB waves,we choose these 2 stocks as the study object.
+
 ```{r}
 
 AMC_2021 <- getSymbols('AMC', src="yahoo", from = "2021-01-01", auto.assign = FALSE)
@@ -524,6 +525,11 @@ amc_gme + plot_annotation(
 )
 ```
 
+From the graphs above, we have the following observations:
+
+1. Generally there is no relationship between the posts count and daily price change for both `AMC` and `GME`.
+
+2. Only for some dates in 
 
 ### What are the most popular words?
 ```{r}
