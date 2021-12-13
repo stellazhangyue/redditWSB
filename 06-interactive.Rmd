@@ -1,3 +1,32 @@
 # Interactive component
 
+# Interactive component
 
+## Link to the interactive map
+Click [here](https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&file=stock_change.js) or copy the url: https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&file=stock_change.js&mode=full
+
+## Descriptions
+
+The interactive part of our analysis was built with D3 version 6, which the code has been uploaded to [VizHub](https://vizhub.com/). You can also find code [here](https://github.com/stellazhangyue/redditWSB/tree/main/scripts) in our github repo. 
+The interactive plot shows the selected 10 stock price related to a highlighted date. Our data source for the plot is [yahoo finance](https://finance.yahoo.com/). You can also find the data [here](https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv) under the `data` folder of our repo.
+
+
+## Instructions for using the map
+
+The plot is initialized with 10 lines showing the stock price aligned with date Dec 31, 2020. We provide the following interactive options:
+
+1. Users can hover the mouse over the plot to align the price with any date. The y value will become price in a day divided by the price in the highlighted day.  
+2. Users can click the legends to select the stocks they want to view. Click twice to bring the stock back.  
+3. Users can select volume / price to view.  
+
+Notes: 
+
+- Since the y axis reflects a division, we use log scale to make the plot stable.  
+
+- Once a legend or a variable is clicked, the entire plot will be initialized to align with the first date, Dec 31, 2020.  
+
+References:
+
+
+1. Observable: Line Chart, Index Chart (https://observablehq.com/@d3/index-chart)  
+2. D3 Gallery: Line chart (https://www.d3-graph-gallery.com/line.html)

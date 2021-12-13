@@ -24,7 +24,7 @@
 <meta name="author" content="Xingyu Lu, Yue Xiong ,Yue Zhang" />
 
 
-<meta name="date" content="2021-12-12" />
+<meta name="date" content="2021-12-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -145,10 +145,7 @@
 </ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#whats-the-impact-of-rwallstreetbet"><i class="fa fa-check"></i><b>5.1</b> What’s the impact of r/wallstreetbet?</a>
-<ul>
-<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#general-publics-interests-on-google"><i class="fa fa-check"></i><b>5.1.1</b> General Public’s interests on Google</a></li>
-</ul></li>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#whats-the-impact-of-rwallstreetbet"><i class="fa fa-check"></i><b>5.1</b> What’s the impact of r/wallstreetbet?</a></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#stock-data-and-information"><i class="fa fa-check"></i><b>5.2</b> Stock Data and Information</a>
 <ul>
 <li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#stock-data-plot"><i class="fa fa-check"></i><b>5.2.1</b> Stock Data Plot</a></li>
@@ -163,10 +160,17 @@
 <li class="chapter" data-level="5.3.2" data-path="results.html"><a href="results.html#reddit-metrics-vs.-stock-price"><i class="fa fa-check"></i><b>5.3.2</b> Reddit metrics vs. stock price</a></li>
 <li class="chapter" data-level="5.3.3" data-path="results.html"><a href="results.html#what-are-the-most-popular-words"><i class="fa fa-check"></i><b>5.3.3</b> What are the most popular words?</a></li>
 <li class="chapter" data-level="5.3.4" data-path="results.html"><a href="results.html#sentiment-analysis-on-reddit-posts-regarding-gme-1"><i class="fa fa-check"></i><b>5.3.4</b> Sentiment analysis on Reddit posts regarding GME</a></li>
+<li class="chapter" data-level="5.3.5" data-path="results.html"><a href="results.html#general-publics-interests-on-google"><i class="fa fa-check"></i><b>5.3.5</b> General Public’s interests on Google</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
-<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="chapter" data-level="7" data-path="interactive-component-1.html"><a href="interactive-component-1.html"><i class="fa fa-check"></i><b>7</b> Interactive component</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="interactive-component-1.html"><a href="interactive-component-1.html#link-to-the-interactive-map"><i class="fa fa-check"></i><b>7.1</b> Link to the interactive map</a></li>
+<li class="chapter" data-level="7.2" data-path="interactive-component-1.html"><a href="interactive-component-1.html#descriptions"><i class="fa fa-check"></i><b>7.2</b> Descriptions</a></li>
+<li class="chapter" data-level="7.3" data-path="interactive-component-1.html"><a href="interactive-component-1.html#instructions-for-using-the-map"><i class="fa fa-check"></i><b>7.3</b> Instructions for using the map</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>8</b> Conclusion</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -191,7 +195,7 @@
 <div id="reddit-post-dataset" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Reddit post dataset</h2>
 <p>We first create the missing values plots, both count and percent, for the reddit post dataset.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-24-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-24-2.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-22-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
 <p>We can observe from the missing value plots that there are 4 different missing patterns, which are complete cases (47.19%), missing <code>selftext</code> (45.08%), missing both <code>selftext</code> and <code>author</code> (4.77%), and missing <code>author</code> only (2.95%). Therefore, out of the 7 variables in the dataset, only 2 variables might be missing, which are <code>selftext</code> and <code>author</code> respectively. Among the 2 variables, 49.85% of the <code>selftext</code> is missing while only 7.72% of the <code>author</code> is missing.</p>
 <p>Looking into the <code>selftext</code> column in the original dataset, we noticed that there are 3 major levels that account for ~90% of the data, which are “removed”, "" and “deleted”. Consulted the reddit documents, we found that “removed” means the post is either removed by the moderators of the subreddit group or the administrator; “deleted” means the post is deleted by the content author; "" appears when a post doesn’t have body text or a post’s body contains pictures only. In this regard, we are only considering “removed” and “deleted” as NA, "“s are considered as valid inputs. About 45% of the posts are”removed", which means the level of censorship is relatively high.</p>
 <pre><code>## # A tibble: 95,599 × 3
@@ -224,8 +228,8 @@
 <div id="google-trend-dataset" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Google Trend dataset</h2>
 <p>We created the missing values plots, both count and percent, for two Google trend datasets and found there’s no missing value in both datasets
-<img src="finalproj_files/figure-html/unnamed-chunk-27-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-27-2.png" width="672" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-28-2.png" width="672" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-25-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-25-2.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-26-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-26-2.png" width="672" /></p>
 
 </div>
 </div>
