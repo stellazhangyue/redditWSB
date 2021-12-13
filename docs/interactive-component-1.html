@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Interactive component | Analysis of stocks discussed in Reddit r/wallstreetbets</title>
-  <meta name="description" content="Chapter 6 Interactive component | Analysis of stocks discussed in Reddit r/wallstreetbets" />
+  <title>Chapter 7 Interactive component | Analysis of stocks discussed in Reddit r/wallstreetbets</title>
+  <meta name="description" content="Chapter 7 Interactive component | Analysis of stocks discussed in Reddit r/wallstreetbets" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Interactive component | Analysis of stocks discussed in Reddit r/wallstreetbets" />
+  <meta property="og:title" content="Chapter 7 Interactive component | Analysis of stocks discussed in Reddit r/wallstreetbets" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Interactive component | Analysis of stocks discussed in Reddit r/wallstreetbets" />
+  <meta name="twitter:title" content="Chapter 7 Interactive component | Analysis of stocks discussed in Reddit r/wallstreetbets" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="results.html"/>
-<link rel="next" href="interactive-component-1.html"/>
+<link rel="prev" href="interactive-component.html"/>
+<link rel="next" href="conclusion.html"/>
 <script src="libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -190,16 +190,48 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="interactive-component" class="section level1" number="6">
-<h1><span class="header-section-number">Chapter 6</span> Interactive component</h1>
+<div id="interactive-component-1" class="section level1" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Interactive component</h1>
+<div id="link-to-the-interactive-map" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Link to the interactive map</h2>
+<p>Click <a href="https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&amp;file=stock_change.js">here</a> or copy the url: <a href="https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&amp;file=stock_change.js&amp;mode=full" class="uri">https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&amp;file=stock_change.js&amp;mode=full</a></p>
+</div>
+<div id="descriptions" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Descriptions</h2>
+<p>The interactive part of our analysis was built with D3 version 6, which the code has been uploaded to <a href="https://vizhub.com/">VizHub</a>. You can also find code <a href="https://github.com/stellazhangyue/redditWSB/tree/main/scripts">here</a> in our github repo.
+The interactive plot shows the selected 10 stock price related to a highlighted date. Our data source for the plot is <a href="https://finance.yahoo.com/">yahoo finance</a>. You can also find the data <a href="https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv">here</a> under the <code>data</code> folder of our repo.</p>
+</div>
+<div id="instructions-for-using-the-map" class="section level2" number="7.3">
+<h2><span class="header-section-number">7.3</span> Instructions for using the map</h2>
+<p>The plot is initialized with 10 lines showing the stock price aligned with date Dec 31, 2020. We provide the following interactive options:</p>
+<ol style="list-style-type: decimal">
+<li>Users can hover the mouse over the plot to align the price with any date. The y value will become price in a day divided by the price in the highlighted day.<br />
+</li>
+<li>Users can click the legends to select the stocks they want to view. Click twice to bring the stock back.<br />
+</li>
+<li>Users can select volume / price to view.</li>
+</ol>
+<p>Notes:</p>
+<ul>
+<li><p>Since the y axis reflects a division, we use log scale to make the plot stable.</p></li>
+<li><p>Once a legend or a variable is clicked, the entire plot will be initialized to align with the first date, Dec 31, 2020.</p></li>
+</ul>
+<p>References:</p>
+<ol style="list-style-type: decimal">
+<li>Observable: Line Chart, Index Chart (<a href="https://observablehq.com/@d3/index-chart" class="uri">https://observablehq.com/@d3/index-chart</a>)<br />
+</li>
+<li>D3 Gallery: Line chart (<a href="https://www.d3-graph-gallery.com/line.html" class="uri">https://www.d3-graph-gallery.com/line.html</a>)</li>
+</ol>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="results.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="interactive-component-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="interactive-component.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

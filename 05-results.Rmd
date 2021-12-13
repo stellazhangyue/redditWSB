@@ -103,7 +103,7 @@ rs <- list(visible = TRUE, x = 0.5, y = -0.055,
            ))
 
 # combined plot
-fig <- subplot(fig, fig2, heights = c(0.7,0.2), nrows=2,
+fig <- plotly::subplot(fig, fig2, heights = c(0.7,0.2), nrows=2,
              shareX = TRUE, titleY = TRUE)
 fig <- fig %>% layout(title = paste("GME: 2020-12-01 -",Sys.Date()),
          xaxis = list(rangeselector = rs),
@@ -185,7 +185,7 @@ rs <- list(visible = TRUE, x = 0.5, y = -0.055,
            ))
 
 # combined plot
-fig3 <- subplot(fig3, fig4, heights = c(0.7,0.2), nrows=2,
+fig3 <- plotly::subplot(fig3, fig4, heights = c(0.7,0.2), nrows=2,
              shareX = TRUE, titleY = TRUE)
 fig3 <- fig3 %>% layout(title = paste("AMC: 2020-12-01 -",Sys.Date()),
          xaxis = list(rangeselector = rs),

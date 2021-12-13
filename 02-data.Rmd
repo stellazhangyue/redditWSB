@@ -27,7 +27,7 @@ for(i in top_10_tickers) {
   tmp <- get_price_df(i)
   df_output <- rbind(df_output, tmp)
 }
-write.csv(df_output,'data/tmp/top_10_stocks_prices.csv',row.names=FALSE)
+write.csv(df_output,'data/clean/stock/top_10_stocks_prices.csv',row.names=FALSE)
 ```
 
 ```{r}

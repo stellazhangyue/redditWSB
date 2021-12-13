@@ -12,9 +12,6 @@ reddit-post-dataset
 google-trend-dataset
 results
 whats-the-impact-of-rwallstreetbet
-general-publics-interests-on-google
-interest-over-time
-interest-by-subregion
 stock-data-and-information
 stock-data-plot
 stock-risk-assessment
@@ -26,5 +23,11 @@ rwallstreetbets-metrics
 reddit-metrics-vs.-stock-price
 what-are-the-most-popular-words
 sentiment-analysis-on-reddit-posts-regarding-gme-1
+general-publics-interests-on-google
+interest-over-time
 interactive-component
+interactive-component-1
+link-to-the-interactive-map
+descriptions
+instructions-for-using-the-map
 conclusion
