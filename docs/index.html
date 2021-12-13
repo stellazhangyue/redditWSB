@@ -155,6 +155,7 @@
 <li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#stock-risk-assessment"><i class="fa fa-check"></i><b>5.2.2</b> Stock Risk Assessment</a></li>
 <li class="chapter" data-level="5.2.3" data-path="results.html"><a href="results.html#most-popular-stocks"><i class="fa fa-check"></i><b>5.2.3</b> Most Popular Stocks</a></li>
 <li class="chapter" data-level="5.2.4" data-path="results.html"><a href="results.html#time-series-of-the-top-10-stocks"><i class="fa fa-check"></i><b>5.2.4</b> Time Series of the Top 10 Stocks</a></li>
+<li class="chapter" data-level="5.2.5" data-path="results.html"><a href="results.html#correlations-between-top-10-mentioned-stocks"><i class="fa fa-check"></i><b>5.2.5</b> Correlations between top 10 mentioned stocks</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#rwallstreetbets-reddit-post-data"><i class="fa fa-check"></i><b>5.3</b> r/WallStreetBets Reddit Post Data</a>
 <ul>
@@ -193,12 +194,16 @@
 <div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
 <p>Background:
-In January, 2021, there is a subreddit called r/wallstreetbets where participants discuss stock and option trading. The participants are mainly young retailer traders who have little background in investment knowledge and risk management. They are not satisfied with the over short on some stocks by major Wall Street companies. In January and June 2021, there were 2 waves of major short squeeze led by the participants in this subreddit, which were GameStop short squeeze and AMC short squeeze.
-(reference: <a href="https://en.wikipedia.org/wiki/R/wallstreetbets" class="uri">https://en.wikipedia.org/wiki/R/wallstreetbets</a>)</p>
-<p>We’ll be trying to answer following questions:
-1. How big is the impact of reddit wallstreetbet? I.e. no. of news, downloads of Robinhood and other trading apps,
-2. For each targeted stock, what’s the relationship between reddit posts and stock price/volume etc.
-3. Why does Wallstreetbet choose these target stocks? What’re their similarities? How do their choices change as time evolves? Gamestop, AMC, Blueberry, Nokia, SPCE, PLTR, TSLA.</p>
+In January, 2021, there is a subreddit called r/wallstreetbets where participants discuss stocks and option trading. Previously, there are not much redditers discussing in this subreddit group. Only until January 2021, there was one person started to share his investment in <code>GameStop</code>, with the ticker to be <code>GME</code>, and explained his rationale. This posts started to get the public attention and also, the redditers discovered that <code>GME</code> has been over short by some major financial institute, i.e. short interest is greater than 100%. This attracted more and more people into the r/wallstreetbets. The newly joined people are mainly young retailer traders who have little background in investment knowledge and risk management. They were not satisfied with the over short on some stocks by major Wall Street companies, so they started to buy those stocks, mostly <code>GME</code>. They were especially angered by the Citron Research’s comment, which predicted the <code>GME</code>’s stock price would decrease continuously. This actually initiated a short squeeze on <code>GME</code>, pushing their stock prices up significantly. After a few days, Elon Musk also tweeted out a link to the r/wallstreetbets subreddit, which further enlightened the redditers and broadcasted to even more people all over the world. Later on, the official r/wallstreetbets Discord server was banned due to the “hateful and discriminatory content” and Robinhood started to restricted the trade of heavily shorted stocks such as <code>GME</code>, <code>AMC Entertainment Holdings Inc</code> (<code>AMC</code>), <code>BlackBerry Limited</code> (<code>BB</code>), <code>Nokia</code> (<code>NOK</code>), and etc. Other trading platform also followed Robinhood to restrict the trade of those stocks, which were TD Ameritrade, E-Trade, and Webull respectively.</p>
+<p>There were 2 waves of major short squeeze led by the participants in this subreddit, which were around January/Feburary and May/June period. Also, the focus of the 2 waves were different, while for the 1st wave, <code>GME</code> is the focus stock, <code>AMC</code> overtaken <code>GME</code> became the focus stock in the 2nd wave.</p>
+<p>In this project, we would like to collect stock related data, Reddit related data (mainly posts) as well as the Google search related data to generate visualization and get some useful insights. We’ll be trying to answer following questions through this study:</p>
+<ol style="list-style-type: decimal">
+<li><p>How big is the impact of reddit wallstreetbet? I.e. no. of news, downloads of Robinhood and other trading apps,</p></li>
+<li><p>For each targeted stock, what’s the relationship between reddit posts and stock price/volume etc.</p></li>
+<li><p>Why does Wallstreetbet choose these target stocks? What’re their similarities? How do their choices change as time evolves? Gamestop, AMC, Blueberry, Nokia, SPCE, PLTR, TSLA.</p></li>
+</ol>
+<p>In the following chapters, we will use data source to plot graphs, trying to answer the above questions. Also, we would like to explore other aspects from the graphs and come up with more conclusions.</p>
+<p>For more details of this project, click the link here or copy the url <a href="https://github.com/stellazhangyue/redditWSB.git" class="uri">https://github.com/stellazhangyue/redditWSB.git</a> and open it in browser to go to our Github repository and navigate code in .Rmd files.</p>
 
 </div>
             </section>

@@ -337,28 +337,53 @@ From the above graph, we can have the following observation:
 
 5. The stocks are included in different waves, while`PLTR` is the stock that is only active in 1st wave, there are other stocks that are active only in the 2nd wave, which are `CLOV`, `SND`, `RETA` respectively. For `GME`, `AMC`, `BB`, `NOK`, `NAKD`, they are active in both of the waves. However, for `MAR`, its stock price does not change much through out the 2 waves.
 
-### Correlations between top 10 stocks
+### Correlations between top 10 mentioned stocks
+We removed `CLOV` from the ticker for 2020, because it went public in 2021.
 ```{r}
 top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')
-tickerPrices <- NULL
-for (ticker in top_10_tickers)
-  tickerPrices <- cbind(tickerPrices, getSymbols(ticker, src = "yahoo", from = "2020-01-01", auto.assign=FALSE)[,4])
 
-drop_na <- apply(tickerPrices,1,function(x) all(!is.na(x)))
-tickerPrices <- tickerPrices[drop_na]
-colnames(tickerPrices) <- top_10_tickers
+# remove CLOV
+top_10_tickers_2020 <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','RETA','MAR')
+ticker_vol <- NULL
+for (ticker in top_10_tickers_2020)
+  ticker_vol <- cbind(ticker_vol, getSymbols(ticker, src = "yahoo", from = "2020-01-01", to = "2020-12-31", auto.assign=FALSE)[,5])
 
-corr <- cor(tickerPrices)
-melted_cormat <- melt(corr)
+drop_na <- apply(ticker_vol,1,function(x) all(!is.na(x)))
+ticker_vol <- ticker_vol[drop_na]
+colnames(ticker_vol) <- top_10_tickers_2020
 
+corr <- cor(ticker_vol)
 ggcorrplot(corr, 
            type = 'upper',
            lab = TRUE,
            lab_size = 3,
            method = 'circle',
-           colors = c(light_red, "white", green),
-           title="Correlogram of Stocks",
+           colors = c("red", "white", "green"),
+           title="2020",
            legend.title = "Correlation")
+
+```
+
+```{r}
+ticker_vol_wsb <- NULL
+for (ticker in top_10_tickers)
+  ticker_vol_wsb <- cbind(ticker_vol_wsb, getSymbols(ticker, src = "yahoo", from = "2021-01-01", to = "2021-02-01", auto.assign=FALSE)[,5])
+
+drop_na <- apply(ticker_vol_wsb,1,function(x) all(!is.na(x)))
+ticker_vol_wsb <- ticker_vol_wsb[drop_na]
+colnames(ticker_vol_wsb) <- top_10_tickers
+
+corr_wsb <- cor(ticker_vol_wsb)
+
+ggcorrplot(corr_wsb,
+           type = 'upper',
+           lab = TRUE,
+           lab_size = 3,
+           method = 'circle',
+           colors = c("red", "white", "green"),
+           title="2021 Jan and Feb",
+           legend.title = "Correlation")
+
 ```
 
 
