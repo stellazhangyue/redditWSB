@@ -294,53 +294,23 @@ From the graph above, we can see that `GME` and `AMC` are the dominant 2 dominan
 Now, we want to study how the top 10 stocks' prices move over the past one year. Again, since the closing price is the most representative price among all the 5 prices, we just use closing price to show the price change over time.
 
 ```{r}
-tickerPrices <- NULL
-for (ticker in top_10_tickers)
-  tickerPrices <- cbind(tickerPrices, getSymbols(ticker, src = "yahoo", from = "2020-12-01", auto.assign=FALSE)[,4])
-df_price <- data.table::as.data.table(tickerPrices)
-colnames(df_price) <- c('date','GME.Close','AMC.Close','BB.Close','NOK.Close','SND.Close','NAKD.Close', 'PLTR.Close','CLOV.Close','RETA.Close','MAR.Close')
-```
-
-```{r}
-library("tidyverse")
-df <- economics %>%
-  select(date, psavert, uempmed) %>%
-  gather(key = "variable", value = "value", -date)
-head(df)
-
 df_price <- read.csv('data/clean/stock/top_10_stocks_daily_return.csv')
 df_price %>%
   select(Date, Symbol, Daily_return) %>%
+  filter(Date >= as.Date('2021-01-01')) %>%
+  filter(Date <= as.Date('2021-09-01')) %>%
+  filter(Symbol != "^GSPC") %>%
   pivot_wider(names_from = Symbol, values_from = Daily_return, values_fill = 0) %>%
-  gather(key = "variable", value = "value", -Date) %>%
-  ggplot(aes(x = Date, y = value)) + 
-    geom_line(aes(color = variable, linetype = variable)) + 
-    scale_color_manual(values = c("Red", "Orange", "Yellow", "Green", "black", "black", "black", "black", "black", "black", "black"))
-  #ggplot(aes(x=Date)) + 
-    #geom_line(aes(y = GME), color = "darkred") 
-    #geom_line(aes(y = AMC), color="steelblue", linetype="twodash")
+  gather(key = "variable", value = "value", -Date) -> df_price
+
+ts_plot <- 
+  ggplot(data=df_price, aes(x=Date, y=value, group = variable, colour = variable)) +
+    geom_line() +
+    labs(y= "Daily Return", x = "Date") + 
+    ggtitle("Daily Return of Top 10 mentioned Stocks")
+ 
+ts_plot
 ```
-
-```{r}
-get_price_df <- function(ticker) {
-  GME_S <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
-  gme_sp_df <- data.frame(Date=index(GME_S),coredata(GME_S))
-  gme_sp_df <- gme_sp_df %>%
-    select(Date, ends_with("Close")) %>%
-    rename(Close = ends_with("Close"))
-  gme_sp_df$Symbol = ticker
-  gme_sp_df <- select(gme_sp_df, Symbol, Date, Close)
-  return(gme_sp_df)
-}
-df_output = data.frame()
-for(i in top_10_tickers) {
-  tmp <- get_price_df(i)
-  df_output <- rbind(df_output, tmp)
-}
-write.csv(df_output,'data/tmp/top_10_stocks_prices.csv')
-```
-
-
 
 
 ## r/WallStreetBets Reddit Post Data
