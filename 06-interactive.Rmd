@@ -3,12 +3,14 @@
 # Interactive component
 
 ## Link to the interactive map
-Click [here](https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&file=stock_change.js&mode=full) or copy the url: https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&file=stock_change.js&mode=full
+Click [here](https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&file=stock_change.js) or copy the url: https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&file=stock_change.js&mode=full
 
 ## Descriptions
 
-The interactive part of our analysis was built with D3 version 6, which the code has been uploaded to [VizHub](https://vizhub.com/). You can also find code [here](https://github.com/NeverGiveUpDXQ/2020-U.S.-Election-Visualizations/blob/main/interactive-map-2020-election.html) in our github repo. 
-This zoomable cloropleth map shows the number of votes obtained by each party/presidential candidate, their shares of votes, and [margins of victory (MOV)](https://ballotpedia.org/Margin-of-victory_(MOV)) on US county level during 2020 Presidential Election. We used the same voting results data retrieved from Fox News as described in previous sections, but formats of certain columns were changed to adapt to the plot. You can find the data [here](https://github.com/NeverGiveUpDXQ/2020-U.S.-Election-Visualizations/blob/main/data/d3csv/2020_map_d3.csv) under the `data` folder of our repo.
+The interactive part of our analysis was built with D3 version 6, which the code has been uploaded to [VizHub](https://vizhub.com/). You can also find code [here](https://github.com/stellazhangyue/redditWSB/tree/main/scripts) in our github repo. 
+
+
+The plot shows that . You can find the data [here](https://github.com/NeverGiveUpDXQ/2020-U.S.-Election-Visualizations/blob/main/data/d3csv/2020_map_d3.csv) under the `data` folder of our repo.
 
 ## Instructions for using the map
 

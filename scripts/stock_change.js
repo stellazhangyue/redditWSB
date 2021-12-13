@@ -14,7 +14,7 @@ const svg = d3.select("#my_dataviz")
 
 
 //var url = "https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/tmp/indices.csv"
-var url = "https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/tmp/tmp_combined.csv"
+var url = "https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv";
 d3.csv(url, function(d){
     return { 
         symbol: d.Symbol,
