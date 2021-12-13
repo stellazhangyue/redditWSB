@@ -130,7 +130,7 @@
 <ul>
 <li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#stock-dataset"><i class="fa fa-check"></i><b>2.1</b> Stock dataset</a></li>
 <li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#reddit-posts-dataset"><i class="fa fa-check"></i><b>2.2</b> Reddit posts dataset</a></li>
-<li class="chapter" data-level="2.3" data-path="data-sources.html"><a href="data-sources.html#google-search-score-dataset"><i class="fa fa-check"></i><b>2.3</b> Google search score dataset</a></li>
+<li class="chapter" data-level="2.3" data-path="data-sources.html"><a href="data-sources.html#google-trends-dataset"><i class="fa fa-check"></i><b>2.3</b> Google Trends dataset</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
 <ul>
@@ -306,14 +306,16 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Issues with this dataset: </strong>
-1. Only the current state of the posts can be downloaded. Because the majority of the discussions on r/wallsteetbets we are interested in happened earlier this year, many of the posts are either deleted by the author or removed by the administrator. As a result, we can no longer access those posts’ content and perform analysis on top it. See [Section header text] for more details.
-2. Because of the big volume of the posts and the large size of the data, we are unable to download all posts over the complete time period. Instead, we only download the posts created in Jan, Feb, May, Jun and Jul, which are the months most of the discussions that we care about happened in.</p>
+<p><strong>Issues with this dataset: </strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Only the current state of the posts can be downloaded. Because the majority of the discussions on r/wallsteetbets we are interested in happened earlier this year, many of the posts are either deleted by the author or removed by the administrator. As a result, we can no longer access those posts’ content and perform analysis on top it. See [Section header text] for more details.</p></li>
+<li><p>Because of the big volume of the posts and the large size of the data, we are unable to download all posts over the complete time period. Instead, we only download the posts created in Jan, Feb, May, Jun and Jul, which are the months most of the discussions that we care about happened in.</p></li>
+</ol>
 </div>
-<div id="google-search-score-dataset" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> Google search score dataset</h2>
-<p><strong>Dataset: combined_news.csv and combined_web.csv</strong>
-This dataset mainly contains the website search and news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. Both csv files are downloaded from <a href="https://trends.google.com/trends/?geo=US"><em>Google Trends</em></a>. Google assigns a search score for each keyword each work. The scores represent search interest relative to the highest point for the given region and time. We are focusing on United State for the time period starting from 2021-01-01.</p>
+<div id="google-trends-dataset" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Google Trends dataset</h2>
+<p><strong>Dataset: combined_news.csv and combined_web.csv</strong></p>
+<p>This dataset mainly contains the website search and news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. Both csv files are downloaded from <a href="https://trends.google.com/trends/?geo=US"><em>Google Trends</em></a>. Google assigns a search score to each keyword for each week. The scores represent search interest relative to the highest point for the given region and time. We are focusing on United State for the time period starting from 2021-01-01.</p>
 <table>
 <caption><span id="tab:unnamed-chunk-5">Table 2.3: </span>Columns in dataset</caption>
 <thead>

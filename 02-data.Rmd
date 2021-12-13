@@ -23,12 +23,16 @@ knitr::kable(DataDescription[10:16, ], caption = "Columns in dataset",
              row.names = F,font_size = 10)
 ```
 **Issues with this dataset: **
+
 1. Only the current state of the posts can be downloaded. Because the majority of the discussions on r/wallsteetbets we are interested in happened earlier this year, many of the posts are either deleted by the author or removed by the administrator. As a result, we can no longer access those posts' content and perform analysis on top it. See [Section header text] for more details.
+
 2. Because of the big volume of the posts and the large size of the data, we are unable to download all posts over the complete time period. Instead, we only download the posts created in Jan, Feb, May, Jun and Jul, which are the months most of the discussions that we care about happened in.
 
-## Google search score dataset
+## Google Trends dataset
+
 **Dataset: combined_news.csv and combined_web.csv**
-This dataset mainly contains the website search and news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. Both csv files are downloaded from [*Google Trends*](https://trends.google.com/trends/?geo=US). Google assigns a search  score for each keyword each work. The scores represent search interest relative to the highest point for the given region and time. We are focusing on United State for the time period starting from 2021-01-01.
+
+This dataset mainly contains the website search and news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. Both csv files are downloaded from [*Google Trends*](https://trends.google.com/trends/?geo=US). Google assigns a search score to each keyword for each week. The scores represent search interest relative to the highest point for the given region and time. We are focusing on United State for the time period starting from 2021-01-01.
 
 ```{r, echo=FALSE, results='asis'}
 DataDescription<- readr::read_csv("data/schema.csv")

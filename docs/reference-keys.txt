@@ -5,7 +5,7 @@ introduction
 data-sources
 stock-dataset
 reddit-posts-dataset
-google-search-score-dataset
+google-trends-dataset
 data-transformation
 reddit-data-transformation
 parse-stock-tickers-from-reddit-posts
