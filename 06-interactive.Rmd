@@ -8,31 +8,25 @@ Click [here](https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?
 ## Descriptions
 
 The interactive part of our analysis was built with D3 version 6, which the code has been uploaded to [VizHub](https://vizhub.com/). You can also find code [here](https://github.com/stellazhangyue/redditWSB/tree/main/scripts) in our github repo. 
-
-
-The plot shows that //////////////////. You can find the data [here](https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv) under the `data` folder of our repo.
+The interactive plot shows the selected 10 stock price related to a highlighted date. Our data source for the plot is [yahoo finance](https://finance.yahoo.com/). You can also find the data [here](https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv) under the `data` folder of our repo.
 
 
 ## Instructions for using the map
 
-The plot is initialized with a mapping of 2020 US Presidential Election votes with no default county specified. The color of each county reflects the winning party's margin of victory, as scaled on the legend. 
+The plot is initialized with 10 lines showing the stock price aligned with date Dec 31, 2020. We provide the following interactive options:
 
-1. Users can scroll up or down to manually zoom in or out the full map. 
-2. Users can click and drag to move the map.
-3. Users can hover the mouse over a county to see county name, vote counts for each party, and the margin. 
-4. Users can click on the county of interest, and the map will then automatically zoom in on the selected area. 
+1. Users can hover the mouse over the plot to align the price with any date. The y value will become price in a day divided by the price in the highlighted day.  
+2. Users can click the legends to select the stocks they want to view. Click twice to bring the stock back.  
+3. Users can select volume / price to view.  
 
 Notes: 
 
-- Since the post-election processing is onging and vote counting is not 100% completed in several states, the vote counts are subject to change. Alaska returned voting results by district but not county, so the data is reported on the state level. 
+- Since the y axis reflects a division, we use log scale to make the plot stable.  
 
-- It may take a couple of seconds to load all features. You should be able to see a map like shown in the screenshot below. If the map does not load properly, please refresh the page a couple of times until you get a map like this:
-
-![](https://raw.githubusercontent.com/NeverGiveUpDXQ/2020-U.S.-Election-Visualizations/main/_bookdown_files/finalproj_files/figure-html/demo.PNG){width=95%}
+- Once a legend or a variable is clicked, the entire plot will be initialized to align with the first date, Dec 31, 2020.  
 
 References:
 
 
-1. Tony McGovern: US County Level Election Results with d3.v4 (https://raw.githubusercontent.com/tonmcg/US_County_Level_Election_Results_08-20/master/index.html)
-Result image:(https://raw.githubusercontent.com/tonmcg/US_County_Level_Election_Results_08-20/master/img/us_election_results.png)
-2. Observable: d3-6.0 Migration Guide (https://observablehq.com/@d3/d3v6-migration-guide#events)
+1. Observable: Line Chart, Index Chart (https://observablehq.com/@d3/index-chart)  
+2. D3 Gallery: Line chart (https://www.d3-graph-gallery.com/line.html)
