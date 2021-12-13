@@ -6,3 +6,12 @@ Low,numeric,Lowest price of the day
 Close,numeric,Close price adjusted for splits
 Volume,numeric,Number of shares traded
 Adjusted,numeric,Adjusted close price adjusted for splits and dividend and/or capital gain distributions.
+,,
+Column Name,Type,Description
+postid,character,unique identifier for post
+author,character,post creator
+created_utc,integer,post created time in utc timezone
+permalink,character,URL to the post
+score,integer,number of upvotes minus the number of downvotes
+title,character,post title
+selftext,character,post content

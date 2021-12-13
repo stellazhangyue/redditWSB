@@ -5,7 +5,7 @@ The primary data sources for this project are [*Yahoo Finance*](https://finance.
 From the above data sources we collected and used three major datasets: Stock dataset from Yahoo Finance, Reddit posts dataset from Reddit API and Google search score dataset from Google Trends. Each member in our team was responsible for downloading one dataset from corresponding data sources. More details of the datasets are as following:
 
 ## Stock dataset
-This data mainly contains the prices and volume of the stocks that are discussed in r/wallstreetbets subreddit, which help to indicate the stock performance. We uses the R package `quantmod` to download the data, which is sourced from [*Yahoo Finance*](https://finance.yahoo.com/).
+This data mainly contains the prices and volume of the stocks that are discussed in r/wallstreetbets subreddit, which help to indicate the stock performance. We used the R package `quantmod` to download the data, which is sourced from [*Yahoo Finance*](https://finance.yahoo.com/).
 
 ```{r, echo=FALSE, results='asis'}
 DataDescription<- readr::read_csv("data/schema.csv")
@@ -15,13 +15,15 @@ knitr::kable(DataDescription[1:7, ], caption = "Major columns used",
 
 
 ## Reddit posts dataset
-This dataset contains the posts in r/wallstreetbets subreddit, which we used to extract out the information about the stocks discussed and the post attitude. 
+This dataset contains the posts in r/wallstreetbets subreddit, which we used to extract out the information about the stocks discussed and the post attitude. We created a python [*script*](https://github.com/stellazhangyue/redditWSB/blob/main/scripts/wallstreetbet_data_collection.ipynb)  to pull the data we need from [*Pushshift Reddit API*](https://github.com/pushshift/api) and write to the csv files. Due to Github's limit on file size, we slice the data by day to create one file for each day. The Pushshift Reddit API has the advantage over the official Reddit API that it gives full functionality for searching Reddit data, which is very helpful for us to only download the data we need.
+
 ```{r, echo=FALSE, results='asis'}
 DataDescription<- readr::read_csv("data/schema.csv")
-knitr::kable(DataDescription[1:7, ], caption = "Major columns used",
+knitr::kable(DataDescription[10:16, ], caption = "Major columns used",
              row.names = F,font_size = 10)
 ```
-
+**Issues with this dataset: **
+1. Only the current state of the posts can be downloaded. Because the majority of the discussions on r/wallsteetbets we are interested in happened earlier this year, many of the posts are either deleted by the author or removed by the administrator. As a result, we can no longer access those posts' content and perform analysis on top it. See [Section header text] for more details.
 
 ## Google search score dataset
 this data mainly contains the website search ans news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. This data can be found from [*Google Trends*](https://trends.google.com/trends/?geo=US). Google Trends is a website by Google that analyzes the popularity of top search queries in Google Search across various regions and languages. 

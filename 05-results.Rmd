@@ -399,8 +399,8 @@ reddit_post_ov_ts <- reddit_post_ov %>%
   hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
   hc_xAxis(title = list(text = "Date"),
            labels = list(format = '{value:%b %d}')) %>%
-  hc_yAxis(title = list(text = "Subscriber growth")) %>%
-  hc_title(text = "<b>r/WallStreetBets Daily active users and posts count</b>") %>%
+  hc_yAxis(title = list(text = "# of posts")) %>%
+  hc_title(text = "<b>r/wallstreetbets daily posts count</b>") %>%
   hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
   hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
   hc_exporting(enabled = TRUE)
@@ -424,7 +424,7 @@ hc_add_annotation(
 )
 ```
 
-### Reddit metrics vs. stock price
+### Reddit metrics vs. stock price and volume
 ```{r}
 
 AMC_2021 <- getSymbols('AMC', src="yahoo", from = "2021-01-01", auto.assign = FALSE)
@@ -458,6 +458,7 @@ amc_scatter <- ggplot(amc_post_vs_diff, aes(x = amc_cnt,
         legend.position="bottom",
         legend.title = element_text(face="bold"))
 ```
+
 ```{r}
 GME_2021 <- getSymbols('GME', src="yahoo", from = "2021-01-01", auto.assign = FALSE)
 gme_price_diff <- data.frame(Date=index(GME_2021),coredata(GME_2021)) %>%
@@ -497,7 +498,66 @@ amc_gme + plot_annotation(
   subtitle = 'Jan, Feb, May, Jun, July 2021',
 )
 ```
+```{r}
+amc_vol <- data.frame(Date=index(AMC_2021),coredata(AMC_2021)) %>%
+  select(Date, ends_with("Volume")) %>%
+  rename(volume = ends_with("Volume")) %>%
+  select(Date, volume)
+  
+amc_post_vs_vol <- merge(amc_reddit_post, amc_vol) %>%
+  drop_na() 
 
+amc_scatter <- ggplot(amc_post_vs_vol, aes(x = amc_cnt, 
+                          y = volume))+
+  geom_point(color = light_red) +
+  geom_text(
+    aes(label = ifelse(amc_cnt >= 3000 | volume >= 400000000, format(Date, "%m-%d"), "")),
+    hjust=0.5, vjust=0, size=2) +
+  labs(x = "# of posts in r/WallStreetBets", 
+       y = "volume", 
+       title = "AMC")+
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold"),
+        plot.subtitle = element_text(face = "bold", color = "grey35"),
+        plot.caption = element_text(color = "grey68"),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position="bottom",
+        legend.title = element_text(face="bold"))
+```
+
+```{r}
+gme_vol <- data.frame(Date=index(GME_2021),coredata(GME_2021)) %>%
+  select(Date, ends_with("Volume")) %>%
+  rename(volume = ends_with("Volume")) %>%
+  select(Date, volume)
+
+gme_post_vs_vol <- merge(gme_reddit_post, gme_vol) %>%
+  drop_na() 
+
+gme_scatter <- ggplot(gme_post_vs_vol, aes(x = gme_cnt, 
+                          y = volume))+
+  geom_point(color = light_blue) +
+  geom_text(
+    aes(label = ifelse(gme_cnt >= 10000 | volume >= 100000000, format(Date, "%m-%d"), "")),
+    hjust=0.5, vjust=0, size=2) +
+  labs(x = "# of posts in r/WallStreetBets", 
+       y = "volume", 
+       title = "GME")+
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold"),
+        plot.subtitle = element_text(face = "bold", color = "grey35"),
+        plot.caption = element_text(color = "grey68"),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position="bottom",
+        legend.title = element_text(face="bold"))
+
+amc_gme <- amc_scatter + gme_scatter
+
+amc_gme + plot_annotation(
+  title = 'Post count vs daily volume scatterplot',
+  subtitle = 'Jan, Feb, May, Jun, July 2021',
+)
+```
 
 ### What are the most popular words?
 ```{r}

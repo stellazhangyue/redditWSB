@@ -1,5 +1,10 @@
+tab:unnamed-chunk-4
+tab:unnamed-chunk-5
 introduction
 data-sources
+stock-dataset
+reddit-posts-dataset
+google-search-score-dataset
 data-transformation
 google-trends-data-transformation
 reddit-data-transformation
@@ -7,6 +12,7 @@ parse-stock-tickers-from-reddit-posts
 subreddit-overview
 frequent-keywords-in-reddit-posts
 sentiment-analysis-on-reddit-posts-regarding-gme
+stock-data-transformation
 missing-values
 reddit-post-dataset
 google-trend-dataset
@@ -20,7 +26,7 @@ time-series-of-the-top-10-stocks
 correlations-between-top-10-mentioned-stocks
 rwallstreetbets-reddit-post-data
 rwallstreetbets-metrics
-reddit-metrics-vs.-stock-price
+reddit-metrics-vs.-stock-price-and-volume
 what-are-the-most-popular-words
 sentiment-analysis-on-reddit-posts-regarding-gme-1
 general-publics-interests-on-google
@@ -31,8 +37,3 @@ link-to-the-interactive-map
 descriptions
 instructions-for-using-the-map
 conclusion
-tab:unnamed-chunk-3
-stock-dataset
-reddit-posts-dataset
-google-search-score-dataset
-stock-data-transformation
