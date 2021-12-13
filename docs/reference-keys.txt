@@ -1,10 +1,12 @@
 introduction
 data-sources
 data-transformation
-sentiment-analysis-on-reddit-posts-regarding-gme
-word-clouds
 google-trends-data-transformation
 reddit-data-transformation
+parse-stock-tickers-from-reddit-posts
+subreddit-overview
+frequent-keywords-in-reddit-posts
+sentiment-analysis-on-reddit-posts-regarding-gme
 missing-values
 reddit-post-dataset
 google-trend-dataset
@@ -19,7 +21,7 @@ stock-risk-assessment
 most-popular-stocks
 time-series-of-the-top-10-stocks
 rwallstreetbets-reddit-post-data
-reddit-post-data-overview
+rwallstreetbets-metrics
 what-are-the-most-popular-words
 sentiment-analysis-on-reddit-posts-regarding-gme-1
 interactive-component
