@@ -1,7 +1,5 @@
 # Interactive component
 
-# Interactive component
-
 ## Link to the interactive map
 Click [here](https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&file=stock_change.js) or copy the url: https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?edit=files&file=stock_change.js&mode=full
 
