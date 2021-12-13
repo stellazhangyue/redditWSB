@@ -203,9 +203,9 @@
 <p>From the above data sources we collected and used three major datasets: Stock dataset from Yahoo Finance, Reddit posts dataset from Reddit API and Google search score dataset from Google Trends. Each member in our team was responsible for downloading one dataset from corresponding data sources. More details of the datasets are as following:</p>
 <div id="stock-dataset" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Stock dataset</h2>
-<p>This data mainly contains the prices and volume of the stocks that are discussed in r/wallstreetbets subreddit, which help to indicate the stock performance. We used the R package <code>quantmod</code> to download the data, which is sourced from <a href="https://finance.yahoo.com/"><em>Yahoo Finance</em></a>.</p>
+<p>This dataset mainly contains the prices and volume of the stocks that are discussed in r/wallstreetbets subreddit, which help to indicate the stock performance. We used the R package <code>quantmod</code> to download the data, which is sourced from <a href="https://finance.yahoo.com/"><em>Yahoo Finance</em></a>.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-3">Table 2.1: </span>Major columns used</caption>
+<caption><span id="tab:unnamed-chunk-9">Table 2.1: </span>Major columns used</caption>
 <colgroup>
 <col width="11%" />
 <col width="7%" />
@@ -261,7 +261,7 @@
 <h2><span class="header-section-number">2.2</span> Reddit posts dataset</h2>
 <p>This dataset contains the posts in r/wallstreetbets subreddit, which we used to extract out the information about the stocks discussed and the post attitude. We created a python <a href="https://github.com/stellazhangyue/redditWSB/blob/main/scripts/wallstreetbet_data_collection.ipynb"><em>script</em></a> to pull the data we need from <a href="https://github.com/pushshift/api"><em>Pushshift Reddit API</em></a> and write to the csv files. Due to Github’s limit on file size, we slice the data by day to create one file for each day. The Pushshift Reddit API has the advantage over the official Reddit API that it gives full functionality for searching Reddit data, which is very helpful for us to only download the data we need.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-4">Table 2.2: </span>Major columns used</caption>
+<caption><span id="tab:unnamed-chunk-10">Table 2.2: </span>Major columns used</caption>
 <thead>
 <tr class="header">
 <th align="left">Column Name</th>
@@ -308,11 +308,60 @@
 </tbody>
 </table>
 <p><strong>Issues with this dataset: </strong>
-1. Only the current state of the posts can be downloaded. Because the majority of the discussions on r/wallsteetbets we are interested in happened earlier this year, many of the posts are either deleted by the author or removed by the administrator. As a result, we can no longer access those posts’ content and perform analysis on top it. See [Section header text] for more details.</p>
+1. Only the current state of the posts can be downloaded. Because the majority of the discussions on r/wallsteetbets we are interested in happened earlier this year, many of the posts are either deleted by the author or removed by the administrator. As a result, we can no longer access those posts’ content and perform analysis on top it. See [Section header text] for more details.
+2. Because of the big volume of the posts and the large size of the data, we are unable to download all posts over the complete time period. Instead, we only download the posts created in Jan, Feb, May, Jun and Jul, which are the months most of the discussions that we care about happened in.</p>
 </div>
 <div id="google-search-score-dataset" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Google search score dataset</h2>
-<p>this data mainly contains the website search ans news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. This data can be found from <a href="https://trends.google.com/trends/?geo=US"><em>Google Trends</em></a>. Google Trends is a website by Google that analyzes the popularity of top search queries in Google Search across various regions and languages.</p>
+<p><strong>Dataset: combined_news.csv and combined_web.csv</strong>
+This dataset mainly contains the website search and news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. Both csv files are downloaded from <a href="https://trends.google.com/trends/?geo=US"><em>Google Trends</em></a>. Google assigns a search score for each keyword each work. The scores represent search interest relative to the highest point for the given region and time. We are focusing on United State for the time period starting from 2021-01-01.</p>
+<table>
+<caption><span id="tab:unnamed-chunk-11">Table 2.3: </span>Major columns used</caption>
+<thead>
+<tr class="header">
+<th align="left">Column Name</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">postid</td>
+<td align="left">character</td>
+<td align="left">unique identifier for post</td>
+</tr>
+<tr class="even">
+<td align="left">author</td>
+<td align="left">character</td>
+<td align="left">post creator</td>
+</tr>
+<tr class="odd">
+<td align="left">created_utc</td>
+<td align="left">integer</td>
+<td align="left">post created time in utc timezone</td>
+</tr>
+<tr class="even">
+<td align="left">permalink</td>
+<td align="left">character</td>
+<td align="left">URL to the post</td>
+</tr>
+<tr class="odd">
+<td align="left">score</td>
+<td align="left">integer</td>
+<td align="left">number of upvotes minus the number of downvotes</td>
+</tr>
+<tr class="even">
+<td align="left">title</td>
+<td align="left">character</td>
+<td align="left">post title</td>
+</tr>
+<tr class="odd">
+<td align="left">selftext</td>
+<td align="left">character</td>
+<td align="left">post content</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>
