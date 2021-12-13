@@ -302,7 +302,8 @@
 <li><p>Filter to posts mention <code>GME</code> in either title or content text.</p></li>
 <li><p>Get <a href="https://www.rdocumentation.org/packages/tidytext/versions/0.2.6/topics/stop_words">stop words</a> from <code>tidytext</code> package and remove from data frame</p></li>
 </ul>
-<p>We then perform a simple sentiment analysis focusing only at the word level. The lexicon we used is <code>nrc</code> by Saif Mohammad and Peter Turney, classifies words into emotions like positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust. We then summarize the data to get the number of words in each sentiment class for each day. For complete sentiment analysis code, see <a href="https://github.com/stellazhangyue/redditWSB/blob/main/sentiment_analysis.R">here</a>.</p>
+<p>We then perform a simple sentiment analysis focusing only at the word level. The lexicon we used is <code>nrc</code> by Saif Mohammad and Peter Turney, classifies words into emotions like positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust. We then summarize the data to get the number of words in each sentiment class for each day.</p>
+<p>For complete sentiment analysis code, see <a href="https://github.com/stellazhangyue/redditWSB/blob/main/sentiment_analysis.R">here</a>.</p>
 <p>We process the Reddit posts one month at a time because of the huge data size and limited memory. In the end we combined the monthly data into two data frames: 1. containing Jan and Feb, corresponding to the time period of first wave; 2. containing May, Jun and Jul, corresponding to the time period of second wave. Each of them has following schema:</p>
 <table>
 <thead>
