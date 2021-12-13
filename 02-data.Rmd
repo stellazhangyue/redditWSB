@@ -1,8 +1,12 @@
 # Data sources
 
-The primary data sources for this project are [*Yahoo Finance*](https://finance.yahoo.com/), [*Reddit API*](https://www.reddit.com/dev/api/) and [*Google Trends*](https://trends.google.com/trends/?geo=US). Yahoo Finance provides financial news, data and commentary including stock quotes, press releases, financial reports, and original content. Reddit API is the official portal Reddit created to facilitate developers in their app-building endeavors, where developers can retrieve the constantly updating feeds of Reddit posts. Google Trends is a website by Google that analyzes the popularity of top search queries in Google Search across various regions and languages. 
-From the above data sources 
+To answer the 3 questions mentioned in Chapter 1 - Introduction, we need to collect the following data:
 
+1. Stock related data: this data mainly contains the price and volume of the stocks that are discussed in r/wallstreetbets subreddit, which help to indicate the stock performance. This data can be found from [*Yahoo Finance*](https://finance.yahoo.com/), which provides financial news, data and commentary including stock quotes, press releases, financial reports, and original content.
+
+2. Reddit related data: this data mainly contains the posts information in r/wallstreetbets subreddit, which helps to extract out the information about the stocks discussed and the post attitude. This data can be found from [*Reddit API*](https://www.reddit.com/dev/api/). Reddit API is the official portal Reddit created to facilitate developers in their app-building endeavors, where developers can retrieve the constantly updating feeds of Reddit posts.
+
+3. Google search related data: this data mainly contains the website search ans news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. This data can be found from [*Google Trends*](https://trends.google.com/trends/?geo=US). Google Trends is a website by Google that analyzes the popularity of top search queries in Google Search across various regions and languages. 
 
 
 ```{r}
