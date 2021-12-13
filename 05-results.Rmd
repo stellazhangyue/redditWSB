@@ -439,15 +439,17 @@ From the above 3 graphs, we have the following observations:
 
 3. The daily active users spiked at 28th Jan, 2021 with 117426 distinct users have posted at least 1 post. We can see that during the 1st and 2nd WSB wave, the daily active users increased a lot as comparing to the before and after the wave.
 
-4. The effect of the WSB wave lasts for quite some time, since it is only around early March, 2021, the daily active user are back to the normal level. 
+4. The daily active users and the post counts spiked 1 day after the new joiner's peak, which means that the new joiners are very active in the begin and they gradually loss the interest in this topic over time.
 
-5. The posts created during the 1st WSB wave are much higher than that during the 2nd WSB wave, therefore, the 1st WSB wave attract more public attention as comparing to the 2nd WSB wave.
+5. The effect of the WSB wave lasts for quite some time, since it is only around early March, 2021, the daily active user are back to the normal level. 
 
-5. From the posts count graph, we can see that there are 2 sub-waves in both 1st and 2nd WSB wave, indicating that the redditers are continuously follow the event and it is not one time thing.   
+6. The posts created during the 1st WSB wave are much higher than that during the 2nd WSB wave, therefore, the 1st WSB wave attract more public attention as comparing to the 2nd WSB wave.
 
-6. The posts count of `GME` is much higher than that of `AMC` during the 1st wave, therefore, `GME` is the primary stock in the 1st wave.
+7. From the posts count graph, we can see that there are 2 sub-waves in both 1st and 2nd WSB wave, indicating that the redditers are continuously follow the event and it is not one time thing.   
 
-7. While `GME` and `AMC` are widely discussed during that period, there are still many other stocks and topics that posts discussed. 
+8. The posts count of `GME` is much higher than that of `AMC` during the 1st wave, therefore, `GME` is the primary stock in the 1st wave.
+
+9. While `GME` and `AMC` are widely discussed during that period, there are still many other stocks and topics that posts discussed. 
 
 ### Reddit metrics vs. stock price
 
@@ -590,14 +592,26 @@ From the graphs above, we have the following observations:
 
 1. Generally there is no relationship between the posts count and daily price change for both `AMC` and `GME`.
 
-2. Only for some dates in 
+2. Only for some dates in the 1st and 2nd WSB wave, i.e. 2021-01-27, when there are huge post counts, the price change also very high.
+
+3. `GME` generally has higher daily price change than `AMC`. The maximum daily change of `GME` is around 200% while the maximum daily change of `AMC` is only around 30%
+
+4. The association between the posts counts and volume is tighter than the association between the posts counts and price change. 
+
+5. There is some weak correlation between posts counts and volume, which is the bigger the post count is, the higher the volume is. 
+
+6. `AMC` generally has much higher volume than `GME`, this is because that the price of `AMC` is much lower than `GME`, therefore, people can afford to buy more `AMC` stocks. 
 
 ### What are the most popular words?
+
+Now, we would like to take a closer look at the posts in r/WallStreetBets sub-reddit group and we want to get the board picture about the vast majority of the posts.
+
 ```{r}
 reddit_wc <- readr::read_csv("data/clean/reddit/reddit_wc_total.csv")
 wordcloud2(data=reddit_wc, size=0.7, maxRotation = 0, minRotation = 0)
 ```
 
+The above word cloud shows the most mentioned words across all the posts created in Jan, Feb, May, Jun, July 2021. We can see that `gme`, `amc`, `buy`, `hold`, `short` are some words that are most commonly mentioned in the high influencing posts.
 
 ### Sentiment analysis on Reddit posts regarding GME
 ```{r echo=FALSE, message=FALSE}
@@ -630,6 +644,18 @@ second_wave <- gme_nrc_second_wave %>%
     xlab("sentiment")
 first_wave / second_wave
 ```
+
+Since there are 2 WSB waves, we would like to study the posts in these 2 periods separately to compare whether there is any change in terms of the sentiments. Also, for the 10 different sentiment, we manually assign them into 2 categories, which are positive and negative sentiments respectively. The positive sentiments includes: `positive`, `trust`, `anticipation`, `joy` and `surprise` while the negative sentiments includes: `negative`, `anger`, `fear`, `sadness` and `disgust`.
+
+From the graphs above, we have the following observations:
+
+1. The sentiments of the posts are dominated by positive related sentiment, i.e. `positive`, `trust` and `anticipation`. We can see the 2 most popular sentiment among all posts in both 1st and 2nd WSB waves are `positive` and `trust`.
+
+2. The overall sentiments of posts in the 1st WSB wave is slightly more negative than that in the 2nd WSB wave as we can see that the percentage posts with `negative` sentiment is higher in 1st WSB wave than that in the 2nd WSB wave and also in the top 6 sentiments in 1st WSB wave, there are the 3 negative related sentiments while there are only 2 negative related sentiments in the top 6 sentiments in 2nd WSB wave.
+
+3. There are much more posts created during the 1st WSB wave as comparing to that created during the 2nd WSB wave since more word count means more posts created.
+
+Also, we would like to explore whether there is any relationship between the sentiment of the posts and the stock price, so we use `GEM` as a case to study the relationship. Also, we introduce a new parameter, called positive percentage, which is calculated by `total positive word counts / total word counts` the on daily basis. 
 
 ```{r}
 gme_nrc_total <- rbind(gme_nrc_first_wave, gme_nrc_second_wave)
