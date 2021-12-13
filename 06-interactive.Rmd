@@ -10,7 +10,8 @@ Click [here](https://vizhub.com/lulululuxingyu/d413f4871c1449d781395571f0878eec?
 The interactive part of our analysis was built with D3 version 6, which the code has been uploaded to [VizHub](https://vizhub.com/). You can also find code [here](https://github.com/stellazhangyue/redditWSB/tree/main/scripts) in our github repo. 
 
 
-The plot shows that . You can find the data [here](https://github.com/NeverGiveUpDXQ/2020-U.S.-Election-Visualizations/blob/main/data/d3csv/2020_map_d3.csv) under the `data` folder of our repo.
+The plot shows that //////////////////. You can find the data [here](https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv) under the `data` folder of our repo.
+
 
 ## Instructions for using the map
 
