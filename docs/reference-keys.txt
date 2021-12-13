@@ -1,5 +1,5 @@
+tab:unnamed-chunk-3
 tab:unnamed-chunk-4
-tab:unnamed-chunk-5
 introduction
 data-sources
 stock-dataset
@@ -27,6 +27,7 @@ correlations-between-top-10-mentioned-stocks
 rwallstreetbets-reddit-post-data
 rwallstreetbets-metrics
 reddit-metrics-vs.-stock-price-and-volume
+reddit-metrics-vs.-stock-price
 what-are-the-most-popular-words
 sentiment-analysis-on-reddit-posts-regarding-gme-1
 general-publics-interests-on-google

@@ -164,9 +164,10 @@
 <ul>
 <li class="chapter" data-level="5.3.1" data-path="results.html"><a href="results.html#rwallstreetbets-metrics"><i class="fa fa-check"></i><b>5.3.1</b> r/WallStreetBets metrics</a></li>
 <li class="chapter" data-level="5.3.2" data-path="results.html"><a href="results.html#reddit-metrics-vs.-stock-price-and-volume"><i class="fa fa-check"></i><b>5.3.2</b> Reddit metrics vs. stock price and volume</a></li>
-<li class="chapter" data-level="5.3.3" data-path="results.html"><a href="results.html#what-are-the-most-popular-words"><i class="fa fa-check"></i><b>5.3.3</b> What are the most popular words?</a></li>
-<li class="chapter" data-level="5.3.4" data-path="results.html"><a href="results.html#sentiment-analysis-on-reddit-posts-regarding-gme-1"><i class="fa fa-check"></i><b>5.3.4</b> Sentiment analysis on Reddit posts regarding GME</a></li>
-<li class="chapter" data-level="5.3.5" data-path="results.html"><a href="results.html#general-publics-interests-on-google"><i class="fa fa-check"></i><b>5.3.5</b> General Public’s interests on Google</a></li>
+<li class="chapter" data-level="5.3.3" data-path="results.html"><a href="results.html#reddit-metrics-vs.-stock-price"><i class="fa fa-check"></i><b>5.3.3</b> Reddit metrics vs. stock price</a></li>
+<li class="chapter" data-level="5.3.4" data-path="results.html"><a href="results.html#what-are-the-most-popular-words"><i class="fa fa-check"></i><b>5.3.4</b> What are the most popular words?</a></li>
+<li class="chapter" data-level="5.3.5" data-path="results.html"><a href="results.html#sentiment-analysis-on-reddit-posts-regarding-gme-1"><i class="fa fa-check"></i><b>5.3.5</b> Sentiment analysis on Reddit posts regarding GME</a></li>
+<li class="chapter" data-level="5.3.6" data-path="results.html"><a href="results.html#general-publics-interests-on-google"><i class="fa fa-check"></i><b>5.3.6</b> General Public’s interests on Google</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -204,7 +205,7 @@
 <h2><span class="header-section-number">2.1</span> Stock dataset</h2>
 <p>This data mainly contains the prices and volume of the stocks that are discussed in r/wallstreetbets subreddit, which help to indicate the stock performance. We used the R package <code>quantmod</code> to download the data, which is sourced from <a href="https://finance.yahoo.com/"><em>Yahoo Finance</em></a>.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-4">Table 2.1: </span>Major columns used</caption>
+<caption><span id="tab:unnamed-chunk-3">Table 2.1: </span>Major columns used</caption>
 <colgroup>
 <col width="11%" />
 <col width="7%" />
@@ -260,7 +261,7 @@
 <h2><span class="header-section-number">2.2</span> Reddit posts dataset</h2>
 <p>This dataset contains the posts in r/wallstreetbets subreddit, which we used to extract out the information about the stocks discussed and the post attitude. We created a python <a href="https://github.com/stellazhangyue/redditWSB/blob/main/scripts/wallstreetbet_data_collection.ipynb"><em>script</em></a> to pull the data we need from <a href="https://github.com/pushshift/api"><em>Pushshift Reddit API</em></a> and write to the csv files. Due to Github’s limit on file size, we slice the data by day to create one file for each day. The Pushshift Reddit API has the advantage over the official Reddit API that it gives full functionality for searching Reddit data, which is very helpful for us to only download the data we need.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-5">Table 2.2: </span>Major columns used</caption>
+<caption><span id="tab:unnamed-chunk-4">Table 2.2: </span>Major columns used</caption>
 <thead>
 <tr class="header">
 <th align="left">Column Name</th>
