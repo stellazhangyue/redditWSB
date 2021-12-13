@@ -9,7 +9,7 @@ This dataset mainly contains the prices and volume of the stocks that are discus
 
 ```{r, echo=FALSE, results='asis'}
 DataDescription<- readr::read_csv("data/schema.csv")
-knitr::kable(DataDescription[1:7, ], caption = "Major columns used",
+knitr::kable(DataDescription[1:7, ], caption = "Columns in dataset",
              row.names = F,font_size = 10)
 ```
 
@@ -19,7 +19,7 @@ This dataset contains the posts in r/wallstreetbets subreddit, which we used to 
 
 ```{r, echo=FALSE, results='asis'}
 DataDescription<- readr::read_csv("data/schema.csv")
-knitr::kable(DataDescription[10:16, ], caption = "Major columns used",
+knitr::kable(DataDescription[10:16, ], caption = "Columns in dataset",
              row.names = F,font_size = 10)
 ```
 **Issues with this dataset: **
@@ -32,6 +32,6 @@ This dataset mainly contains the website search and news search information in G
 
 ```{r, echo=FALSE, results='asis'}
 DataDescription<- readr::read_csv("data/schema.csv")
-knitr::kable(DataDescription[10:16, ], caption = "Major columns used",
+knitr::kable(DataDescription[10:16, ], caption = "Columns in dataset",
              row.names = F,font_size = 10)
 ```

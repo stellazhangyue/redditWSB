@@ -10,6 +10,307 @@ library(textdata)
 source("sentiment_analysis.R")
 ```
 
+## Reddit Data Transformation
+These 2 waves are mainly caused by the discussions in the subreddit group, r/wallstreetbets. Therefore, we have downloaded the Reddit posts that have been posted during these 2 periods and also extend some time before and after the wave. This is because we believe it takes some time for the initial posts to get public attention and then the posts starts to influence the stock price. Also, by including the posts that are slightly after the wave, we can do a comparison during and after the wave to check how big the effects of the posts in the sub-Reddit group on the stock price. Therefore, we have downloaded the data for the whole January, February, May, June and July, which have completely cover the 2 waves and also cover some extension. Also, we have parsed the posts on daily basis, which also helps to show the change over time.
+
+### Parse Stock tickers from Reddit posts
+Before starting to do the analysis, we need to find the list of WSB stocks first. the Generally speaking, all the stocks that have been discussed in the r/wallstreetbets subreddit group should be considered as WSB stock. However, given the time frame that we considered is relatively long, which is 5 months, also, the WSBs has caught huge public attention, which also attracted a lot of new redditers. Therefore, there are many people participate in the discussion and the stocks mentioned are quite diversified. In this project, we will only focus on the top 10 stocks that have been mentioned in the posts. In order to find the top 10 most discussed stocks, we created a python script to parse the reddit posts. You can find the code [here](https://github.com/stellazhangyue/redditWSB/blob/main/scripts/Possible_Tickers_Finder.ipynb). We'll discuss what the script does in the following paragraphs.
+
+In the source data, which are the daily posts csv files, there are 2 columns that may contains the stock information, which are `title` and `selftext` respectively. Therefore, we need to first find the stock ticker from these 2 columns. Generally, the stock ticker should start with `$` and followed by 2 to 4 consecutive upper case letters. However, in the source data, there is no `$` exists, we cannot get the exact stock data but rather, we can extract out the list of possible stock tickers by extracting all the sub-strings which are consists of 2 to 4 consecutive upper case letters. 
+
+We have used regex in python to extract out the list of possible stock tickers from `title` and `selftext` respectively for each of the daily reddit csv and then we combine these 2 lists together. However, there might be the case that the possible stock tickers are mentioned by the redditers both in `title` and `selftext`. In this case, we define that the possible stock ticker should be considered only once. Therefore, after combining the 2 lists together, we also need to drop duplicates to make sure there is no double count of possible stock ticker from both `title` and `selftext`. With that, we can make sure that the count of every possible stock ticker in 1 row is at most 1. 
+
+Then, we start to count the possible stock ticker and summarize the count information into a dictionary. For every daily reddit csv, we will get a possible stock ticker count dictionary and combine them together to get the final count dictionary and stored it into the clean data folder. 
+
+Now, in r, we can read the file which contains the information of the final possible stock ticker count. Since we are only interested in the top 10 WSB stocks, we need to re-order the data frame according to the word count in descending order. 
+
+We noticed that there are some invalid tickers exists in the data frame, but that is expected since there is no perfect way to extract out the stock ticker due to the lack of `$` in the data source, so we manually go through the data frame and select out the top 10 tickers, which are: `GME`, `AMC`, `BB`,`NOK`, `SND`, `NAKD`, `PLTR`, `CLOV`, `RETA`, `MAR`, respectively.
+
+```{r}
+df <- read.csv('data/clean/reddit/possible_tickers_count.csv')
+df %>% arrange(desc(count)) -> df
+write.csv(df,"data/clean/reddit/ranked_possible_tickers_count.csv", row.names = FALSE)
+```
+
+### r/wallstreetbets Subreddit Overview
+We'd like to get an overview of r/wallstreetbets subreddit's metrics. We first loaded separate daily posts data files into one data frame, deduplicate the data and then aggregated the data in following steps:
+
+* Covert post create date from unix epoch integer to a Date `date_utc`.
+
+* Add two new boolean columns `contains_amc` and `contains_gme` to indicate whether the title/content contains the stock ticker, ignoring cases.
+
+* Group the data by `date_utc`, and then use `summarise` to get aggregated metrics.
+
+```{r echo=FALSE}
+reddit_filenames <- list.files("data/raw/reddit/daywise", pattern="*.csv", full.names=TRUE)
+reddit_df <- do.call(rbind,lapply(reddit_filenames, read.csv))
+reddit_df <- subset(reddit_df, select = -c(X))
+reddit_df <- reddit_df[!duplicated(reddit_df),]
+```
+
+```{r}
+reddit_overview_df <- reddit_df %>%
+  mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
+         contains_gme = grepl("GME", title, ignore.case = TRUE) | grepl("GME", selftext, ignore.case = TRUE),
+         contains_amc = grepl("AMC", title, ignore.case = TRUE) | grepl("AMC", selftext, ignore.case = TRUE)) %>%
+  select(date_utc, author, postid, score, contains_amc, contains_gme) %>%
+  group_by(date_utc) %>%
+  summarise(post_cnt = n(),
+            distinct_user_cnt = n_distinct(author),
+            gme_cnt = sum(contains_gme),
+            amc_cnt = sum(contains_amc))
+
+date_utc <- seq(as.Date("2021/3/1"), as.Date("2021/4/30"), "days")
+empty_df <- data.frame(date_utc)
+empty_df$post_cnt <- NA
+empty_df$distinct_user_cnt <- NA
+empty_df$gme_cnt <- NA
+empty_df$amc_cnt <- NA
+
+reddit_overview_df <- rbind(reddit_overview_df, empty_df)
+
+write.csv(reddit_overview_df,"data/clean/reddit/wsb_subreddit_overview.csv", row.names = FALSE)
+```
+
+After cleaning, the data frame contains 5 columns and 210 records. We choose to specificly count the number of posts mentioning `GME` and `AMC` because we knoe they are the most prominent stocks in this event.
+
+```{r, echo=FALSE, results='asis'}
+DataDescription<- readr::read_csv("data/schema.csv")
+knitr::kable(DataDescription[27:31, ],
+             row.names = F,font_size = 10)
+```
+
+### Reddit posts content
+We'd also like to look into the content of the posts to understand what people are discussing on Reddit during the time period of the event. In order to obtain this information, we'd like do word level analysis on the posts' contend. We cleaned the text data following steps including:
+
+- Filter to posts with `score` higher than 10.
+
+- Concatenate `title` and `selftext` to one single string `text`
+
+- Select columns we needed. i.e. `date_utc`, `text`
+
+- Load all post content text as a corpus using `tm` package.
+
+- Convert Latin characters to ASCII.
+
+- Remove double spaces.
+
+- Remove special characters, numbers or punctuation from text.
+
+- Remove common stop words in order to produce meaningful results and avoid the most common frequent words such as “I” or “the”.
+
+- Remove specific stop words in this context, for example: `https`, `www`, `amp`, `com` etc.
+
+#### Frequent keywords in Reddit posts
+```{r warning=FALSE}
+get_reddit_wc_df <- function(start_dt, end_dt) {
+  reddit_wc <- reddit_df %>%
+    filter(score >= 10) %>%
+    mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
+           text = cleanData(str_trim(paste(title, selftext)))) %>%
+    filter(date_utc <= as.Date(end_dt) & date_utc >= as.Date(start_dt)) %>%
+    select(date_utc, text)
+  
+  reddit_corpus <- Corpus(VectorSource(reddit_wc$text), readerControl = list(reader = readPlain, language = "en_US", load = TRUE))
+    
+  #Clean up the corpus
+  reddit_corpus <- tm_map(reddit_corpus, removePunctuation)
+  reddit_corpus <- tm_map(reddit_corpus, removeNumbers)
+  reddit_corpus <- tm_map(reddit_corpus, stripWhitespace)
+  reddit_corpus <- tm_map(reddit_corpus, removeWords, stopwords("english"))
+  reddit_corpus <- tm_map(reddit_corpus, removeWords, c("http", "www", "amp", "https", "the", "com"))
+  
+  #Generate Document Term Matrix
+  reddit_tdm <- TermDocumentMatrix(reddit_corpus)
+  reddit_matrix <- as.matrix(reddit_tdm) 
+  reddit_words <- sort(rowSums(reddit_matrix),decreasing=TRUE) 
+  reddit_wc_df <- data.frame(word = names(reddit_words),freq=reddit_words)
+  
+  #Get stop words from 'tidytext' package and remove from data frame
+  lexStopWords <- stop_words
+  reddit_wc_df <- reddit_wc_df %>% 
+    anti_join(lexStopWords, by = c("word" = "word")) %>% 
+    filter(!word  %in% c("http", "www", "amp", "https", "the", "com", "removed", "deleted", "don", "png"))
+  return(reddit_wc_df)
+}
+
+reddit_wc_df_1 <- get_reddit_wc_df('2021-01-01', '2021-01-31')
+reddit_wc_df_2 <- get_reddit_wc_df('2021-02-01', '2021-02-28')
+reddit_wc_df_567 <- get_reddit_wc_df('2021-05-01', '2021-07-31')
+reddit_wc_df_total <- rbind(reddit_wc_df_1, reddit_wc_df_2, reddit_wc_df_567) %>%
+  group_by(word) %>%
+  summarise(freq = sum(freq)) %>%
+  arrange(desc(freq))
+
+write.csv(reddit_wc_df_total, file = ("data/clean/reddit/reddit_wc_total.csv"), row.names=FALSE)
+```
+
+In order to find frequent keywords mentioned in Reddit posts, we created a document term matrix with the `TermDocumentMatrix` function from the `tm` package to obtain words counts for each word mentioned. We created a dataframe containing each word mentioned in the post as the first column and their frequency in the second column, it has 36,261 rows:
+```{r, echo=FALSE, results='asis'}
+DataDescription<- readr::read_csv("data/schema.csv")
+knitr::kable(DataDescription[34:35, ],
+             row.names = F,font_size = 10)
+```
+
+#### Sentiment Analysis on Reddit Posts regarding GME
+We are also interested in what's people's sentiments on the stocks mentioned. We picked `GME` as the representative, since it's the most mentioned stock in r/wallstreetbets and the most reported stock in news. We'd like to perform word level sentiment analysis on the posts mentioning GME to get a better understanding of people's view over the subject. In addition to the cleaning steps mentioned earlier, we further cleaned the data in following steps:
+
+- Filter to posts mention `GME` in either title or content text.
+
+- Get [stop words](https://www.rdocumentation.org/packages/tidytext/versions/0.2.6/topics/stop_words) from `tidytext` package and remove from data frame
+```{r}
+# filter posts with score > 10 and contains GME in title or text
+reddit_GME_sa <- reddit_df %>%
+  filter(score >= 10) %>%
+  select(postid, created_utc, title, selftext) %>%
+  mutate(title_contains_GME = grepl("GME", title, ignore.case = TRUE),
+         text_contains_GME = grepl("GME", selftext, ignore.case = TRUE)) %>%
+  filter(title_contains_GME | text_contains_GME) %>%
+  mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
+         text = cleanData(str_trim(paste(title, selftext))),
+         postid = paste(postid, date_utc, sep = "_"))
+```
+
+We then perform a simple sentiment analysis focusing only at the word level. The lexicon we used is `nrc` by Saif Mohammad and Peter Turney, classifies words into emotions like positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust. We then summarize the data to get the number of words in each sentiment class for each day. 
+
+For complete sentiment analysis code, see [here](https://github.com/stellazhangyue/redditWSB/blob/main/sentiment_analysis.R).
+```{r warning=FALSE}
+reddit_GME_sa_Jan <- reddit_GME_sa %>%
+  filter(date_utc <= as.Date('2021-01-31') & date_utc >= as.Date('2021-01-01')) %>%
+  select(postid, text)
+
+gme_nrc_Jan <- get_nrc_sentiments(reddit_GME_sa_Jan)
+gme_afinn_Jan <- get_afinn_sentiments(reddit_GME_sa_Jan)
+```
+
+```{r warning=FALSE}
+reddit_GME_sa_Feb <- reddit_GME_sa %>%
+  filter(date_utc <= as.Date('2021-02-28') & date_utc >= as.Date('2021-02-01')) %>%
+  select(postid, text)
+
+gme_nrc_Feb <- get_nrc_sentiments(reddit_GME_sa_Feb)
+```
+
+```{r warning=FALSE}
+reddit_GME_sa_567 <- reddit_GME_sa %>%
+  filter(date_utc <= as.Date('2021-07-31') & date_utc >= as.Date('2021-05-01')) %>%
+  select(postid, text)
+
+gme_nrc_567 <- get_nrc_sentiments(reddit_GME_sa_567)
+```
+
+```{r}
+gme_nrc_Jan_agg <- gme_nrc_Jan %>%
+  select(textDate, sentiment, wordCount) %>%
+  group_by(textDate, sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) 
+
+gme_nrc_Feb_agg <- gme_nrc_Feb %>%
+  select(textDate, sentiment, wordCount) %>%
+  group_by(textDate, sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) 
+
+gme_nrc_first_wave <- rbind(gme_nrc_Jan_agg, gme_nrc_Feb_agg)
+
+write.csv(gme_nrc_first_wave, file = ("data/clean/reddit/gme_sa_nrc_first_wave.csv"), row.names=FALSE)
+``` 
+
+```{r}
+gme_nrc_567_agg <- gme_nrc_567 %>%
+  select(textDate, sentiment, wordCount) %>%
+  group_by(textDate, sentiment) %>%
+  dplyr::summarise(wordCount = sum(wordCount)) 
+
+write.csv(gme_nrc_567_agg, file = ("data/clean/reddit/gme_sa_nrc_second_wave.csv"), row.names=FALSE)
+```
+
+We process the Reddit posts one month at a time because of the huge data size and limited memory. In the end we combined the monthly data into two data frames: 1. containing Jan and Feb, corresponding to the time period of first wave; 2. containing May, Jun and Jul, corresponding to the time period of second wave. Each of them has following schema:
+```{r, echo=FALSE, results='asis'}
+DataDescription<- readr::read_csv("data/schema.csv")
+knitr::kable(DataDescription[38:40, ],
+             row.names = F,font_size = 10)
+```
+
+## Stock Data Transformation
+For each of the top 10 mentioned tickers, we download its stock price data from [*Yahoo Finance*](https://finance.yahoo.com/) using `quantmod` package for the time period starting from 2020-01-01. The data downloaded by using `quantmod` are `xts` `zoo` objects and each object has following attributes: `X.Open`,`X.High`,`X.Low`,`X.Close`,`X.Volume`,`X.Adjusted` where `X` is the stock ticker. We transformed each of those objects to the format we need in following steps:
+
+- Convert `xts` `zoo` object to `data.frame`, by loading `index` to `Date` column and extracting the core data.
+
+- Select columns we needed. i.e.`Date`, `X.Close` and `X.Volume`.
+
+- Rename `X.Close` as `Close`, `X.Volume` as `Volume`.
+
+- Add a `Symbol` column to indicate the ticker.
+```{r}
+top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR','^GSPC')
+get_price_df <- function(ticker) {
+  GME_S <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
+  gme_sp_df <- data.frame(Date=index(GME_S),coredata(GME_S))
+  gme_sp_df <- gme_sp_df %>%
+    select(Date, ends_with("Close"), ends_with("Volume")) %>%
+    rename(Close = ends_with("Close")) %>%
+    rename(Volume = ends_with("Volume"))
+  gme_sp_df$Symbol = ticker
+  gme_sp_df <- select(gme_sp_df, Symbol, Date, Close, Volume)
+  return(gme_sp_df)
+}
+df_output = data.frame()
+for(i in top_10_tickers) {
+  tmp <- get_price_df(i)
+  df_output <- rbind(df_output, tmp)
+}
+write.csv(df_output,'data/clean/stock/top_10_stocks_prices.csv',row.names=FALSE)
+```
+
+After finishing downloading data for all 10 tickers, we bind them to one big data frame containing all data, which has 3 columns and 4956 rows:
+```{r, echo=FALSE, results='asis'}
+DataDescription<- readr::read_csv("data/schema.csv")
+knitr::kable(DataDescription[43:46, ],
+             row.names = F,font_size = 10)
+```
+
+Looking at the raw price might not be as useful when comparing different stocks because they have different volume. It is useful to look at change in price instead. We can calculate the aggregated return in percentage by using function `periodReturn`. The aggregate level can be specified by changing argument `period`. Here we set the aggregate level to be `daily`. Similar to how we handle the price and volume, for each ticker we performed following steps to get the data in the format we need:
+
+- Download stock price data using `quantmod` package
+
+- Apply `periodReturn` function with `period="daily"` to calculate daily return
+
+- Convert `xts` `zoo` object to `data.frame`, by loading `index` to `Date` column and `daily.returns`.
+
+- Multiply the calculated daily return by 100 to concert to percentage
+
+- Rename `daily.returns` as `Daily_return`.
+
+- Add a `Symbol` column to indicate the ticker.
+
+- Select columns we needed. i.e.`Date`, `Daily_return` and `Symbol`.
+
+```{r}
+get_price_df <- function(ticker) {
+  df <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
+  daily_return <- na.omit(periodReturn(df, period="daily", type = "arithmetic"))
+  dat <- data.frame(date=index(daily_return), daily_return$daily.returns)
+  dat$daily.returns <- dat$daily.returns * 100
+  dat <- dat %>%
+    rename(Daily_return = daily.returns, Date = date)
+  dat$Symbol = ticker
+  dat <- select(dat, Symbol, Date, Daily_return)
+  return(dat)
+}
+df_output = data.frame()
+for(i in top_10_tickers) {
+  tmp <- get_price_df(i)
+  df_output <- rbind(df_output, tmp)
+}
+write.csv(df_output,'data/clean/stock/top_10_stocks_daily_return.csv',row.names=FALSE)
+```
+
+After finishing downloading and processing data for all 10 tickers, we bind them to one big data frame containing all data, which has 4 columns and 4956 rows:
+```{r, echo=FALSE, results='asis'}
+DataDescription<- readr::read_csv("data/schema.csv")
+knitr::kable(DataDescription[49:51, ],
+             row.names = F,font_size = 10)
+```
 
 ## Google Trends Data Transformation
 In the Google Trends source data, it assigns a number to each keyword for each period(week). The numbers represent search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term. A score of <1 means there is some search interest but it's extremely low. We are replacing all <1's with 0.5, so that we can keep the data frame consistent with all scores as numeric data. 
@@ -51,212 +352,8 @@ knitr::kable(data.frame(
              row.names = F,font_size = 10)
 ```
 
+References:
 
-## Reddit Data Transformation
-```{r echo=FALSE}
-reddit_filenames <- list.files("data/raw/reddit/daywise", pattern="*.csv", full.names=TRUE)
-reddit_df <- do.call(rbind,lapply(reddit_filenames, read.csv))
-reddit_df <- subset(reddit_df, select = -c(X))
-reddit_df <- reddit_df[!duplicated(reddit_df),]
-```
+1. How to Generate Word Clouds in R (https://towardsdatascience.com/create-a-word-cloud-with-r-bde3e7422e8a)
 
-### Parse Stock tickers from Reddit posts
-These 2 waves are mainly caused by the discussion in the sub-Reddit group, WallStreetBets. Therefore, we have downloaded the Reddit posts that have been posted during these 2 periods and also extend some time before and after the wave. This is because we believe it takes some time for the initial posts to get public attention and then the posts starts to influence the stock price. Also, by including the posts that are slightly after the wave, we can do a comparison during and after the wave to check how big the effects of the posts in the sub-Reddit group on the stock price. Therefore, we have downloaded the data for the whole January, February, May, June and July, which have completely cover the 2 waves and also cover some extension. Also, we have parsed the posts on daily basis, which also helps to show the change over time.
-
-Before starting to do the analysis, we need to find the list of WSB stocks first. the Generally speaking, all the stocks that have been discussed in the WallStreetBets sub-Reddit group should be considered as WSB stock. However, given the time frame that we considered is relatively long, which is 5 months, also, the WSBs has caught huge public attention, which also attracted a lot of new redditers. Therefore, there are many people participate in the discussion and the stocks mentioned are quite diversified. In this project, we will only focus on the top 10 stocks that have been mentioned in the posts. 
-
-In the source data, which are the daily posts csv files, there are 2 columns that may contains the stock information, which are `title` and `selftext` respectively. Therefore, we need to first find the stock ticker from these 2 columns. Generally, the stock ticker should start with `$` and followed by 2 to 4 consecutive upper case letters. However, in the source data, there is no `$` exists, we cannot get the exact stock data but rather, we can extract out the list of possible stock tickers by extracting all the sub-strings which are consists of 2 to 4 consecutive upper case letters. 
-
-We have used regex in python to extract out the list of possible stock tickers from `title` and `selftext` respectively for each of the daily reddit csv and then we combine these 2 lists together. However, there might be the case that the possible stock tickers are mentioned by the redditers both in `title` and `selftext`. In this case, we define that the possible stock ticker should be considered only once. Therefore, after combining the 2 lists together, we also need to drop duplicates to make sure there is no double count of possible stock ticker from both `title` and `selftext`. With that, we can make sure that the count of every possible stock ticker in 1 row is at most 1. 
-
-Then, we start to count the possible stock ticker and summarize the count information into a dictionary. For every daily reddit csv, we will get a possible stock ticker count dictionary and combine them together to get the final count dictionary and stored it into the clean data folder. 
-
-Now, in r, we can read the file which contains the information of the final possible stock ticker count. Since we are only interested in the top 10 WSB stocks, we need to re-order the data frame according to the word count in descending order. 
-
-We noticed that there are some invalid tickers exists in the data frame, but that is expected since there is no perfect way to extract out the stock ticker due to the lack of `$` in the data source, so we manually go through the data frame and select out the top 10 tickers, which are: `GME`, `AMC`, `BB`,`NOK`, `SND`, `NAKD`, `PLTR`, `CLOV`, `RETA`, `MAR`, respectively.
-
-```{r}
-df <- read.csv('data/clean/reddit/possible_tickers_count.csv')
-df %>% arrange(desc(count)) -> df
-write.csv(df,"data/clean/reddit/ranked_possible_tickers_count.csv", row.names = FALSE)
-```
-
-### Subreddit overview
-```{r}
-reddit_overview_df <- reddit_df %>%
-  mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
-         contains_gme = grepl("GME", title, ignore.case = TRUE) | grepl("GME", selftext, ignore.case = TRUE),
-         contains_amc = grepl("AMC", title, ignore.case = TRUE) | grepl("AMC", selftext, ignore.case = TRUE)) %>%
-  select(date_utc, author, postid, score, contains_amc, contains_gme) %>%
-  group_by(date_utc) %>%
-  summarise(post_cnt = n(),
-            distinct_user_cnt = n_distinct(author),
-            gme_cnt = sum(contains_gme),
-            amc_cnt = sum(contains_amc))
-
-date_utc <- seq(as.Date("2021/3/1"), as.Date("2021/4/30"), "days")
-empty_df <- data.frame(date_utc)
-empty_df$post_cnt <- NA
-empty_df$distinct_user_cnt <- NA
-empty_df$gme_cnt <- NA
-empty_df$amc_cnt <- NA
-
-reddit_overview_df <- rbind(reddit_overview_df, empty_df)
-
-write.csv(reddit_overview_df,"data/clean/reddit/wsb_subreddit_overview.csv", row.names = FALSE)
-```
-
-
-### Frequent keywords in Reddit posts
-```{r warning=FALSE}
-get_reddit_wc_df <- function(start_dt, end_dt) {
-  reddit_wc <- reddit_df %>%
-    filter(score >= 10) %>%
-    mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
-           text = cleanData(str_trim(paste(title, selftext)))) %>%
-    filter(date_utc <= as.Date(end_dt) & date_utc >= as.Date(start_dt)) %>%
-    select(date_utc, text)
-  
-  reddit_corpus <- Corpus(VectorSource(reddit_wc$text), readerControl = list(reader = readPlain, language = "en_US", load = TRUE))
-    
-  #Clean up the corpus
-  reddit_corpus <- tm_map(reddit_corpus, removePunctuation)
-  reddit_corpus <- tm_map(reddit_corpus, removeNumbers)
-  reddit_corpus <- tm_map(reddit_corpus, stripWhitespace)
-  reddit_corpus <- tm_map(reddit_corpus, removeWords, stopwords("english"))
-  reddit_corpus <- tm_map(reddit_corpus, removeWords, c("http", "www", "amp", "https", "the", "com"))
-  
-  #Generate Document Term Matrix
-  reddit_tdm <- TermDocumentMatrix(reddit_corpus)
-  reddit_matrix <- as.matrix(reddit_tdm) 
-  reddit_words <- sort(rowSums(reddit_matrix),decreasing=TRUE) 
-  reddit_wc_df <- data.frame(word = names(reddit_words),freq=reddit_words)
-  
-  #Get stop words from 'tidytext' package and remove from data frame
-  lexStopWords <- stop_words
-  reddit_wc_df <- reddit_wc_df %>% 
-    anti_join(lexStopWords, by = c("word" = "word")) %>% 
-    filter(!word  %in% c("http", "www", "amp", "https", "the", "com", "removed", "deleted", "don", "png"))
-  
-  return(reddit_wc_df)
-}
-
-reddit_wc_df_1 <- get_reddit_wc_df('2021-01-01', '2021-01-31')
-reddit_wc_df_2 <- get_reddit_wc_df('2021-02-01', '2021-02-28')
-reddit_wc_df_567 <- get_reddit_wc_df('2021-05-01', '2021-07-31')
-reddit_wc_df_total <- rbind(reddit_wc_df_1, reddit_wc_df_2, reddit_wc_df_567) %>%
-  group_by(word) %>%
-  summarise(freq = sum(freq)) %>%
-  arrange(desc(freq))
-
-write.csv(reddit_wc_df_total, file = ("data/clean/reddit/reddit_wc_total.csv"), row.names=FALSE)
-```
-
-
-
-### Sentiment Analysis on Reddit Posts regarding GME
-
-```{r}
-# filter posts with score > 10 and contains GME in title or text
-reddit_GME_sa <- reddit_df %>%
-  filter(score >= 10) %>%
-  select(postid, created_utc, title, selftext) %>%
-  mutate(title_contains_GME = grepl("GME", title, ignore.case = TRUE),
-         text_contains_GME = grepl("GME", selftext, ignore.case = TRUE)) %>%
-  filter(title_contains_GME | text_contains_GME) %>%
-  mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01")),
-         text = cleanData(str_trim(paste(title, selftext))),
-         postid = paste(postid, date_utc, sep = "_"))
-```
-
-```{r warning=FALSE}
-reddit_GME_sa_Jan <- reddit_GME_sa %>%
-  filter(date_utc <= as.Date('2021-01-31') & date_utc >= as.Date('2021-01-01')) %>%
-  select(postid, text)
-
-gme_nrc_Jan <- get_nrc_sentiments(reddit_GME_sa_Jan)
-```
-
-```{r warning=FALSE}
-reddit_GME_sa_Feb <- reddit_GME_sa %>%
-  filter(date_utc <= as.Date('2021-02-28') & date_utc >= as.Date('2021-02-01')) %>%
-  select(postid, text)
-
-gme_nrc_Feb <- get_nrc_sentiments(reddit_GME_sa_Feb)
-```
-
-```{r warning=FALSE}
-reddit_GME_sa_567 <- reddit_GME_sa %>%
-  filter(date_utc <= as.Date('2021-07-31') & date_utc >= as.Date('2021-05-01')) %>%
-  select(postid, text)
-
-gme_nrc_567 <- get_nrc_sentiments(reddit_GME_sa_567)
-```
-
-```{r}
-gme_nrc_Jan_agg <- gme_nrc_Jan %>%
-  select(textDate, sentiment, wordCount) %>%
-  group_by(textDate, sentiment) %>%
-  dplyr::summarise(wordCount = sum(wordCount)) 
-
-gme_nrc_Feb_agg <- gme_nrc_Feb %>%
-  select(textDate, sentiment, wordCount) %>%
-  group_by(textDate, sentiment) %>%
-  dplyr::summarise(wordCount = sum(wordCount)) 
-
-gme_nrc_first_wave <- rbind(gme_nrc_Jan_agg, gme_nrc_Feb_agg)
-
-write.csv(gme_nrc_first_wave, file = ("data/clean/reddit/gme_sa_nrc_first_wave.csv"), row.names=FALSE)
-``` 
-
-
-```{r}
-gme_nrc_567_agg <- gme_nrc_567 %>%
-  select(textDate, sentiment, wordCount) %>%
-  group_by(textDate, sentiment) %>%
-  dplyr::summarise(wordCount = sum(wordCount)) 
-
-write.csv(gme_nrc_567_agg, file = ("data/clean/reddit/gme_sa_nrc_second_wave.csv"), row.names=FALSE)
-```
-
-## Stock Data Transformation
-```{r}
-top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR','^GSPC')
-get_price_df <- function(ticker) {
-  GME_S <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
-  gme_sp_df <- data.frame(Date=index(GME_S),coredata(GME_S))
-  gme_sp_df <- gme_sp_df %>%
-    select(Date, ends_with("Close"), ends_with("Volume")) %>%
-    rename(Close = ends_with("Close")) %>%
-    rename(Volume = ends_with("Volume"))
-  gme_sp_df$Symbol = ticker
-  gme_sp_df <- select(gme_sp_df, Symbol, Date, Close, Volume)
-  return(gme_sp_df)
-}
-df_output = data.frame()
-for(i in top_10_tickers) {
-  tmp <- get_price_df(i)
-  df_output <- rbind(df_output, tmp)
-}
-write.csv(df_output,'data/clean/stock/top_10_stocks_prices.csv',row.names=FALSE)
-```
-
-```{r}
-get_price_df <- function(ticker) {
-  df <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
-  daily_return <- na.omit(periodReturn(df, period="daily", type = "arithmetic"))
-  dat <- data.frame(date=index(daily_return), daily_return$daily.returns)
-  dat$daily.returns <- dat$daily.returns * 100
-  dat <- dat %>%
-    rename(Daily_return = daily.returns, Date = date)
-  dat$Symbol = ticker
-  dat <- select(dat, Symbol, Date, Daily_return)
-  return(dat)
-}
-df_output = data.frame()
-for(i in top_10_tickers) {
-  tmp <- get_price_df(i)
-  df_output <- rbind(df_output, tmp)
-}
-write.csv(df_output,'data/clean/stock/top_10_stocks_daily_return.csv',row.names=FALSE)
-```
+2. Tutorial: Sentiment Analysis in R(https://www.kaggle.com/rtatman/tutorial-sentiment-analysis-in-r)

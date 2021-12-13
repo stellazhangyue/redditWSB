@@ -23,3 +23,30 @@ AMC,numeric,"search score for keyword ""AMC"""
 Reddit,numeric,"search score for keyword ""Reddit"""
 r/WallStreetBets,numeric,"search score for keyword ""r/WallStreetBets"""
 Robinhood ,numeric,"search score for keyword ""Robinhood"""
+,,
+Column Name,Type,Description
+date_utc,Date,post created date
+post_cnt,integer,number of posts
+distinct_usr_cnt,integer,number of distinct author that created posts
+gme_cnt,integer,number of posts containing GME
+amc_cnt,integer,number of posts containing AMC
+,,
+Column Name,Type,Description
+word,character,English word appeared in the Reddit posts
+freq,numeric,Number of appearances
+,,
+Column Name,Type,Description
+textDate,character,post created date
+sentiment,character,nrc classified sentiment
+wordCount,numeric,number of words in the sentiment class
+,,
+Column Name,Type,Description
+Symbol,character,Date of the prices and volume
+Date,Date,Stock ticker
+Close,numeric,Close price adjusted for splits
+Volume,numeric,Number of shares traded
+,,
+Column Name,Type,Description
+Symbol,character,Date of the prices and volume
+Date,Date,Stock ticker
+Daily_return,numeric,Daily return in percentage

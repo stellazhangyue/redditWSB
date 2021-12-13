@@ -15,12 +15,12 @@ There were 2 waves of major short squeeze led by the participants in this subred
 
 In this project, we would like to collect stock related data, Reddit related data (mainly posts) as well as the Google search related data to generate visualization and get some useful insights. We'll be trying to answer following questions through this study:
 
-1. How big is the impact of reddit wallstreetbet? I.e. no. of news, downloads of Robinhood and other trading apps,
+1. How big is the impact of r/wallstreetbets subreddit group?
 
-2. For each targeted stock, what’s the relationship between reddit posts and stock price/volume etc.
+2. For each targeted stock, what’s the relationship between Reddit posts and stock price/volume etc.
 
-3. Why does Wallstreetbet choose these target stocks? What’re their similarities? How do their choices change as time evolves? Gamestop, AMC, Blueberry, Nokia, SPCE, PLTR, TSLA.
+3. Why does r/wallstreetbets choose these target stocks? What’re their similarities? How do their choices change as time evolves? Gamestop, AMC, Blueberry, Nokia, SPCE, PLTR, TSLA.
 
-In the following chapters, we will use data source to plot graphs, trying to answer the above questions. Also, we would like to explore other aspects from the graphs and come up with more conclusions.
+In the following chapters, we will use multiple data sources to plot graphs, and try to answer the above questions with proper data visualization techniques. Also, we would like to explore other aspects from the graphs and come up with more conclusions.
 
 For more details of this project, click the link here or copy the url https://github.com/stellazhangyue/redditWSB.git and open it in browser to go to our Github repository and navigate code in .Rmd files.

@@ -57,11 +57,22 @@ process_text <- function(reddit_GME_sa) {
 
 get_nrc_sentiments <- function(df) {
   tidy_df <- process_text(df)
-  #Get words from bing lexicon
+  #Get words from nrc lexicon
   nrcLexWord <- get_sentiments("nrc")
   
   #Apply sentiment to words
   df_nrc <- tidy_df %>% inner_join(nrcLexWord, by = c("textWord" = "word"))
   
   return(df_nrc)
+}
+
+get_afinn_sentiments <- function(df) {
+  tidy_df <- process_text(df)
+  #Get words from afinn lexicon
+  afinnLexWord <- get_sentiments("afinn")
+  
+  #Apply sentiment to words
+  df_afinn <- tidy_df %>% inner_join(afinnLexWord, by = c("textWord" = "word"))
+  
+  return(df_afinn)
 }
