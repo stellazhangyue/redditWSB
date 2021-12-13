@@ -12,9 +12,8 @@ const svg = d3.select("#my_dataviz")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-
 //var url = "https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/tmp/indices.csv"
-var url = "https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv";
+var url = "https://raw.githubusercontent.com/stellazhangyue/redditWSB/main/data/clean/stock/top_10_stocks.csv"
 d3.csv(url, function(d){
     return { 
         symbol: d.Symbol,
@@ -56,7 +55,7 @@ d3.csv(url, function(d){
                     / d3.min(data_stock[stock], function(d) { return +d.volume; });
             scales_v.push(scale);
         }) 
-        const v = d3.scaleLog()
+        var v = d3.scaleLog()
             .domain([1 / d3.max(scales_v), d3.max(scales_v)])
             .range([ height, 0 ])
         
@@ -67,7 +66,7 @@ d3.csv(url, function(d){
                     / d3.min(data_stock[stock], function(d) { return +d.close; });
             scales_c.push(scale);
         })
-        const c = d3.scaleLog()
+        var c = d3.scaleLog()
             .domain([1 / d3.max(scales_c), d3.max(scales_c)])
             .range([ height, 0 ])
 
@@ -148,7 +147,7 @@ d3.csv(url, function(d){
                 .attr("stroke-width", 1.5)
                 .attr("d", d3.line()
                     .x(function(d) { return x(d.date) })
-                    .y(function(d) { return variable_map[f](d[f] / data[0][f]) })
+                    .y(function(d) { return variable_map[f](d[f] / data_stock[stock][0][f]) })
                 )
                 // .append("g")
                 // .attr("class", "brush")
@@ -406,15 +405,15 @@ d3.csv(url, function(d){
                 .transition()
                 .style("fill", "#2378ae")
             f = "volume";
-            yAxis
-                .transition()
-                .call(d3.axisLeft(v).ticks(4).tickFormat(function(d){ return d3.format(".2f")(d) }));
-            grid
-                .transition()
-                .call(make_y_gridlines(variable_map[f])
-                    .tickSize(-width)
-                    .tickFormat("")
-                )
+            // yAxis
+            //     .transition()
+            //     .call(d3.axisLeft(v).ticks(4).tickFormat(function(d){ return d3.format(".2f")(d) }));
+            // grid
+            //     .transition()
+            //     .call(make_y_gridlines(variable_map[f])
+            //         .tickSize(-width)
+            //         .tickFormat("")
+            //     )
             replotPath(x(0) + margin.left);
         }
 
@@ -427,20 +426,43 @@ d3.csv(url, function(d){
                 .transition()
                 .style("fill", "None")
             f = "close";
-            yAxis
+            // yAxis
+            //     .transition()
+            //     .call(d3.axisLeft(c).ticks(4).tickFormat(function(d){ return d3.format(".2f")(d) }));
+            // grid
+            //     .transition()
+            //     .call(make_y_gridlines(variable_map[f])
+            //         .tickSize(-width)
+            //         .tickFormat("")
+            //     )
+            replotPath(x(0) + margin.left);
+        }
+
+        function replotPath(x_val) {
+            var x0 = x.invert(x_val - margin.left);
+          	
+          	//console.log(variable_map[f]);
+          	var new_scales_v = [2];
+          	var new_scales_c = [2];
+          	for (let index = 0; index < stocks.length; ++index) {
+            		if(selected_stocks.has(stocks[index]) ) {
+                 		new_scales_v.push(scales_v[index]);
+                  	new_scales_c.push(scales_c[index]);
+                }
+        		}
+          	
+        		v.domain([1 / d3.max(new_scales_v), d3.max(new_scales_v)]);
+          	c.domain([1 / d3.max(new_scales_c), d3.max(new_scales_c)]);
+          	
+						yAxis
                 .transition()
-                .call(d3.axisLeft(c).ticks(4).tickFormat(function(d){ return d3.format(".2f")(d) }));
+                .call(d3.axisLeft(variable_map[f]).ticks(4).tickFormat(function(d){ return d3.format(".2f")(d) }));
             grid
                 .transition()
                 .call(make_y_gridlines(variable_map[f])
                     .tickSize(-width)
                     .tickFormat("")
                 )
-            replotPath(x(0) + margin.left);
-        }
-
-        function replotPath(x_val) {
-            var x0 = x.invert(x_val - margin.left);
 
             stocks.forEach(function (stock) {
                 var id = bisect(data_stock[stock], x0);
