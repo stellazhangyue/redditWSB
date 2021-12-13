@@ -15,3 +15,11 @@ permalink,character,URL to the post
 score,integer,number of upvotes minus the number of downvotes
 title,character,post title
 selftext,character,post content
+,,
+Column Name,Type,Description
+Week,Date,Starting day of the week
+Gamestop,numeric,"search score for keyword ""Gamestop"""
+AMC,numeric,"search score for keyword ""AMC"""
+Reddit,numeric,"search score for keyword ""Reddit"""
+r/WallStreetBets,numeric,"search score for keyword ""r/WallStreetBets"""
+Robinhood ,numeric,"search score for keyword ""Robinhood"""
