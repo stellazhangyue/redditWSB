@@ -22,6 +22,7 @@ most-popular-stocks
 time-series-of-the-top-10-stocks
 rwallstreetbets-reddit-post-data
 rwallstreetbets-metrics
+reddit-metrics-vs.-stock-price
 what-are-the-most-popular-words
 sentiment-analysis-on-reddit-posts-regarding-gme-1
 interactive-component
