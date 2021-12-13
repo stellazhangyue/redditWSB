@@ -395,8 +395,8 @@ amc_scatter <- ggplot(amc_post_vs_diff, aes(x = amc_cnt,
                           y = price_diff))+
   geom_point(color = light_red) +
   geom_text(
-    aes(label = ifelse(gme_cnt >= 3000, as.character(Date), "")),
-    hjust=1, vjust=0, size=2) +
+    aes(label = ifelse(amc_cnt >= 3000 | price_diff>= 10 | price_diff <=-10, as.character(Date), "")),
+    hjust=0.5, vjust=0, size=2) +
   labs(x = "# of posts in r/WallStreetBets", 
        y = "daily price change", 
        title = "AMC")+
@@ -427,8 +427,8 @@ gme_scatter <- ggplot(gme_post_vs_diff, aes(x = gme_cnt,
                           y = price_diff))+
   geom_point(color = light_blue) +
   geom_text(
-    aes(label = ifelse(gme_cnt >= 10000, as.character(Date), "")),
-    hjust=1, vjust=0, size=2) +
+    aes(label = ifelse(gme_cnt >= 10000 | price_diff >= 50 | price_diff <=-50, as.character(Date), "")),
+    hjust=0.5, vjust=0, size=2) +
   labs(x = "# of posts in r/WallStreetBets", 
        y = "daily price change", 
        title = "GME")+
@@ -440,7 +440,12 @@ gme_scatter <- ggplot(gme_post_vs_diff, aes(x = gme_cnt,
         legend.position="bottom",
         legend.title = element_text(face="bold"))
 
-amc_scatter + gme_scatter
+amc_gme <- amc_scatter + gme_scatter
+
+amc_gme + plot_annotation(
+  title = 'Post count vs daily price change scatterplot',
+  subtitle = 'Jan, Feb, May, Jun, July 2021',
+)
 ```
 
 
