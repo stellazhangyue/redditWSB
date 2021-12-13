@@ -25,10 +25,8 @@ green <- "#8DF186"
 purple <- "#D5A7F1"
 ```
 
-## What's the impact of r/wallstreetbet?
-
 ## Stock Data and Information
-### Stock Data Plot
+### Stock Candlestick Plot
 The most representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in WallStreetBet sub-reddit analysed in Chapter 3 - cleaning. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
 
 The graph is interactive, where we can choose select the period of time that we want to focus on by dragging on the bottom graph. This allows us to zoom in and see the graph clearly. Also, we can choose the specific period, i.e. the past 1 year or past 6 months data by pressing the corresponding buttons above and we can easily go back to the main graph by pressing the "RESET" botton.
@@ -485,7 +483,7 @@ hc_add_annotation(
     )
 )
 ```
-### Reddit metrics vs. stock price and volume
+
 From the above 3 graphs, we have the following observations:
 
 1. There are very few joiners to the r/WallStreetBets sub-reddit group before and after the 1st wave of WSB. However, there are huge amount of new users joining to the sub-reddit group daily at the end of the January, peaked at 27th Jan, 2021 with 4443 new joiners.
@@ -506,7 +504,20 @@ From the above 3 graphs, we have the following observations:
 
 9. While `GME` and `AMC` are widely discussed during that period, there are still many other stocks and topics that posts discussed. 
 
-### Reddit metrics vs. stock price
+### What are the most popular keywords?
+
+Now, we would like to take a closer look at the posts in r/WallStreetBets sub-reddit group and we want to get the board picture about the vast majority of the posts.
+
+```{r}
+reddit_wc <- readr::read_csv("data/clean/reddit/reddit_wc_total.csv")
+wordcloud2(data=reddit_wc, size=0.7)
+```
+
+The above word cloud shows the most mentioned words across all the posts created in Jan, Feb, May, Jun, July 2021. We can see that `gme`, `amc`, `buy`, `hold`, `short` are some words that are most commonly mentioned in the high influencing posts.
+
+
+## What's the impact of r/wallstreetbet?
+### Reddit metrics vs. stock price and volume
 
 Now, we want to examine how the posts counts in r/WallStreetBets sub-reddit group affect the stock price as well as the stock trading volume. Since `GME` and `AMC` are the 2 most representative stocks in the 2 WSB waves,we choose these 2 stocks as the study object.
 
@@ -643,6 +654,7 @@ amc_gme + plot_annotation(
   subtitle = 'Jan, Feb, May, Jun, July 2021',
 )
 ```
+
 From the graphs above, we have the following observations:
 
 1. Generally there is no relationship between the posts count and daily price change for both `AMC` and `GME`.
@@ -657,16 +669,6 @@ From the graphs above, we have the following observations:
 
 6. `AMC` generally has much higher volume than `GME`, this is because that the price of `AMC` is much lower than `GME`, therefore, people can afford to buy more `AMC` stocks. 
 
-### What are the most popular words?
-
-Now, we would like to take a closer look at the posts in r/WallStreetBets sub-reddit group and we want to get the board picture about the vast majority of the posts.
-
-```{r}
-reddit_wc <- readr::read_csv("data/clean/reddit/reddit_wc_total.csv")
-wordcloud2(data=reddit_wc, size=0.7, maxRotation = 0, minRotation = 0)
-```
-
-The above word cloud shows the most mentioned words across all the posts created in Jan, Feb, May, Jun, July 2021. We can see that `gme`, `amc`, `buy`, `hold`, `short` are some words that are most commonly mentioned in the high influencing posts.
 
 ### Sentiment analysis on Reddit posts regarding GME
 ```{r echo=FALSE, message=FALSE}
@@ -780,15 +782,26 @@ combined_news <- readr::read_csv("data/clean/gtrends/combined_news.csv")
 web <- combined_web %>%
   ggplot(aes(x=Week, y=score, color = keyword)) +
   geom_line() +
-  ggtitle("Web Search Interest overtime")
+  ggtitle("Web Search Interest overtime") + 
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold"),
+        plot.subtitle = element_text(face = "bold", color = "grey35"),
+        plot.caption = element_text(color = "grey68"),
+        legend.title = element_text(face="bold"))
 
 news <- combined_news %>%
   ggplot(aes(x=Week, y=score, color = keyword)) +
   geom_line() +
-  ggtitle("News Search Interest overtime")
+  ggtitle("News Search Interest overtime") +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold"),
+        plot.subtitle = element_text(face = "bold", color = "grey35"),
+        plot.caption = element_text(color = "grey68"),
+        legend.title = element_text(face="bold"))
 
 web / news
 ```
+
 In the above 2 graphs, the x-axis is the date. For the y-aixs score, it represents search interest relative to the highest point on the chart for the given region and time. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. A score of 0 means there was not enough data for this term.
 
 From the above 2 graphs, we have the following observations:
