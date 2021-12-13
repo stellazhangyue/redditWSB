@@ -18,6 +18,11 @@ library(wordcloud2)
 library(highcharter)
 ```
 
+```{r}
+light_blue <- '#88A8F2'
+light_red <- '#EF856E'
+green <- "#8DF186"
+```
 
 ## What's the impact of r/wallstreetbet?
 
@@ -333,9 +338,61 @@ From the above graph, we can have the following observation:
 
 ## r/WallStreetBets Reddit Post Data
 
-### Reddit post data overview
-```{r}
+### r/WallStreetBets metrics
 
+```{r}
+reddit_sub <- readr::read_csv("data/clean/reddit/reddit_sub_growth.csv") %>%
+  mutate(Date = as.Date(Date, format = "'%Y-%m-%d'"))
+
+reddit_sub %>%
+  hchart("line",hcaes(x = Date, y = growth)) %>%
+  hc_chart(zoomType = "x") %>%
+  hc_colors(c(light_blue)) %>%
+  hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+  hc_xAxis(title = list(text = "Date"),
+           labels = list(format = '{value:%b %d}')) %>%
+  hc_yAxis(title = list(text = "Subscriber growth")) %>%
+  hc_title(text = "<b>r/WallStreetBets subscriber growth by Date</b>") %>%
+  hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+  hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+  hc_exporting(enabled = TRUE)
+```
+
+```{r}
+reddit_post_ov <- readr::read_csv("data/clean/reddit/wsb_subreddit_overview.csv") %>%
+  rename(Date = date_utc) %>%
+  pivot_longer(!Date, names_to = "attribute", values_to = "value")
+
+reddit_post_ov_ts <- reddit_post_ov %>%
+  hchart("line",hcaes(x = Date, y = value, group = attribute)) %>%
+  hc_chart(zoomType = "x") %>%
+  hc_colors(c(light_blue, light_red)) %>%
+  hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+  hc_xAxis(title = list(text = "Date"),
+           labels = list(format = '{value:%b %d}')) %>%
+  hc_yAxis(title = list(text = "Subscriber growth")) %>%
+  hc_title(text = "<b>r/WallStreetBets Daily active users and posts count</b>") %>%
+  hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+  hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+  hc_exporting(enabled = TRUE)
+
+
+hc_add_annotation(
+    reddit_post_ov_ts,
+    labelOptions = list(
+      backgroundColor = 'rgba(0,0,0,0.4)',
+      verticalAlign = 'top',
+      y = 15
+    ),
+    labels = list(
+      list(point = list(xAxis = 0, yAxis = 0,
+          x = datetime_to_timestamp(as.Date("2021/01/28")),
+          y = 170000), text = "First wave"),
+      list(point = list(xAxis = 0, yAxis = 0,
+          x = datetime_to_timestamp(as.Date("2021/06/03")),
+          y = 17000), text = "Second wave")
+    )
+)
 ```
 
 
@@ -360,8 +417,8 @@ first_wave <- gme_nrc_first_wave %>%
   mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
   ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
     geom_bar(stat = "identity", aes(fill = label)) +
-    scale_fill_manual(values = c("neg" = "#88A8F2",
-                                "pos" = "#EF856E")) +
+    scale_fill_manual(values = c("neg" = green,
+                                "pos" = light_red)) +
     ggtitle("GME Sentiment Jan and Feb") +
     xlab("sentiment")
 second_wave <- gme_nrc_second_wave %>%
@@ -371,8 +428,8 @@ second_wave <- gme_nrc_second_wave %>%
   mutate(label = ifelse(sentiment %in% neg_sentiments, 'neg', 'pos')) %>%
   ggplot(aes(x = fct_reorder(sentiment, desc(wordCount)), y = wordCount)) +
     geom_bar(stat = "identity", aes(fill = label)) +
-    scale_fill_manual(values = c("neg" = "#88A8F2",
-                                "pos" = "#EF856E")) +
+    scale_fill_manual(values = c("neg" = green,
+                                "pos" = light_red)) +
     ggtitle("GME Sentiment May, Jun and Jul") +
     xlab("sentiment")
 first_wave / second_wave
@@ -401,9 +458,14 @@ total <- merge(gme_stock_df, gme_nrc_sum, by.y="textDate", by.x="Date") %>%
   pivot_longer(!Date, names_to = "attr", values_to = "val")
 ggplot(total, aes(x=Date, y=val, color=attr)) +
   geom_line() +
+  scale_color_manual(values = c(light_blue, light_red)) +
   ggtitle("GME positive percentage and stock price") +
   ylab("value") +
-  labs(color = "") 
+  labs(color = "") +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold"),
+        plot.caption = element_text(color = "grey68"),
+        legend.position="bottom")
 ```
 
 Above plot analyzes if the sentiments on r/WallStreetBets had any impact on GME's stock price.

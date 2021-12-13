@@ -53,6 +53,12 @@ knitr::kable(data.frame(
 
 
 ## Reddit Data Transformation
+```{r echo=FALSE}
+reddit_filenames <- list.files("data/raw/reddit/daywise", pattern="*.csv", full.names=TRUE)
+reddit_df <- do.call(rbind,lapply(reddit_filenames, read.csv))
+reddit_df <- subset(reddit_df, select = -c(X))
+reddit_df <- reddit_df[!duplicated(reddit_df),]
+```
 
 ### Parse Stock tickers from Reddit posts
 There were 2 waves of sharp stock price change for WallStreetBets (WSBs) stocks in 2021, which were around January/Feburary and May/June period. These 2 waves are mainly caused by the discussion in the sub-Reddit group, WallStreetBets. Therefore, we have downloaded the Reddit posts that have been posted during these 2 periods and also extend some time before and after the wave. This is because we believe it takes some time for the initial posts to get public attention and then the posts starts to influence the stock price. Also, by including the posts that are slightly after the wave, we can do a comparison during and after the wave to check how big the effects of the posts in the sub-Reddit group on the stock price. Therefore, we have downloaded the data for the whole January, February, May, June and July, which have completely cover the 2 waves and also cover some extension. Also, we have parsed the posts on daily basis, which also helps to show the change over time.
@@ -73,6 +79,25 @@ We noticed that there are some invalid tickers exists in the data frame, but tha
 df <- read.csv('data/clean/reddit/possible_tickers_count.csv')
 df %>% arrange(desc(count)) -> df
 write.csv(df,"data/clean/reddit/ranked_possible_tickers_count.csv", row.names = FALSE)
+```
+
+### Subreddit overview
+```{r}
+reddit_overview_df <- reddit_df %>%
+  mutate(date_utc = as.Date(as.POSIXct(as.numeric(created_utc), origin="1970-01-01"))) %>%
+  select(date_utc, author, postid, score) %>%
+  group_by(date_utc) %>%
+  summarise(post_cnt = n(),
+            distinct_user_cnt = n_distinct(author))
+
+date_utc <- seq(as.Date("2021/3/1"), as.Date("2021/4/30"), "days")
+empty_df <- data.frame(date_utc)
+empty_df$post_cnt <- NA
+empty_df$distinct_user_cnt <- NA
+
+reddit_overview_df <- rbind(reddit_overview_df, empty_df)
+
+write.csv(reddit_overview_df,"data/clean/reddit/wsb_subreddit_overview.csv", row.names = FALSE)
 ```
 
 
@@ -124,14 +149,6 @@ write.csv(reddit_wc_df_total, file = ("data/clean/reddit/reddit_wc_total.csv"), 
 
 
 ### Sentiment Analysis on Reddit Posts regarding GME
-
-```{r echo=FALSE}
-reddit_filenames <- list.files("data/raw/reddit/daywise", pattern="*.csv", full.names=TRUE)
-reddit_df <- do.call(rbind,lapply(reddit_filenames, read.csv))
-reddit_df <- subset(reddit_df, select = -c(X))
-reddit_df <- reddit_df[!duplicated(reddit_df),]
-```
-
 
 ```{r}
 # filter posts with score > 10 and contains GME in title or text
