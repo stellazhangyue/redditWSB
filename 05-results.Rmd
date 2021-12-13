@@ -28,7 +28,15 @@ green <- "#8DF186"
 
 ### General Public's interests on Google
 
+We believe that the whole event , i.e. r/wallstreetbets subreddit, short squeeze and the associated stocks are relatively new to the public, therefore, they are very likely to search some of the related keywords in Google to understand the whole event. Therefore, in this section, we would like to use the Google search related data to explore the general public attention towards this event. 
+
 #### Interest over time
+
+In Google, people can search in the website and if they already know the basic information about the event and they follow the event closely and only interested in the most recent news, therefore, we would like to zoom one level down into Google News to understand the topics that the close followers are interested in.
+
+We have identified some keywords from the word cloud, excluding the commonly searched word in our daily life, i.e. stock, market, buy and etc, which are: `GME`,`AMC` `AMC`,`GameStop`, `r/WallStreetBets`,`Reddit`,`Robinhood` respectively. Therefore, we will use the 
+
+Also, since we want to compare the public interest 
 ```{r}
 combined_web <- readr::read_csv("data/clean/gtrends/combined_web.csv")
 combined_news <- readr::read_csv("data/clean/gtrends/combined_news.csv")
@@ -53,7 +61,7 @@ The above two plots display the interest on the relative topics during the time 
 
 ## Stock Data and Information
 ### Stock Data Plot
-The most Representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in WallStreetBet sub-reddit analysed in Chapter 3 - cleaning. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
+The most representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in WallStreetBet sub-reddit analysed in Chapter 3 - cleaning. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
 
 ```{r}
 getSymbols("GME",src='yahoo')
