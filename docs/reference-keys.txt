@@ -28,3 +28,8 @@ what-are-the-most-popular-words
 sentiment-analysis-on-reddit-posts-regarding-gme-1
 interactive-component
 conclusion
+tab:unnamed-chunk-3
+stock-dataset
+reddit-posts-dataset
+google-search-score-dataset
+stock-data-transformation

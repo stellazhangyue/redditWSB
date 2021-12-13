@@ -1,0 +1,8 @@
+﻿Column Name,Type,Description
+Date,Date,Date of the prices and volume
+Open,numeric,Open price
+High,numeric,Highest price of the day
+Low,numeric,Lowest price of the day
+Close,numeric,Close price adjusted for splits
+Volume,numeric,Number of shares traded
+Adjusted,numeric,Adjusted close price adjusted for splits and dividend and/or capital gain distributions.

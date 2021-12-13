@@ -1,51 +1,29 @@
 # Data sources
 
-To answer the 3 questions mentioned in Chapter 1 - Introduction, we need to collect the following data:
+The primary data sources for this project are [*Yahoo Finance*](https://finance.yahoo.com/), [*Pushshift Reddit API*](https://github.com/pushshift/api) and [*Google Trends*](https://trends.google.com/trends/?geo=US). Yahoo Finance provides financial news, data and commentary including stock quotes, press releases, financial reports, and original content. The pushshift.io Reddit API was designed and created by the /r/datasets mod team to help provide enhanced functionality and search capabilities for searching Reddit comments and submissions. Google Trends is a website by Google that analyzes the popularity of top search queries in Google Search across various regions and languages. 
 
-1. Stock related data: this data mainly contains the price and volume of the stocks that are discussed in r/wallstreetbets subreddit, which help to indicate the stock performance. This data can be found from [*Yahoo Finance*](https://finance.yahoo.com/), which provides financial news, data and commentary including stock quotes, press releases, financial reports, and original content.
+From the above data sources we collected and used three major datasets: Stock dataset from Yahoo Finance, Reddit posts dataset from Reddit API and Google search score dataset from Google Trends. Each member in our team was responsible for downloading one dataset from corresponding data sources. More details of the datasets are as following:
 
-2. Reddit related data: this data mainly contains the posts information in r/wallstreetbets subreddit, which helps to extract out the information about the stocks discussed and the post attitude. This data can be found from [*Reddit API*](https://www.reddit.com/dev/api/). Reddit API is the official portal Reddit created to facilitate developers in their app-building endeavors, where developers can retrieve the constantly updating feeds of Reddit posts.
+## Stock dataset
+This data mainly contains the prices and volume of the stocks that are discussed in r/wallstreetbets subreddit, which help to indicate the stock performance. We uses the R package `quantmod` to download the data, which is sourced from [*Yahoo Finance*](https://finance.yahoo.com/).
 
-3. Google search related data: this data mainly contains the website search ans news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. This data can be found from [*Google Trends*](https://trends.google.com/trends/?geo=US). Google Trends is a website by Google that analyzes the popularity of top search queries in Google Search across various regions and languages. 
-
-
-```{r}
-top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR','^GSPC')
-get_price_df <- function(ticker) {
-  GME_S <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
-  gme_sp_df <- data.frame(Date=index(GME_S),coredata(GME_S))
-  gme_sp_df <- gme_sp_df %>%
-    select(Date, ends_with("Close"), ends_with("Volume")) %>%
-    rename(Close = ends_with("Close")) %>%
-    rename(Volume = ends_with("Volume"))
-  gme_sp_df$Symbol = ticker
-  gme_sp_df <- select(gme_sp_df, Symbol, Date, Close, Volume)
-  return(gme_sp_df)
-}
-df_output = data.frame()
-for(i in top_10_tickers) {
-  tmp <- get_price_df(i)
-  df_output <- rbind(df_output, tmp)
-}
-write.csv(df_output,'data/tmp/top_10_stocks_prices.csv',row.names=FALSE)
+```{r, echo=FALSE, results='asis'}
+DataDescription<- readr::read_csv("data/schema.csv")
+knitr::kable(DataDescription[1:7, ], caption = "Major columns used",
+             row.names = F,font_size = 10)
 ```
 
-```{r}
-get_price_df <- function(ticker) {
-  df <- getSymbols(ticker, src="yahoo", from = "2020-01-01", auto.assign = FALSE)
-  daily_return <- na.omit(periodReturn(df, period="daily", type = "arithmetic"))
-  dat <- data.frame(date=index(daily_return), daily_return$daily.returns)
-  dat$daily.returns <- dat$daily.returns * 100
-  dat <- dat %>%
-    rename(Daily_return = daily.returns, Date = date)
-  dat$Symbol = ticker
-  dat <- select(dat, Symbol, Date, Daily_return)
-  return(dat)
-}
-df_output = data.frame()
-for(i in top_10_tickers) {
-  tmp <- get_price_df(i)
-  df_output <- rbind(df_output, tmp)
-}
-write.csv(df_output,'data/clean/stock/top_10_stocks_daily_return.csv',row.names=FALSE)
+
+## Reddit posts dataset
+This dataset contains the posts in r/wallstreetbets subreddit, which we used to extract out the information about the stocks discussed and the post attitude. 
+```{r, echo=FALSE, results='asis'}
+DataDescription<- readr::read_csv("data/schema.csv")
+knitr::kable(DataDescription[1:7, ], caption = "Major columns used",
+             row.names = F,font_size = 10)
 ```
+
+
+## Google search score dataset
+this data mainly contains the website search ans news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. This data can be found from [*Google Trends*](https://trends.google.com/trends/?geo=US). Google Trends is a website by Google that analyzes the popularity of top search queries in Google Search across various regions and languages. 
+
+
