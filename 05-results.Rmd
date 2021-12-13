@@ -430,9 +430,7 @@ hc_add_annotation(
 )
 ```
 
-<<<<<<< HEAD
 ### Reddit metrics vs. stock price and volume
-=======
 From the above 3 graphs, we have the following observations:
 
 1. There are very few joiners to the r/WallStreetBets sub-reddit group before and after the 1st wave of WSB. However, there are huge amount of new users joining to the sub-reddit group daily at the end of the January, peaked at 27th Jan, 2021 with 4443 new joiners.
@@ -455,7 +453,6 @@ From the above 3 graphs, we have the following observations:
 
 Now, we want to examine how the posts counts in r/WallStreetBets sub-reddit group affect the stock price as well as the stock trading volume. Since `GME` and `AMC` are the 2 most representative stocks in the 2 WSB waves,we choose these 2 stocks as the study object.
 
->>>>>>> yx2697
 ```{r}
 
 AMC_2021 <- getSymbols('AMC', src="yahoo", from = "2021-01-01", auto.assign = FALSE)
