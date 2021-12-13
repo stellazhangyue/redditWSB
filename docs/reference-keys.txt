@@ -20,6 +20,7 @@ stock-data-plot
 stock-risk-assessment
 most-popular-stocks
 time-series-of-the-top-10-stocks
+correlations-between-top-10-mentioned-stocks
 rwallstreetbets-reddit-post-data
 rwallstreetbets-metrics
 reddit-metrics-vs.-stock-price
