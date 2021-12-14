@@ -220,11 +220,46 @@ ggplot(df_GME, aes(x=Date, y=moving_std)) +
   theme(plot.title = element_text(face = "bold"),
         plot.subtitle = element_text(face = "bold", color = "grey35"),
         plot.caption = element_text(color = "grey68"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position="bottom",
         legend.title = element_text(face="bold"))
 ```
 
+```{r}
+df_GME %>%
+  rename(date = Date) %>%
+  select(date, moving_std) %>%
+  # calculate all date related columns
+  mutate(year = as.numeric(as.POSIXlt(date)$year + 1900),
+         month = as.numeric(as.POSIXlt(date)$mon + 1),
+         monthf = factor(month,
+                         levels = as.character(1:12), 
+                         labels = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"),
+                         order=TRUE),
+         weekday = as.POSIXlt(date)$wday,
+         weekdayf = factor(weekday,
+                           levels = rev(1:7),
+                           labels=rev(c("Mon","Tue","Wed","Thu","Fri","Sat","Sun")),
+                           ordered=TRUE),
+         yearmonth = as.yearmon(date),
+         yearmonthf = factor(yearmonth),
+         week = as.numeric(format(date,"%W"))
+         ) %>%
+  ddply(.(yearmonthf), transform, monthweek = 1 + week - min(week)) %>%
+  # Plot the heatmap
+  ggplot(aes(x = monthweek, y = weekdayf, fill = moving_std)) +
+    geom_tile(color = "White") + 
+    facet_grid(year~monthf) +
+    scale_fill_gradient("std", low = "white", high = "blue") +
+    ggtitle("GME standard deviation heatmap") +
+    xlab("week of Month") +
+    ylab("Day of Week") +
+    theme_bw() +
+    theme(plot.title = element_text(face = "bold"),
+          plot.subtitle = element_text(face = "bold", color = "grey35"),
+          plot.caption = element_text(color = "grey68"),
+          legend.position="bottom",
+          legend.title = element_text(face="bold"))
+```
 ```{r}
 getSymbols("AMC",src='yahoo')
 df_AMC <- data.frame(Date=index(AMC),coredata(AMC))
@@ -244,14 +279,52 @@ ggplot(df_AMC, aes(x=Date, y=moving_std)) +
         legend.position="bottom",
         legend.title = element_text(face="bold"))
 ```
+```{r}
+df_AMC %>%
+  rename(date = Date) %>%
+  select(date, moving_std) %>%
+  # calculate all date related columns
+  mutate(year = as.numeric(as.POSIXlt(date)$year + 1900),
+         month = as.numeric(as.POSIXlt(date)$mon + 1),
+         monthf = factor(month,
+                         levels = as.character(1:12), 
+                         labels = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"),
+                         order=TRUE),
+         weekday = as.POSIXlt(date)$wday,
+         weekdayf = factor(weekday,
+                           levels = rev(1:7),
+                           labels=rev(c("Mon","Tue","Wed","Thu","Fri","Sat","Sun")),
+                           ordered=TRUE),
+         yearmonth = as.yearmon(date),
+         yearmonthf = factor(yearmonth),
+         week = as.numeric(format(date,"%W"))
+         ) %>%
+  ddply(.(yearmonthf), transform, monthweek = 1 + week - min(week)) %>%
+  # Plot the heatmap
+  ggplot(aes(x = monthweek, y = weekdayf, fill = moving_std)) +
+    geom_tile(color = "White") + 
+    facet_grid(year~monthf) +
+    scale_fill_gradient("std", low = "white", high = "red") +
+    ggtitle("AMC standard deviation heatmap") +
+    xlab("week of Month") +
+    ylab("Day of Week") +
+    theme_bw() +
+    theme(plot.title = element_text(face = "bold"),
+          plot.subtitle = element_text(face = "bold", color = "grey35"),
+          plot.caption = element_text(color = "grey68"),
+          legend.position="bottom",
+          legend.title = element_text(face="bold"))
+```
 
-From the 2 graphs above, we have following observations:
+Looking at the line chart and calendar heat map for `GME` and `AMC`, both of them deliver similar observations as follow:
 
 1. Around Jan/Feb and May/June period, there are huge changes for both `GME` and `AMC` in terms of risk.
 
 2. `GME` has relatively higher risk than  `AMC` as `GME`'s moving standard deviation reached more than 100 while the highest moving standard deviation of `AMC` is about 13.
 
 3. The risk of `GME` is highest in the first wave during Jan/Feb period while the risk of `AMC` is highest in the second wave during May/Jun period. This can be supported by the general knowledge that `GME` is the leading stock in the 1st wave while `AMC` is the leading stock in the 2nd wave.
+
+
 
 ### Most Popular Stocks
 Besides studying about the 2 most representative stocks in WSBs, which are `GME` and `AMC` respectively, we could also study some other WSB stocks, which are not as popular as `GME` and `AMC` but they are still very representative and have received a lot of public attention.
@@ -750,7 +823,7 @@ From the graphs above, we have the following observations:
 
 3. There are much more posts created during the 1st WSB wave as comparing to that created during the 2nd WSB wave since more word count means more posts created.
 
-Also, we would like to explore whether there is any relationship between the sentiment of the posts and the stock price, so we use `GEM` as a case to study the relationship. Also, we introduce a new parameter, called positive percentage, which is calculated by `total positive word counts / total word counts` the on daily basis. 
+In the next graph, we would like to explore whether there is any relationship between the sentiment of the posts and the stock price, so we use `GEM` as a case to study the relationship. Also, we introduce a new parameter, called positive percentage, which is calculated by `total positive word counts / total word counts` the on daily basis. 
 
 ```{r}
 gme_nrc_total <- rbind(gme_nrc_first_wave, gme_nrc_second_wave)
@@ -773,23 +846,35 @@ gme_stock_df <- data.frame(Date=index(gme_stock),coredata(gme_stock)) %>%
   select(Date, price)
 total <- merge(gme_stock_df, gme_nrc_sum, by.y="textDate", by.x="Date") %>%
   pivot_longer(!Date, names_to = "attr", values_to = "val")
-ggplot(total, aes(x=Date, y=val, color=attr)) +
-  geom_line() +
-  scale_color_manual(values = c(light_blue, light_red)) +
-  ggtitle("GME positive percentage and stock price") +
-  ylab("value") +
-  labs(color = "") +
-  theme_bw() +
-  theme(plot.title = element_text(face = "bold"),
-        plot.subtitle = element_text(face = "bold", color = "grey35"),
-        plot.caption = element_text(color = "grey68"),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position="bottom",
-        legend.title = element_text(face="bold"))
+# ggplot(total, aes(x=Date, y=val, color=attr)) +
+#   geom_line() +
+#   scale_color_manual(values = c(light_blue, light_red)) +
+#   ggtitle("GME positive percentage and stock price") +
+#   ylab("value") +
+#   labs(color = "") +
+#   theme_bw() +
+#   theme(plot.title = element_text(face = "bold"),
+#         plot.subtitle = element_text(face = "bold", color = "grey35"),
+#         plot.caption = element_text(color = "grey68"),
+#         axis.text.x = element_text(angle = 45, hjust = 1),
+#         legend.position="bottom",
+#         legend.title = element_text(face="bold"))
+
+hchart(total, "line", hcaes(x = Date, y = val, group = attr)) %>%
+  hc_chart(zoomType = "x") %>%
+  hc_colors(c(light_blue, light_red)) %>%
+  hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
+  hc_xAxis(title = list(text = "Date"),
+           labels = list(format = '{value:%b %d}')) %>%
+  hc_yAxis(title = list(text = "count")) %>%
+  hc_title(text = "<b>GME positive sentiment percentage and stock price movement</b>") %>%
+  hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
+  hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
+  hc_exporting(enabled = TRUE)
 ```
 
-Above plot analyzes if the sentiments on r/WallStreetBets had any impact on GME's stock price.
-
+The line for positive sentiment percentage is disconnected in Mar and Apr, because we didn't collect Reddit post data for those two months. So we are going to focus on the time periods where we have the Reddit post data. Daily positive sentiment percentage and stock price movement graph suggests that there exists some negative correlation between each other. 
+In other words, there may be many other influential factors that affect stock price direction, example: dividends, earning per share, cash flow, etc.
 
 ### General Public's interests on Google
 
