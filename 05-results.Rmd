@@ -27,7 +27,7 @@ purple <- "#D5A7F1"
 
 ## Stock Data and Information
 ### Stock Candlestick Plot
-The most representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in WallStreetBet sub-reddit analysed in Chapter 3 - cleaning. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
+The most representative WSB stocks are `GME` and `AMC`. Also, these 2 stocks are the top 2 most widely discussed stocks in r/wallstreetbets subreddit analysed in [Data transformation]. Therefore, we choose these 2 stocks and show the stock price and volume change in the past one year.
 
 The graph is interactive, where we can choose select the period of time that we want to focus on by dragging on the bottom graph. This allows us to zoom in and see the graph clearly. Also, we can choose the specific period, i.e. the past 1 year or past 6 months data by pressing the corresponding buttons above and we can easily go back to the main graph by pressing the "RESET" botton.
 
@@ -195,7 +195,7 @@ fig3 <- fig3 %>% layout(title = paste("AMC: 2020-12-01 -",Sys.Date()),
 fig3
 ```
 
-From the above 2 graphs, we can clearly see that there are 2 waves of the WSB stocks, which are indicated by the sudden spike of the stock price as well as the sudden increase of the volume. These 2 waves are around January - Feburary and May - June period respectively. These 2 graphs actually double confirm with our previous claims. 
+From the above 2 graphs, we can clearly see that there are 2 waves of the WSB stocks, which are indicated by the sudden spike of the stock price as well as the sudden increase of the volume. These 2 waves are around January - February and May - June period respectively. These 2 graphs actually double confirm with our previous claims. 
 
 Also, the gray and red line in the price graph is the Bollinger Bands, which is the price level at 1 standard deviation level above and below the sample moving average of the price, which is able to capture the volatility of the stock. Generally, Bollinger bands is used to check whether prices are relatively high or low as comparing to the historical price. Here, we can see that for the beginning of the 2 waves, the price of both `GME` and `AMC` break the Bollinger upper bands, which suggests that the price of these 2 stocks are extremely high as comparing to the historical data. However, the Bollinger bands also adjusted themselves quickly to accommodate the sudden price change, so we can see that the price of these 2 stocks fall back within the Bollinger bands after a short period of time.
 
@@ -490,15 +490,15 @@ From the above 3 graphs, we can have the following observations:
 
 4. During the May, Jun and July 2021 period, which is the 2nd wave of WSB, we can see that there are still 2 stock pairs with strong correlation, which are (`NAKD`,`BB`) and (`NAKD`,`AMC`) respectively. Therefore, during the 2nd WSB wave, the correlationship among all the stocks are stronger than in 2021 and 2nd WSB wave influence all the stock prices.
 
-5. By comapring the 2nd and 3rd graph, we can see that the correlation among the stock price are generally higher in 1st WSB wave as comparing to that in 2nd WS wave. Also, in the 2nd WSB wave, `NAKD` now has positive correlation coefficient with most of the other stocks in contrast with it being outlier in the 1st wave.
+5. By comparing the 2nd and 3rd graph, we can see that the correlation among the stock price are generally higher in 1st WSB wave as comparing to that in 2nd WS wave. Also, in the 2nd WSB wave, `NAKD` now has positive correlation coefficient with most of the other stocks in contrast with it being outlier in the 1st wave.
 
-## r/WallStreetBets Reddit Post Data
+## r/wallstreetbets Reddit Post Data
 
-In this section, we mainly explore the posts in r/WallStreetBets sub-reddit. We would like to explore how this event affects the r/WallStreetBets sub-reddit group and how the posts affect the stock price. Also, we also want to conduct the sentiment analysis on the posts to get the general information about the massive post.
+In this section, we mainly explore the posts in r/wallstreetbets subreddit. We would like to explore how this event affects the r/wallstreetbets subreddit group and how the posts affect the stock price. Also, we also want to conduct the sentiment analysis on the posts to get the general information about the massive post.
 
-### r/WallStreetBets metrics
+### r/wallstreetbets metrics
 
-We would like to access how this event affects the r/WallStreetBets sub-reddit group from the following 3 aspects, which are: subscriber growth and daily active users and posts count. Subscriber growth can show how many new users are attracted to the sub-reddit group by this event. The definition of daily active users is that the user has posted at least 1 post on that day and it can show how many people are actively contributing to the community and event and posts counts can directly reflect the popularity of the sub-reddit group.
+We would like to access how this event affects the r/wallstreetbets subreddit group from the following 3 aspects, which are: subscriber growth and daily active users and posts count. Subscriber growth can show how many new users are attracted to the sub-reddit group by this event. The definition of daily active users is that the user has posted at least 1 post on that day and it can show how many people are actively contributing to the community and event and posts counts can directly reflect the popularity of the sub-reddit group.
 
 Also, since we want to compare the popularity of the sub-reddit group before and after the events in order to show how big the effect of the event on the sub-reddit group, we choose to display the data in the past 2 year.
 
@@ -594,9 +594,9 @@ hc_add_annotation(
 
 From the above 3 graphs, we have the following observations:
 
-1. There are very few joiners to the r/WallStreetBets sub-reddit group before and after the 1st wave of WSB. However, there are huge amount of new users joining to the sub-reddit group daily at the end of the January, peaked at 27th Jan, 2021 with 4443 new joiners.
+1. There are very few joiners to the r/wallstreetbets subreddit group before and after the 1st wave of WSB. However, there are huge amount of new users joining to the sub-reddit group daily at the end of the January, peaked at 27th Jan, 2021 with 4443 new joiners.
 
-2. Even there are 2nd WSB wave, not much new joiners are attracted to the sub-reddit group, which means that it is the same group of people who participated in the 1st WSB wave initiate and participate the 2nd WSB wave again. 
+2. Even there are 2nd WSB wave, not much new joiners are attracted to the subreddit group, which means that it is the same group of people who participated in the 1st WSB wave initiate and participate the 2nd WSB wave again. 
 
 3. The daily active users spiked at 28th Jan, 2021 with 117426 distinct users have posted at least 1 post. We can see that during the 1st and 2nd WSB wave, the daily active users increased a lot as comparing to the before and after the wave.
 
@@ -614,7 +614,7 @@ From the above 3 graphs, we have the following observations:
 
 ### What are the most popular keywords?
 
-Now, we would like to take a closer look at the posts in r/WallStreetBets sub-reddit group and we want to get the board picture about the vast majority of the posts.
+Now, we would like to take a closer look at the posts in r/wallstreetbets subreddit group and we want to get the board picture about the vast majority of the posts.
 
 ```{r}
 reddit_wc <- readr::read_csv("data/clean/reddit/reddit_wc_total.csv")
@@ -627,7 +627,7 @@ The above word cloud shows the most mentioned words across all the posts created
 ## What's the impact of r/wallstreetbet?
 ### Reddit metrics vs. stock price and volume
 
-Now, we want to examine how the posts counts in r/WallStreetBets sub-reddit group affect the stock price as well as the stock trading volume. Since `GME` and `AMC` are the 2 most representative stocks in the 2 WSB waves,we choose these 2 stocks as the study object.
+Now, we want to examine how the posts counts in r/wallstreetbets subreddit group affect the stock price as well as the stock trading volume. Since `GME` and `AMC` are the 2 most representative stocks in the 2 WSB waves,we choose these 2 stocks as the study object.
 
 ```{r}
 
@@ -651,7 +651,7 @@ amc_scatter <- ggplot(amc_post_vs_diff, aes(x = amc_cnt,
   geom_text(
     aes(label = ifelse(amc_cnt >= 3000 | price_diff>= 10 | price_diff <=-10, as.character(Date), "")),
     hjust=0.5, vjust=0, size=2) +
-  labs(x = "# of posts in r/WallStreetBets", 
+  labs(x = "# of posts in r/wallstreetbets", 
        y = "daily price change", 
        title = "AMC")+
   theme_bw() +
@@ -684,7 +684,7 @@ gme_scatter <- ggplot(gme_post_vs_diff, aes(x = gme_cnt,
   geom_text(
     aes(label = ifelse(gme_cnt >= 10000 | price_diff >= 50 | price_diff <=-50, as.character(Date), "")),
     hjust=0.5, vjust=0, size=2) +
-  labs(x = "# of posts in r/WallStreetBets", 
+  labs(x = "# of posts in r/wallstreetbets", 
        y = "daily price change", 
        title = "GME")+
   theme_bw() +
@@ -717,7 +717,7 @@ amc_scatter <- ggplot(amc_post_vs_vol, aes(x = amc_cnt,
   geom_text(
     aes(label = ifelse(amc_cnt >= 3000 | volume >= 400000000, format(Date, "%m-%d"), "")),
     hjust=0.5, vjust=0, size=2) +
-  labs(x = "# of posts in r/WallStreetBets", 
+  labs(x = "# of posts in r/wallstreetbets", 
        y = "volume", 
        title = "AMC")+
   theme_bw() +
@@ -744,7 +744,7 @@ gme_scatter <- ggplot(gme_post_vs_vol, aes(x = gme_cnt,
   geom_text(
     aes(label = ifelse(gme_cnt >= 10000 | volume >= 100000000, format(Date, "%m-%d"), "")),
     hjust=0.5, vjust=0, size=2) +
-  labs(x = "# of posts in r/WallStreetBets", 
+  labs(x = "# of posts in r/wallstreetbets", 
        y = "volume", 
        title = "GME")+
   theme_bw() +
@@ -918,7 +918,7 @@ The line for positive sentiment percentage (colored by blue) is disconnected in 
 
 ### General Public's interests on Google
 
-In this section, we mainly explore the posts in r/WallStreetBets Reddit. We believe that the whole event , i.e. r/wallstreetbets subreddit, short squeeze and the associated stocks are relatively new to the public, therefore, they are very likely to search some of the related keywords in Google to understand the whole event. Therefore, in this section, we would like to use the Google search related data to explore the general public attention towards this event. 
+In this section, we mainly explore the posts in r/wallstreetbets subreddit. We believe that the whole event , i.e. r/wallstreetbets subreddit, short squeeze and the associated stocks are relatively new to the public, therefore, they are very likely to search some of the related keywords in Google to understand the whole event. Therefore, in this section, we would like to use the Google search related data to explore the general public attention towards this event. 
 
 #### Interest over time
 

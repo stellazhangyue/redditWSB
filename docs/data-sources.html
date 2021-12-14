@@ -158,9 +158,9 @@
 <li class="chapter" data-level="5.1.4" data-path="results.html"><a href="results.html#time-series-of-the-top-10-stocks"><i class="fa fa-check"></i><b>5.1.4</b> Time Series of the Top 10 Stocks</a></li>
 <li class="chapter" data-level="5.1.5" data-path="results.html"><a href="results.html#correlations-between-top-10-mentioned-stocks"><i class="fa fa-check"></i><b>5.1.5</b> Correlations between top 10 mentioned stocks</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#rwallstreetbets-reddit-post-data"><i class="fa fa-check"></i><b>5.2</b> r/WallStreetBets Reddit Post Data</a>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#rwallstreetbets-reddit-post-data"><i class="fa fa-check"></i><b>5.2</b> r/wallstreetbets Reddit Post Data</a>
 <ul>
-<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#rwallstreetbets-metrics"><i class="fa fa-check"></i><b>5.2.1</b> r/WallStreetBets metrics</a></li>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#rwallstreetbets-metrics"><i class="fa fa-check"></i><b>5.2.1</b> r/wallstreetbets metrics</a></li>
 <li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#what-are-the-most-popular-keywords"><i class="fa fa-check"></i><b>5.2.2</b> What are the most popular keywords?</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#whats-the-impact-of-rwallstreetbet"><i class="fa fa-check"></i><b>5.3</b> What’s the impact of r/wallstreetbet?</a>
@@ -204,7 +204,7 @@
 <h2><span class="header-section-number">2.1</span> Stock dataset</h2>
 <p>This dataset mainly contains the prices and volume of the stocks that are discussed in r/wallstreetbets subreddit, which help to indicate the stock performance. We used the R package <code>quantmod</code> to download the data, which is sourced from <a href="https://finance.yahoo.com/"><em>Yahoo Finance</em></a>.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-15">Table 2.1: </span>Columns in dataset</caption>
+<caption><span id="tab:unnamed-chunk-3">Table 2.1: </span>Columns in dataset</caption>
 <colgroup>
 <col width="11%" />
 <col width="7%" />
@@ -260,7 +260,7 @@
 <h2><span class="header-section-number">2.2</span> Reddit posts dataset</h2>
 <p>This dataset contains the posts in r/wallstreetbets subreddit, which we used to extract out the information about the stocks discussed and the post attitude. We created a python <a href="https://github.com/stellazhangyue/redditWSB/blob/main/scripts/wallstreetbet_data_collection.ipynb"><em>script</em></a> to pull the data we need from <a href="https://github.com/pushshift/api"><em>Pushshift Reddit API</em></a> and write to the csv files. Due to Github’s limit on file size, we slice the data by day to create one file for each day. The Pushshift Reddit API has the advantage over the official Reddit API that it gives full functionality for searching Reddit data, which is very helpful for us to only download the data we need.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-16">Table 2.2: </span>Columns in dataset</caption>
+<caption><span id="tab:unnamed-chunk-4">Table 2.2: </span>Columns in dataset</caption>
 <thead>
 <tr class="header">
 <th align="left">Column Name</th>
@@ -317,7 +317,7 @@
 <p><strong>Dataset: combined_news.csv and combined_web.csv</strong></p>
 <p>This dataset mainly contains the website search and news search information in Google. Since r/wallstreetbets subreddit, the heavily shorted stocks as well as the disagreement between retailer traders and professional traders were relatively new to the general public, we assume that they would actively search in Google to follow this event. Therefore, using Google search data can also serve as another indicator to show the public attention. Both csv files are downloaded from <a href="https://trends.google.com/trends/?geo=US"><em>Google Trends</em></a>. Google assigns a search score to each keyword for each week. The scores represent search interest relative to the highest point for the given region and time. We are focusing on United State for the time period starting from 2021-01-01.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-17">Table 2.3: </span>Columns in dataset</caption>
+<caption><span id="tab:unnamed-chunk-5">Table 2.3: </span>Columns in dataset</caption>
 <thead>
 <tr class="header">
 <th align="left">Column Name</th>

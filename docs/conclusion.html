@@ -158,9 +158,9 @@
 <li class="chapter" data-level="5.1.4" data-path="results.html"><a href="results.html#time-series-of-the-top-10-stocks"><i class="fa fa-check"></i><b>5.1.4</b> Time Series of the Top 10 Stocks</a></li>
 <li class="chapter" data-level="5.1.5" data-path="results.html"><a href="results.html#correlations-between-top-10-mentioned-stocks"><i class="fa fa-check"></i><b>5.1.5</b> Correlations between top 10 mentioned stocks</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#rwallstreetbets-reddit-post-data"><i class="fa fa-check"></i><b>5.2</b> r/WallStreetBets Reddit Post Data</a>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#rwallstreetbets-reddit-post-data"><i class="fa fa-check"></i><b>5.2</b> r/wallstreetbets Reddit Post Data</a>
 <ul>
-<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#rwallstreetbets-metrics"><i class="fa fa-check"></i><b>5.2.1</b> r/WallStreetBets metrics</a></li>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#rwallstreetbets-metrics"><i class="fa fa-check"></i><b>5.2.1</b> r/wallstreetbets metrics</a></li>
 <li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#what-are-the-most-popular-keywords"><i class="fa fa-check"></i><b>5.2.2</b> What are the most popular keywords?</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#whats-the-impact-of-rwallstreetbet"><i class="fa fa-check"></i><b>5.3</b> What’s the impact of r/wallstreetbet?</a>
@@ -201,30 +201,32 @@
 <p>After conducting the study on stock data, Reddit post data and Google search related data, we have a better understanding of the WallStreetBets. Besides answering the 3 questions that we asked in <a href="index.html#introduction">Introduction</a>, we also have some other interesting findings.</p>
 <p>Here are the answers of the questions that we asked in <a href="index.html#introduction">Introduction</a>:</p>
 <ol style="list-style-type: decimal">
-<li><p>How big is the impact of r/wallstreetbets subreddit group?
-The impact of the r/wallstreetbets subreddit group is most prominent during January and Feburary, 2021 and there are relatively smaller but still noticable impacts during the 2nd wave during May to July, 2021. However, besides these 2 periods, there is not much impact of r/wallstreetbets subreddit group on the stock price and trading volume.</p></li>
-<li><p>For each targeted stock, what’s the relationship between Reddit posts and stock price/volume etc.</p></li>
+<li>How big is the impact of r/wallstreetbets subreddit group?</li>
 </ol>
-<p>We used the Reddit posts data to find the top 10 stocks that are mostly mentioned by the posts and those stocks are the target stocks. Generally there is no relationship between the posts count and daily price change for both <code>AMC</code> and <code>GME</code>. Since many of the posts are about <code>AMC</code> and <code>GME</code>, for the rest of the posts mentioning about other stocks, their influence is even less, therefore, we can conclude that there is no relationship between the posts count and daily price change for both <code>AMC</code> and <code>GME</code>.</p>
-<p>As for the relationship between Reddit posts and volume, there are some weak correlation between posts counts and volume, which is the bigger the post count is, the higher the volume is.</p>
+<p>The impact of the r/wallstreetbets subreddit group is most prominent during January and February, 2021 and there is relatively smaller but still noticeable impact during the 2nd wave during May to July, 2021. However, besides these 2 periods, there is not much impact of r/wallstreetbets subreddit group on the stock price and trading volume as well as the general public.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>For each targeted stock, what’s the relationship between Reddit posts and stock price/volume etc?</li>
+</ol>
+<p>We find the top 10 stocks that are most mentioned in the Reddit posts, which are also the target stocks. Generally there is no obvious relationship between the post count and daily price change for both <code>AMC</code> and <code>GME</code>. Because the majority of the posts are about <code>AMC</code> and <code>GME</code>, we can infer the influence is even less for the rest of the posts discussing about other stocks, therefore, we can conclude that there is no relationship between the posts count and daily price change for all those stocks.</p>
+<p>On the other side, as for the relationship between Reddit posts and volume, we find some weak correlation between posts counts and volume, the bigger the post count is, the higher the volume is. With the above two observations, we can infer that the sentiments in the posts can be positive or negative, so people may trade in either directions. But the discussions happened in r/wallstreetbets definitely attracted people’s attentions to those stocks, causing much higher trading volume in the time period.</p>
 <ol start="3" style="list-style-type: decimal">
-<li>Why does r/wallstreetbets choose these target stocks? What’re their similarities? How do their choices change as time evolves? Gamestop, AMC, Blueberry, Nokia, PLTR.</li>
+<li>Why does r/wallstreetbets choose these target stocks? What’re their similarities? How do their choices change as time evolves?</li>
 </ol>
-<p>The redditers in r/wallstreetbets choose these target stocks becuase these stocks are heavily shorted by big financial institutes. There is a change in the target stocks in the 2 waves. The stocks are included in different waves, while<code>PLTR</code> is the stock that is only active in 1st wave, there are other stocks that are active only in the 2nd wave, which are <code>CLOV</code>, <code>SND</code>, <code>RETA</code> respectively. For <code>GME</code>, <code>AMC</code>, <code>BB</code>, <code>NOK</code>, <code>NAKD</code>, they are active in both of the waves.</p>
+<p>The redditers in r/wallstreetbets choose these target stocks because these stocks are heavily shorted by big financial institutes. There is a change in the target stocks between the 2 waves. While <code>PLTR</code> is the stock that is only active in 1st wave, there are other stocks that are active only in the 2nd wave, which are <code>CLOV</code>, <code>SND</code>, <code>RETA</code> respectively. For <code>GME</code>, <code>AMC</code>, <code>BB</code>, <code>NOK</code>, <code>NAKD</code>, they are active in both of the waves. For the stocks that are active in the 1st wave, their market capital were driven to a high level at the end of the wave. As a result, it is hard to drive the stock price higher in the 2nd wave with limited capital and time, therefore, they started to look at other target stocks.</p>
 <p>Besides all the answers to the above question, here are some of interesting findings from all the graph we plot.</p>
 <ul>
 <li><p><code>GME</code> is the focus of the 1st WSB wave while <code>AMC</code> is the 2nd WSB wave.</p></li>
 <li><p>The risk of those WSB target stocks is extremely high during the 2 wave period, with the moving standard deviation be to be 100 times as comparing to the normal level.</p></li>
-<li><p><code>NAKD</code> is outlier in the 1st WSB wave even if it is one of the top 10 most mention word.</p></li>
-<li><p>There are huge amount of new users joining to the sub-reddit group daily at the end of the January. However, after that, there is not much new joiners afterwards, even in the 2nd wave. Also, it is the same group of people who contribute to the 1st WSB wave and 2nd WSB wave.</p></li>
-<li><p>The overall sentiments of posts in the 1st WSB wave is slightly more negative than that in the 2nd WSB wave.</p></li>
-<li><p>The sentiment in the r/wallstreetbets sub-reddit group can be quickly spread across different people and that will amplify the change in stock price since there are a large amount of people buying and selling the same group of stocks at the same time.</p></li>
+<li><p><code>NAKD</code> is an outlier in the 1st WSB wave even if it is one of the top 10 most mention word.</p></li>
+<li><p>There are huge amount of new users joining r/wallstreetbets daily at the end of the January. However, after that, there is not much new joiners afterwards, even in the 2nd wave. We can infer that it is the same group of people who contribute to the 1st WSB wave and 2nd WSB wave.</p></li>
+<li><p>The overall sentiments of posts in the 1st WSB wave is slightly more negative than that is in the 2nd WSB wave.</p></li>
+<li><p>The sentiment in the r/wallstreetbets subreddit group can be quickly spread across different people and that will amplify the change in stock price since there are a large amount of people buying and selling the same group of stocks at the same time.</p></li>
 <li><p>The 1st wave of WSB caught more public attention than the 2nd wave of WSB.</p></li>
 </ul>
-<p>Despite of all these findings, our analysis has some limitation.</p>
+<p>Despite of all these findings, our analysis has some limitations.</p>
 <p>Firstly, for the Reddit post data, since quite a lot of posts are removed or deleted by the time we downloaded from the data source, therefore, our study using the Reddit posts may not reflect the true situation during the 1st and 2nd WSB wave, which means some of the conclusions may be slightly different from what actually happening at that point of time.</p>
 <p>Secondly, for the Google search data, since we cannot get the absolute search count for the Google search but rather, we can only get the relative score provided by Google. Also, for the keyword selection, we could also include more words in the data source to find more interesting facts.</p>
-<p>Therefore, for the future umprovement, we could try to find the data source that have more reddits posts and include more key words in Google search data. That will help to disclose more information.</p>
+<p>Therefore, for future improvements, we could try to find the data source that supplies more comprehensive Reddit posts and include more keywords in Google search data. That will help to disclose more information.</p>
 
 </div>
             </section>
