@@ -408,7 +408,8 @@ From the above graph, we can have the following observation:
 5. The stocks are included in different waves, while`PLTR` is the stock that is only active in 1st wave, there are other stocks that are active only in the 2nd wave, which are `CLOV`, `SND`, `RETA` respectively. For `GME`, `AMC`, `BB`, `NOK`, `NAKD`, they are active in both of the waves. However, for `MAR`, its stock price does not change much through out the 2 waves.
 
 ### Correlations between top 10 mentioned stocks
-We removed `CLOV` from the ticker for 2020, because it went public in 2021.
+We would like to study the correlation between the top 10 most popular stocks and also extend the study period before the WSB wave to see how the WSB event actually affects the correlation. Also, we would like to compare the correlation in the 2 WSB wave respectively to see whether there is any difference. Hence, we need to have 3 separate graphs to study the correlation in different period, which are in 2020, Jan/Feb 2021 and May/Jun/Jul 2021. However, we removed `CLOV` from the study for 2020, because it only went public in 2021 so there is no stock data for `CLOV` in 2020.
+
 ```{r}
 top_10_tickers <- c('GME','AMC','BB','NOK','SND','NAKD','PLTR','CLOV','RETA','MAR')
 
@@ -455,7 +456,41 @@ ggcorrplot(corr_wsb,
            legend.title = "Correlation")
 
 ```
+```{r}
+ticker_vol_wsb <- NULL
+for (ticker in top_10_tickers)
+  ticker_vol_wsb <- cbind(ticker_vol_wsb, getSymbols(ticker, src = "yahoo", from = "2021-05-01", to = "2021-08-01", auto.assign=FALSE)[,5])
 
+drop_na <- apply(ticker_vol_wsb,1,function(x) all(!is.na(x)))
+ticker_vol_wsb <- ticker_vol_wsb[drop_na]
+colnames(ticker_vol_wsb) <- top_10_tickers
+
+corr_wsb <- cor(ticker_vol_wsb)
+
+ggcorrplot(corr_wsb,
+           type = 'upper',
+           lab = TRUE,
+           lab_size = 3,
+           method = 'circle',
+           colors = c("red", "white", "green"),
+           title="2021 May to Jul",
+           legend.title = "Correlation")
+
+```
+
+In this report, if the correlation coefficient < 0.4, we consider there is no correlation; if the correlation coefficient is between 0.4 and 0.7, then it is weak correlation; and if the correlation coefficient > 0.7, then it is strong correlation.
+
+From the above 3 graphs, we can have the following observations:
+
+1. There are 2 stock pairs with weak correlation in 2020, which are (`MAR`,`AMC`) and (`RETA`,`AMC`) respectively, therefore, we can conclude that there are no correlation among all those stocks generally before the WSB waves.
+
+2. During the Jan and Feb 2021 period, which is the 1st wave of WSB, we can see that there are many more stock pairs with weak correlation and even there are 2 stock pairs with strong correlation, which are (`PLTR`,`BB`) and (`NOK`,`AMC`) respectively. Therefore, we can clearly see that it is the 1st WSB wave to influence the stock price of most of the stocks in our list.
+
+3. Also during the 1st WSB wave, the correlation coefficient among the stocks are mainly positively correlated as there are more green circle in the 2nd graph above. This is because that redditers are generally buy different WSB stocks at the same time and also sell at the same time. There is one exception NAKD, which has weak negative correlation some other stocks. 
+
+4. During the May, Jun and July 2021 period, which is the 2nd wave of WSB, we can see that there are still 2 stock pairs with strong correlation, which are (`NAKD`,`BB`) and (`NAKD`,`AMC`) respectively. Therefore, during the 2nd WSB wave, the correlationship among all the stocks are stronger than in 2021 and 2nd WSB wave influence all the stock prices.
+
+5. By comapring the 2nd and 3rd graph, we can see that the correlation among the stock price are generally higher in 1st WSB wave as comparing to that in 2nd WS wave. Also, in the 2nd WSB wave, `NAKD` now has positive correlation coefficient with most of the other stocks in contrast with it being outlier in the 1st wave.
 
 ## r/WallStreetBets Reddit Post Data
 
@@ -825,6 +860,8 @@ From the graphs above, we have the following observations:
 
 In the next graph, we would like to explore whether there is any relationship between the sentiment of the posts and the stock price, so we use `GEM` as a case to study the relationship. Also, we introduce a new parameter, called positive percentage, which is calculated by `total positive word counts / total word counts` the on daily basis. 
 
+From the r/wallstreetbets daily posts count graph, we know that the posts counts are very minimal outside the 2 waves period, therefore, there are not enough data for us to make any reliable conclusion based on such a small number of posts. As a result, we didn't collect Reddit post data for those two months, which leads to the discontinuity of the data.
+
 ```{r}
 gme_nrc_total <- rbind(gme_nrc_first_wave, gme_nrc_second_wave)
 gme_nrc_sum <- gme_nrc_total %>%
@@ -866,15 +903,18 @@ hchart(total, "line", hcaes(x = Date, y = val, group = attr)) %>%
   hc_legend(align = "center", verticalAlign = "bottom",layout = "horizontal") %>%
   hc_xAxis(title = list(text = "Date"),
            labels = list(format = '{value:%b %d}')) %>%
-  hc_yAxis(title = list(text = "count")) %>%
+  hc_yAxis(title = list(text = "Positive Sentiment Percentage")) %>%
   hc_title(text = "<b>GME positive sentiment percentage and stock price movement</b>") %>%
   hc_subtitle(text = "Click and drag in the plot area to zoom in on a time span") %>%
   hc_plotOptions(area = list(lineWidth = 0.5)) %>% 
   hc_exporting(enabled = TRUE)
 ```
 
-The line for positive sentiment percentage is disconnected in Mar and Apr, because we didn't collect Reddit post data for those two months. So we are going to focus on the time periods where we have the Reddit post data. Daily positive sentiment percentage and stock price movement graph suggests that there exists some negative correlation between each other. 
-In other words, there may be many other influential factors that affect stock price direction, example: dividends, earning per share, cash flow, etc.
+The line for positive sentiment percentage (colored by blue) is disconnected in Mar and Apr due to the discontinuity mentioned above. Here are some of the observations based on the graph above:
+
+1. In the 1st WSB wave, the positive sentiment percentage are relatively constant, ranging from 35% to 70%. While for the 2nd WSB wave, the sentiment percentage changes a lot, ranging from 0% to 100%. This may due to the different posts count and active user during these 2 period. Since the posts count and the active users are much higher during the 1st WSB wave, more people are there to express their opinions and the sentiment should be relatively evenly distributed between positive and negative sentiment, therefore, for the positive sentiment percentage, it is close to 50%, which means half of the posts are with positive sentiment while the other half are negative sentiment. On the contrary, in the 2nd wave, less active users are there and also most of the active users are original users, i.e. no new joiners, therefore, the sentiment of the posts created by the active users in 2nd wave should be quite similar since they have the similar interests and similar thoughts. Therefore, if 1 person is positive, it is easy to pass to others, wise versa, so we can see that the positive sentiment percentage swing a lot in the 2nd WSB wave.
+
+2. There is some negative correlation between daily positive sentiment percentage and stock price movement. During the end Jan, 2021 to early Feb, 2021 period, which is the peak of the 1st WSB wave, we can see the negative correlation but with some delay, i.e. the price dip on 28th Jan, 2021 and the positive sentiment percentage topped on 29th Jan, 2021. This is reasonable since when the price drop on the previous day, it means that there are more shorts than longs, so more people will advocate for buying `GME` to bring the price back on the next day. Therefore, more posts are identified with positive sentiment. However, there may be many other influential factors that affect stock price direction, example: dividends, earning per share, cash flow, etc, therefore, the correlation between these 2 variables are just to some extend.
 
 ### General Public's interests on Google
 

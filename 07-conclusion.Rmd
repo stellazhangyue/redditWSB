@@ -1,2 +1,43 @@
 # Conclusion
 
+After conducting the study on stock data, Reddit post data and Google search related data, we have a better understanding of the WallStreetBets. Besides answering the 3 questions that we asked in [Introduction], we also have some other interesting findings. 
+
+Here are the answers of the questions that we asked in [Introduction]:
+
+1. How big is the impact of r/wallstreetbets subreddit group?
+
+The impact of the r/wallstreetbets subreddit group is most prominent during January and February, 2021 and there is relatively smaller but still noticeable impact during the 2nd wave during May to July, 2021. However, besides these 2 periods, there is not much impact of r/wallstreetbets subreddit group on the stock price and trading volume as well as the general public.
+
+2. For each targeted stock, what’s the relationship between Reddit posts and stock price/volume etc?
+
+We use the Reddit posts data to find the top 10 stocks that are most mentioned in the posts and those stocks are the target stocks. Generally there is no relationship between the posts count and daily price change for both `AMC` and `GME`. Since many of the posts are about `AMC` and `GME`, for the rest of the posts mentioning about other stocks, their influence is even less, therefore, we can conclude that there is no relationship between the posts count and daily price change for both `AMC` and `GME`.
+
+As for the relationship between Reddit posts and volume, there are some weak correlation between posts counts and volume, which is the bigger the post count is, the higher the volume is. 
+
+3. Why does r/wallstreetbets choose these target stocks? What’re their similarities? How do their choices change as time evolves? Gamestop, AMC, Blueberry, Nokia, PLTR.
+
+The redditers in r/wallstreetbets choose these target stocks becuase these stocks are heavily shorted by big financial institutes. There is a change in the target stocks in the 2 waves. The stocks are included in different waves, while`PLTR` is the stock that is only active in 1st wave, there are other stocks that are active only in the 2nd wave, which are `CLOV`, `SND`, `RETA` respectively. For `GME`, `AMC`, `BB`, `NOK`, `NAKD`, they are active in both of the waves.
+
+Besides all the answers to the above question, here are some of interesting findings from all the graph we plot.
+
+- `GME` is the focus of the 1st WSB wave while `AMC` is the 2nd WSB wave.
+
+- The risk of those WSB target stocks is extremely high during the 2 wave period, with the moving standard deviation be to be 100 times as comparing to the normal level.
+
+- `NAKD` is outlier in the 1st WSB wave even if it is one of the top 10 most mention word.
+
+- There are huge amount of new users joining to the sub-reddit group daily at the end of the January. However, after that, there is not much new joiners afterwards, even in the 2nd wave. Also, it is the same group of people who contribute to the 1st WSB wave and 2nd WSB wave.
+
+- The overall sentiments of posts in the 1st WSB wave is slightly more negative than that in the 2nd WSB wave.
+
+- The sentiment in the r/wallstreetbets sub-reddit group can be quickly spread across different people and that will amplify the change in stock price since there are a large amount of people buying and selling the same group of stocks at the same time.
+
+- The 1st wave of WSB caught more public attention than the 2nd wave of WSB.
+
+Despite of all these findings, our analysis has some limitation. 
+
+Firstly, for the Reddit post data, since quite a lot of posts are removed or deleted by the time we downloaded from the data source, therefore, our study using the Reddit posts may not reflect the true situation during the 1st and 2nd WSB wave, which means some of the conclusions may be slightly different from what actually happening at that point of time.
+
+Secondly, for the Google search data, since we cannot get the absolute search count for the Google search but rather, we can only get the relative score provided by Google. Also, for the keyword selection, we could also include more words in the data source to find more interesting facts.
+
+Therefore, for the future umprovement, we could try to find the data source that have more reddits posts and include more key words in Google search data. That will help to disclose more information.

@@ -19,7 +19,7 @@ In this project, we would like to collect stock related data, Reddit related dat
 
 2. For each targeted stock, what’s the relationship between Reddit posts and stock price/volume etc.
 
-3. Why does r/wallstreetbets choose these target stocks? What’re their similarities? How do their choices change as time evolves? Gamestop, AMC, Blueberry, Nokia, SPCE, PLTR, TSLA.
+3. Why does r/wallstreetbets choose these target stocks? What’re their similarities? How do their choices change as time evolves? Gamestop, AMC, Blueberry, Nokia, PLTR.
 
 In the following chapters, we will use multiple data sources to plot graphs, and try to answer the above questions with proper data visualization techniques. Also, we would like to explore other aspects from the graphs and come up with more conclusions.
 
